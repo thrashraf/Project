@@ -11,7 +11,7 @@ const port = 5000 || process.env.PORT;
 //* import route
 import usersRoute from './router/usersRoute.js';
 import adminRoute from './router/adminRoute.js';
-import reportRoute from './router/reportRoute.js';
+import innoRoute from './router/innoRoute.js';
 
 const app = express();
 
@@ -22,7 +22,7 @@ app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use('/api', usersRoute, adminRoute, reportRoute);
+app.use('/api', usersRoute, adminRoute, innoRoute);
 
 
 app.listen(port, console.log(`server running on port ${port}`))
