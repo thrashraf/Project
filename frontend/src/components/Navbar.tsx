@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from 'react-scroll'
 
 
 type Props = {}
@@ -11,7 +12,6 @@ export const Navbar = (props: Props) => {
 
   return (
         <>
-            
                 {/* Code block starts */}
                 <nav className=" bg-gray-900 shadow lg:block hidden">
                     <div className="mx-auto container px-6 py-2 lg:py-0">
@@ -126,7 +126,16 @@ export const Navbar = (props: Props) => {
                                         </span>
                                         Dashboard
                                     </a>
-                                    <a href="javascript: void(0)" className="flex px-5 items-center py-6 text-sm leading-5 text-white hover:bg-purple-800 focus:bg-gray-100 focus:text-black  focus:outline-none transition duration-150 ease-in-out">
+                                    <Link to='Publication' smooth={true} spy={true} className="flex px-5 items-center py-6 text-sm leading-5 text-white hover:bg-purple-800 focus:bg-gray-100 focus:text-black  focus:outline-none transition duration-150 ease-in-out">
+                                        <span className="mr-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-puzzle" width={20} height={20} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" />
+                                                <path d="M4 7h3a1 1 0 0 0 1 -1v-1a2 2 0 0 1 4 0v1a1 1 0 0 0 1 1h3a1 1 0 0 1 1 1v3a1 1 0 0 0 1 1h1a2 2 0 0 1 0 4h-1a1 1 0 0 0 -1 1v3a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-1a2 2 0 0 0 -4 0v1a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h1a2 2 0 0 0 0 -4h-1a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1" />
+                                            </svg>
+                                        </span>
+                                        Publication
+                                    </Link>
+                                    <Link to='' smooth={true} spy={true} duration={1000} className="flex px-5 items-center py-6 text-sm leading-5 text-white hover:bg-purple-800 focus:bg-gray-100 focus:text-black  focus:outline-none transition duration-150 ease-in-out">
                                         <span className="mr-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-puzzle" width={20} height={20} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                                 <path stroke="none" d="M0 0h24v24H0z" />
@@ -134,8 +143,8 @@ export const Navbar = (props: Props) => {
                                             </svg>
                                         </span>
                                         Reports
-                                    </a>
-                                    <a href="javascript: void(0)" className="flex px-5 items-center py-6 text-sm leading-5 text-white hover:bg-purple-800 focus:bg-gray-100 focus:text-black focus:outline-none transition duration-150 ease-in-out">
+                                    </Link>
+                                    <Link to="Inno" smooth={true}  duration={1000} className="flex px-5 items-center py-6 text-sm leading-5 text-white hover:bg-purple-800 focus:bg-gray-100 focus:text-black focus:outline-none transition duration-150 ease-in-out">
                                         <span className="mr-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-compass" width={20} height={20} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                                 <path stroke="none" d="M0 0h24v24H0z" />
@@ -144,7 +153,7 @@ export const Navbar = (props: Props) => {
                                             </svg>
                                         </span>
                                         Innovation
-                                    </a>
+                                    </Link>
                                     <a href="javascript: void(0)" className="flex px-5 items-center py-6 text-sm leading-5 text-white hover:bg-purple-800 focus:bg-gray-100 focus:text-black focus:outline-none transition duration-150 ease-in-out">
                                         <span className="mr-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-code" width={20} height={20} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -241,7 +250,7 @@ export const Navbar = (props: Props) => {
                         </div>
                     </div>
                     {/*Mobile responsive sidebar*/}
-                    <div className={show ? "w-full lg:hidden h-full absolute z-40  transform transition duration-300 ease-in-out translate-x-0 " : "   w-full lg:hidden h-full absolute z-40  transform transition duration-300  ease-in-out -translate-x-full"}>
+                    <div className={show ? "w-full lg:hidden h-full  z-40 fixed  transform transition duration-300 ease-in-out translate-x-0 " : "   w-full lg:hidden h-full absolute z-40  transform transition duration-300  ease-in-out -translate-x-full"}>
                         <div className="bg-gray-800 opacity-50 w-full h-full" onClick={() => setShow(false) }  />
                         <div className="w-64 z-40 fixed overflow-y-auto top-0 bg-white shadow h-full flex-col justify-between lg:hidden pb-4 ">
                             <div className="px-6 h-full">
