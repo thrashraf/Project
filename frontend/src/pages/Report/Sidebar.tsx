@@ -107,7 +107,7 @@ export const Sidebar = (props: Props) => {
             <div className="px-3 rounded-md bg-blue-50">
               <Image />
             </div>
-            <p className="ml-5 font-medium">Upload File</p>
+            <p className="ml-5 font-medium">Upload Images</p>
             <input
               type="file"
               accept="image/*"
