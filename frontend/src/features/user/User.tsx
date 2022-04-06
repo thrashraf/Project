@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../app/Store";
 import jwt_decode from 'jwt-decode';
+import axios from "axios";
 
 interface loginInterface{
   email: string;
@@ -20,7 +21,9 @@ const initialState = () => ({
   isSuccess: false,
   isError: false,
   errorMessage: "",
-  redirect: ''
+  redirect: '',
+  expired: null
+  
 });
 
 export const userSlice = createSlice({
@@ -34,6 +37,11 @@ export const userSlice = createSlice({
       state.user = null;
     },
     clearState: () => initialState(),
+    instance: (state, action) => {
+
+      console.log(action.payload);
+      state.token = action.payload.token;
+    }
     
   },
   extraReducers: (builder) => {
@@ -50,11 +58,13 @@ export const userSlice = createSlice({
       state.errorMessage = payload.message;
     });
     builder.addCase(loginUser.fulfilled, (state, { payload }: any) => {
+
       state.isFetching = false;
       state.isSuccess = true;
       state.redirect = payload.route;
       state.user = jwt_decode(payload.accessToken);
       state.token = payload.accessToken;
+      
     });
     builder.addCase(loginUser.pending, (state) => {
       state.isFetching = true;
@@ -65,10 +75,18 @@ export const userSlice = createSlice({
       state.errorMessage = payload.message;
     });
     builder.addCase(refreshUser.fulfilled, (state, { payload }: any) => {
+
+      const user: any = jwt_decode(payload.accessToken);
+
       state.isFetching = false;
       state.isSuccess = true;
       state.user = jwt_decode(payload.accessToken);
       state.token = payload.accessToken;
+      state.expired = user.exp
+
+      axios.defaults.headers.common = {authorization: `Bearer ${payload.accessToken}`}
+      
+
     });
     builder.addCase(refreshUser.pending, (state) => {
       state.isFetching = true;
@@ -173,6 +191,8 @@ export const refreshUser = createAsyncThunk(
   }
 )
 
-export const { login, logout, clearState } = userSlice.actions;
+
+
+export const { login, logout, clearState, instance } = userSlice.actions;
 export const userSelector = (state: RootState) => state.user;
 export default userSlice.reducer;

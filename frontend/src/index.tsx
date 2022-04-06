@@ -5,6 +5,7 @@ import App from './app/App';
 import { Store } from './app/Store'
 import { Provider } from 'react-redux'
 import reportWebVitals from './reportWebVitals';
+import { injectStore } from './utils/api';
 
 ReactDOM.render(
   <Provider store={Store}>
@@ -12,6 +13,8 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
+
+injectStore(Store);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

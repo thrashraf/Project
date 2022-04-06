@@ -186,7 +186,7 @@ export const Template = (props: Props) => {
               return(
                 <View style={styles.photoContainer}>
                   <Image src={`${img.url}`} key={index} style={styles.image}/>
-                  <Text style={styles.figure}>Figure {index + 1.0}</Text>
+                  <Text style={styles.figure}>Rajah {index + 1.0}</Text>
                 </View>
               )
             })}

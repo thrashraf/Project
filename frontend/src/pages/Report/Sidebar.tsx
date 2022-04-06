@@ -9,6 +9,7 @@ type Props = {
     date:string,
     organizer: string,
     venue: string,
+    tentative: any
 
     setTitle: React.Dispatch<React.SetStateAction<string>>
     setContent: React.Dispatch<React.SetStateAction<string>>
@@ -16,13 +17,13 @@ type Props = {
     setOrganizer: React.Dispatch<React.SetStateAction<string>>
     setVenue: React.Dispatch<React.SetStateAction<string>>
     setDate: React.Dispatch<React.SetStateAction<string>>
+    addTentativeHandler: any
+    removeTentativeHandler: any
 
     contentHandler: (e: any) => void
     uploadFile: () => void
     uploadRef: any
     fileSelectorHandler: (e: any) => void
-
-   
 
 }
 
@@ -118,8 +119,31 @@ export const Sidebar = (props: Props) => {
               onChange={(e) => props.fileSelectorHandler(e)}
             />
           </section>
+
+          <section className='my-10 '>
+            <h2 className='text-gray-400 text-center mb-10'>Tentative</h2>
+
+            {props.tentative.map((ten: any, index: number) => {
+              return (
+              <div key={index} className='my-5'>
+                <section className='flex items-start justify-between'>
+                  <input type="time" name="" id="" className='bg-blue-50 outline-none p-2 rounded-lg'/>
+                  <textarea className='bg-blue-50 px-4 rounded-lg outline-none w-[60%]'/>
+                  {props.tentative.length >= 1 && (
+                    <button className='bg-red-500 w-7 h-7 rounded-full my-auto text-white' onClick={()=> props.removeTentativeHandler(index)}>-</button>
+                  )}
+                </section>
+              </div>
+            )
+          })}
+          { props.tentative.length <= 10 && (
+            <button className='bg-blue-500 w-10 h-10 rounded-full my-auto text-white' onClick={props.addTentativeHandler}>+</button>
+          )}
+          </section>
           
         </div>
       </section>
+
   )
 }
+

@@ -4,13 +4,15 @@ import Register from '../pages/Register';
 import Report from '../pages/Report';
 import { Home } from '../pages/Home/Home';
 import Admin from '../pages/Admin';
-import { useAppDispatch } from './hooks';
+import { useAppDispatch, useAppSelector } from './hooks';
 import { useEffect } from 'react';
-import { refreshUser } from '../features/user/User';
+import {  refreshUser, userSelector } from '../features/user/User';
+import axios from 'axios';
 
 function App() {
 
   const dispatch = useAppDispatch();
+  
 
   useEffect(() => {
     dispatch(refreshUser())

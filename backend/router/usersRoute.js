@@ -9,8 +9,10 @@ const usersRoute = express.Router();
 usersRoute.post('/user/register', users.registerUser);
 usersRoute.post('/user/login', users.loginUser );
 usersRoute.get('/user/token', refreshToken);
-usersRoute.get('/user/getAllUser', verifytoken, users.getAllUser); 
+usersRoute.get('/user/getAllUser', users.getAllUser); 
 usersRoute.delete('/user/logout', users.Logout);
+usersRoute.delete('/user/delete', verifytoken, users.testDelete);
+
 
 
 export default usersRoute

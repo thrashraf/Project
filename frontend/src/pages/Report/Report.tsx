@@ -18,6 +18,8 @@ const Report = () => {
 
   const [editMode, setEditMode] = useState<boolean>(false);
 
+  const [tentative, setTentative] = useState<any>([]);
+
   const uploadRef = useRef<HTMLInputElement>(null);
 
   const contentHandler = (e: any) => {
@@ -32,6 +34,16 @@ const Report = () => {
       uploadRef.current.click();
     }
   };
+
+  const addTentativeHandler = () => {
+    setTentative([...tentative, { tentative: ''}])
+  }
+
+  const removeTentativeHandler = (index: number) => {
+    const tentativeList = [...tentative];
+    tentativeList.splice(index);
+    setTentative(tentativeList);
+  }
 
   const fileSelectorHandler = (e: any) => {
     const tempArr: any = [];
@@ -68,12 +80,14 @@ const Report = () => {
         uploadFile={uploadFile}
         uploadRef={uploadRef}
         fileSelectorHandler={fileSelectorHandler}
+        tentative={tentative}
+        addTentativeHandler={addTentativeHandler}
+        removeTentativeHandler={removeTentativeHandler}
 
       />
 
       <section className="hidden lg:flex flex-col col-start-3 col-end-[-1] bg-[#525659] ">
         <div className="h-[800px] w-[500px] m-auto mt-10">
-        
             <Preview
               title={title}
               content={content}
@@ -82,7 +96,7 @@ const Report = () => {
               date={date}
               venue={venue}
               isPhoto={isPhoto}
-              photo={photo}
+              photo={photo} 
             />
           </div>
 
@@ -125,11 +139,16 @@ const Report = () => {
         
         <ImageTemplate isPhoto={isPhoto} photo={photo} />
 
-        )
+        {tentative.length >= 1 ? (
+          <div className="my-2.5 h-[800px] w-[500px] font-Arimo font-normal m-auto bg-white rounded-sm p-10 flex flex-col text-[12px] relative">
+            <h1 className="font-bold">TENTATIF PROGRAM</h1>
+          </div>
+        ): null}
+
         <section className="mt-10 flex justify-end mr-10">
           <button className="mt-10 bg-green-500 text-white px-3 py-2 rounded-lg transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-green-400 cursor-pointer w-[100px] mr-5">
-            Submit
-            </button>
+            Verify
+          </button>
 
         <button className="mt-10 bg-blue-500 text-white px-3 py-2 rounded-lg transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-400 cursor-pointer w-[100px] " onClick={() => setEditMode(!editMode)} >
           {editMode ? (
@@ -152,7 +171,7 @@ const Report = () => {
               loading ? "Loading document..." : "Download"
             }
           </PDFDownloadLink>
-          ) : 'Confirm'}
+          ) : 'Save'}
           
         </button>
       </section>  
@@ -160,7 +179,5 @@ const Report = () => {
     </div>
   );
 };
-
-
 
 export default Report;
