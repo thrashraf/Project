@@ -36,7 +36,7 @@ export const Sidebar = (props: Props) => {
 
         <div className="mt-10">
           <section className="w-full my-5">
-            <p className="my-1 text-sm text-gray-400 ml-1">Title</p>
+            <p className="my-1 text-sm text-gray-400 ml-1">Program Name</p>
             <Input
               type="text"
               placeholder=""
@@ -46,15 +46,17 @@ export const Sidebar = (props: Props) => {
           </section>
 
           <section className="grid grid-cols-2 gap-5 my-5">
-            <div>
-              <p className="my-1 text-sm text-gray-400 ml-1">Program Name</p>
+          <div>
+              <p className="my-1 text-sm text-gray-400 ml-1">Date</p>
               <input
-                type="text"
+                type="date"
                 className="bg-blue-50 px-3 py-3 rounded-lg outline-none w-full"
-                value={props.programName}
-                onChange={(e) => props.setProgramName(e.target.value)}
+                value={props.date}
+                data-date-format="DD MMMM YYYY"
+                onChange={(e) => props.setDate(e.target.value)}
               />
             </div>
+
             <div>
               <p className="my-1 text-sm text-gray-400 ml-1">Organizer</p>
               <input
@@ -67,16 +69,7 @@ export const Sidebar = (props: Props) => {
           </section>
 
           <section className="grid grid-cols-2 gap-5 my-5">
-            <div>
-              <p className="my-1 text-sm text-gray-400 ml-1">Date</p>
-              <input
-                type="date"
-                className="bg-blue-50 px-3 py-3 rounded-lg outline-none w-full"
-                value={props.date}
-                data-date-format="DD MMMM YYYY"
-                onChange={(e) => props.setDate(e.target.value)}
-              />
-            </div>
+            
             <div>
               <p className="my-1 text-sm text-gray-400 ml-1">Venue</p>
               <input
@@ -86,6 +79,26 @@ export const Sidebar = (props: Props) => {
                 onChange={(e) => props.setVenue(e.target.value)}
               />
             </div>
+
+            <section
+            className="mt-5 flex items-center text-blue-400 cursor-pointer 
+          "
+            onClick={props.uploadFile}
+          >
+            <div className="px-3 py-2 rounded-md bg-blue-50">
+              <Image />
+            </div>
+            <p className="ml-5 ">Upload Images</p>
+            <input
+              type="file"
+              accept="image/*"
+              multiple={true}
+              name="upload"
+              className="hidden"
+              ref={props.uploadRef}
+              onChange={(e) => props.fileSelectorHandler(e)}
+            />
+          </section>
           </section>
 
           <section className="w-full my-5">
@@ -100,25 +113,7 @@ export const Sidebar = (props: Props) => {
             />
           </section>
 
-          <section
-            className="my-5 flex items-center text-blue-400 cursor-pointer 
-          "
-            onClick={props.uploadFile}
-          >
-            <div className="px-3 rounded-md bg-blue-50">
-              <Image />
-            </div>
-            <p className="ml-5 font-medium">Upload Images</p>
-            <input
-              type="file"
-              accept="image/*"
-              multiple={true}
-              name="upload"
-              className="hidden"
-              ref={props.uploadRef}
-              onChange={(e) => props.fileSelectorHandler(e)}
-            />
-          </section>
+          
 
           <section className='my-10 '>
             <h2 className='text-gray-400 text-center mb-10'>Tentative</h2>

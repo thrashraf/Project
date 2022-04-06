@@ -88,7 +88,15 @@ const Report = () => {
 
       <section className="hidden lg:flex flex-col col-start-3 col-end-[-1] bg-[#525659] ">
         <div className="h-[800px] w-[500px] m-auto mt-10">
-            <Preview
+
+          <PDFViewer 
+            showToolbar={false}
+            style={{
+              width: '100%',
+              height: '95%',
+            }}>
+
+            <Template
               title={title}
               content={content}
               name={programName}
@@ -97,7 +105,9 @@ const Report = () => {
               venue={venue}
               isPhoto={isPhoto}
               photo={photo} 
+              tentative={tentative}
             />
+          </PDFViewer>
           </div>
 
         {content.length > 2186 ? (
@@ -139,11 +149,11 @@ const Report = () => {
         
         <ImageTemplate isPhoto={isPhoto} photo={photo} />
 
-        {tentative.length >= 1 ? (
+        {/* {tentative.length >= 1 ? (
           <div className="my-2.5 h-[800px] w-[500px] font-Arimo font-normal m-auto bg-white rounded-sm p-10 flex flex-col text-[12px] relative">
             <h1 className="font-bold">TENTATIF PROGRAM</h1>
           </div>
-        ): null}
+        ): null} */}
 
         <section className="mt-10 flex justify-end mr-10">
           <button className="mt-10 bg-green-500 text-white px-3 py-2 rounded-lg transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-green-400 cursor-pointer w-[100px] mr-5">
@@ -163,6 +173,7 @@ const Report = () => {
                 venue={venue}
                 isPhoto={isPhoto}
                 photo={photo}
+                tentative={tentative}
               />
             }
             fileName={title}

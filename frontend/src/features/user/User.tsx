@@ -22,7 +22,8 @@ const initialState = () => ({
   isError: false,
   errorMessage: "",
   redirect: '',
-  expired: null
+  expired: null,
+
   
 });
 
@@ -64,6 +65,7 @@ export const userSlice = createSlice({
       state.redirect = payload.route;
       state.user = jwt_decode(payload.accessToken);
       state.token = payload.accessToken;
+      localStorage.setItem('isAuth', 'true')
       
     });
     builder.addCase(loginUser.pending, (state) => {
@@ -79,22 +81,26 @@ export const userSlice = createSlice({
       const user: any = jwt_decode(payload.accessToken);
 
       state.isFetching = false;
-      state.isSuccess = true;
+      state.isSuccess = false;
+      state.isError = false
       state.user = jwt_decode(payload.accessToken);
       state.token = payload.accessToken;
       state.expired = user.exp
-
+      localStorage.setItem('isAuth', 'true')
       axios.defaults.headers.common = {authorization: `Bearer ${payload.accessToken}`}
       
 
     });
     builder.addCase(refreshUser.pending, (state) => {
-      state.isFetching = true;
+      state.isFetching = false;
+      state.isSuccess = false;
+      state.isError = false
     });
     builder.addCase(refreshUser.rejected, (state, { payload }: any) => {
       state.isFetching = false;
-      state.isError = true;
-      state.errorMessage = payload.message;
+      state.isSuccess = false;
+      state.isError = false
+      
     });
 
   },
