@@ -71,6 +71,7 @@ export const Sidebar = (props: Props) => {
                 value={props.date}
                 data-date-format="DD MMMM YYYY"
                 disabled={props.editMode }
+                required
                 onChange={(e) => props.setDate(e.target.value)}
               />
             </div>
@@ -84,6 +85,7 @@ export const Sidebar = (props: Props) => {
                 className="bg-blue-50 px-3 py-3 rounded-lg outline-none w-full"
                 value={props.organizer}
                 disabled={props.editMode }
+                required
                 onChange={(e) => props.setOrganizer(e.target.value)}
               />
             </div>
@@ -99,6 +101,7 @@ export const Sidebar = (props: Props) => {
                 className="bg-blue-50 px-3 py-3 rounded-lg outline-none w-full"
                 value={props.venue}
                 disabled={props.editMode }
+                required
                 onChange={(e) => props.setVenue(e.target.value)}
               />
             </div>
@@ -136,6 +139,7 @@ export const Sidebar = (props: Props) => {
               onChange={props.contentHandler}
               disabled={props.editMode }
               onKeyPress={props.contentHandler}
+              required
               className="bg-blue-50 px-3 py-3 rounded-lg outline-none w-full resize-none"
             />
           </section>
