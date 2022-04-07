@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Toast from "../../components/Toast";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
@@ -20,7 +19,7 @@ export const Form = () => {
   const navigate = useNavigate();
   const toastRef = useRef<any>(null);
   
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const onSubmithandler = (e: React.SyntheticEvent) => {
     e.preventDefault();

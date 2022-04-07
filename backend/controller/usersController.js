@@ -50,6 +50,7 @@ export const loginUser = async (req, res) => {
       email,
       password
     } = req.body;
+    
 
     //check for existing email
     const [checkExistingEmail] = await user.checkEmail(email);
@@ -83,7 +84,7 @@ export const loginUser = async (req, res) => {
         profile_picture: userInfo.profile_picture
       },
       process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "20s",
+        expiresIn: "15s",
       }
     );
     console.log(accessToken);
@@ -162,3 +163,15 @@ export const Logout = async (req, res) => {
   res.clearCookie("refreshToken");
   return res.sendStatus(200);
 };
+
+export const testDelete = async(req, res) => {
+  try {
+    res.status(200).json({
+      message: 'auth'
+    })
+  } catch (error) {
+    res.status(400).json({
+      message: 'who are u?'
+    })
+  }
+}
