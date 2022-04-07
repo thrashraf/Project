@@ -44,46 +44,20 @@ const IndexDropdown = () => {
         >
           Layout
         </span>
-        <Link
-          to="/admin/dashboard"
-          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:text-blue-500"
-        >
-          Dashboard
-        </Link>
+        
         <Link
           to="/admin/settings"
           className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:text-blue-500"
         >
           Settings
         </Link>
-        
-        <div className="h-0 mx-4 my-2 border border-solid border-blueGray-100" />
-        <span
-          className={
-            "text-sm pt-2 pb-0 px-4 font-bold block w-full whitespace-nowrap bg-transparent "
-          }
-        >
-          Auth Layout
-        </span>
         <Link
           to="/auth/login"
           className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:text-blue-500"
         >
            Profile
         </Link>
-        <Link
-          to="/"
-          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:text-blue-500 "
-          >
         
-          Login
-        </Link>
-        <Link
-          to="/register"
-          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:text-blue-500"
-        >
-          Register
-        </Link>
         <div className="h-0 mx-4 my-2 border border-solid border-blueGray-100 hover:text-blue-500" />
         <span
           className={
