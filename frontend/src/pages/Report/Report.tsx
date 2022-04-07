@@ -255,9 +255,10 @@ const Report = () => {
 
         <section className="mt-10 flex justify-end mr-10">
          
-
-        <button className="mt-10 bg-blue-500 text-white px-3 py-2 rounded-lg transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-400 cursor-pointer w-[100px] " onClick={() => setEditMode(!editMode)} >
-          {editMode ? (
+        {editMode ? (
+          <button className="mt-10 bg-blue-500 text-white px-3 py-2 rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-400 cursor-pointer w-[70px] h-[70px] fixed right-5 bottom-5
+           " onClick={() => setEditMode(!editMode)} >
+          
           <PDFDownloadLink
             document={
               <Template
@@ -276,12 +277,13 @@ const Report = () => {
             fileName={title}
           >
             {({ loading }: any) =>
-              loading ? "Loading document..." : "Download"
+              loading ? <img src="/assets/loading.svg" className="w-[30px] h-[30px] animate-spin m-auto" alt="loading" /> : <i className="fa-solid fa-file-arrow-down fa-xl"></i>
             }
+            
           </PDFDownloadLink>
-          ) : 'Save'}
           
         </button>
+        ) : null}
       </section>  
       </section>
     </div>
