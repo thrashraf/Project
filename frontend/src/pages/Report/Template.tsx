@@ -21,6 +21,7 @@ type Props = {
   isPhoto: boolean;
   photo: any;
   tentative: any;
+  ajk: any;
 };
 
 export const Template = (props: Props) => {
@@ -130,30 +131,37 @@ export const Template = (props: Props) => {
 
     table: {
       marginTop: 40,
-      width: '100%'
+      width: "100%",
+      marginLeft: 40,
     },
 
     row: {
-      display: 'flex',
-      flexDirection: 'row',
-      
+      display: "flex",
+      flexDirection: "row",
+      paddingTop: 8,
+      paddingBottom: 8,
+      marginLeft: 40,
     },
-    
+
     bold: {
-      fontWeight: 'bold',
+      fontWeight: "bold",
     },
     row1: {
-      width: '30%',
-      
-      
+      width: "30%",
     },
     row2: {
-      width: '70%',
-      
-      
+      width: "70%",
+      flexWrap: "wrap",
+    },
+    activities: {
+      lineHeight: 2,
+      marginLeft: 10,
+    },
+    tableHeading: {
+      paddingTop: 10,
+      paddingBottom: 10,
     },
   });
-
 
   return (
     <>
@@ -176,7 +184,7 @@ export const Template = (props: Props) => {
             <Text style={styles.aboutContent}>
               b) Penganjur : {props.organizer}
             </Text>
-            <Text style={styles.aboutContent}>c) Tarikh : {props.date}</Text>
+            <Text style={styles.aboutContent}>c) Tarikh : {props.date.split('-').reverse().join('/')}</Text>
             <Text style={styles.aboutContent}>d) Tempat : {props.venue}</Text>
 
             <Text style={styles.aboutProgram}>
@@ -224,18 +232,71 @@ export const Template = (props: Props) => {
 
           {props.tentative.length > 0 ? (
             <View break>
-              <Text style={styles.aboutProgram}>
-                TENTATIF PROGRAM
-              </Text>
+              <Text style={styles.aboutProgram}>TENTATIF PROGRAM</Text>
 
-              <View style={[styles.row, styles.bold, styles.table]}>
-                <Text style={styles.row1} >MASA</Text>
+              <View
+                style={[
+                  styles.row,
+                  styles.bold,
+                  styles.table,
+                  styles.tableHeading,
+                ]}
+              >
+                <Text style={styles.row1}>MASA</Text>
                 <Text style={styles.row2}>AKTIVITI</Text>
               </View>
+
+              {props.tentative.map((row: any, index: number) => {
+                return (
+                  <View key={index} style={styles.row}>
+                    <Text style={styles.row1}>{row.tentative.time}</Text>
+                    {row.tentative.activities
+                      .split("\n\n")
+                      .map((act: string, num: number) => {
+                        return (
+                          <Text key={num} style={styles.activities}>
+                            {act}
+                          </Text>
+                        );
+                      })}
+                  </View>
+                );
+              })}
             </View>
           ) : null}
 
+          {props.ajk.length > 0 ? (
+            <View break>
+              <Text style={styles.aboutProgram}>JAWATANKUASA</Text>
 
+              <View
+                style={[
+                  styles.row,
+                  styles.bold,
+                  styles.table,
+                  styles.tableHeading,
+                ]}
+              >
+                <Text style={styles.row1}>JAWATAN</Text>
+                <Text style={styles.row2}>NAMA</Text>
+              </View>
+
+              {props.ajk.map((row: any, index: number) => {
+                return (
+                  <View key={index} style={styles.row}>
+                    <Text style={styles.row1}>{row.ajk.role}</Text>
+                    {row.ajk.names.split("\n\n").map((act: any, num: any) => {
+                      return (
+                        <Text key={num} style={styles.activities}>
+                          {act}
+                        </Text>
+                      );
+                    })}
+                  </View>
+                );
+              })}
+            </View>
+          ) : null}
         </Page>
       </Document>
     </>
