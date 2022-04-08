@@ -42,7 +42,7 @@ const Toast = forwardRef((props: Props, ref) => {
     <div
       className={`${
         props.status === "success" ? "bg-green-100" : "bg-red-100"
-      } ${isVisible ? null : 'hidden'} p-5 w-full sm:w-1/2 fixed inset-x-0 mx-auto top-10 rounded-lg animate-fade-in-down`}
+      } ${isVisible ? null : 'hidden'} z-50 p-5 w-full sm:w-1/2 fixed inset-x-0 mx-auto top-10 rounded-lg animate-fade-in-down`}
     >
       <div className="flex space-x-3">
         {props.status === "success" ? successfulIcon : errorIcon}

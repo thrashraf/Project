@@ -2,27 +2,29 @@ import React, { useRef, useState } from "react";
 import { Preview } from "./Preview";
 import { ImageTemplate } from "./ImageTemplate";
 import { Sidebar } from "./Sidebar";
-import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 import { Template } from "./Template";
+import { PasswordModal } from "./PasswordModal";
 
 const Report = () => {
   
+  // ? report state
   const [title, setTitle] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [programName, setProgramName] = useState<string>("");
   const [organizer, setOrganizer] = useState<string>("");
   const [venue, setVenue] = useState<string>("");
-
   const [isPhoto, setIsPhoto] = useState<boolean>(false);
   const [photo, setPhoto] = useState<any[]>([]);
-
   const [tentative, setTentative] = useState<any>([]);
-
   const [ajk, setAjk] = useState<any>([]);
 
+  //? utils
   const [editMode, setEditMode] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
+  //ref
   const uploadRef = useRef<HTMLInputElement>(null);
 
   const contentHandler = (e: any) => {
@@ -124,6 +126,7 @@ const Report = () => {
         ajk={ajk}
         editMode={editMode}
         setEditMode={setEditMode}
+        showModal={showModal} setShowModal={setShowModal}
       />
 
       <section className="hidden lg:flex flex-col col-start-3 col-end-[-1] bg-[#525659] ">
@@ -285,6 +288,8 @@ const Report = () => {
         </button>
         ) : null}
       </section>  
+
+      <PasswordModal showModal={showModal} setShowModal={setShowModal} />
       </section>
     </div>
   );
