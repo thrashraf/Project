@@ -41,9 +41,13 @@ export const createReport = async (req, res, next) => {
       ajk
     );
 
-    res.status(200).json({
-      message: "successful"
-    });
+    if (insertReport.affectedRows > 1) {
+
+        res.status(200).json({
+          message: "successful"
+        });
+    }
+
   } catch (error) {
     console.log(error);
     res.status(400).json({
