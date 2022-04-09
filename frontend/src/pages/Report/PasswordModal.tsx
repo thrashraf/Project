@@ -6,6 +6,9 @@ import { userSelector } from "../../features/user/User";
 type Props = {
     showModal: boolean,
     setShowModal:  React.Dispatch<React.SetStateAction<boolean>>;
+    password: string,
+    setPassword: any
+    authHandler: any
 };
 
 export const PasswordModal = (props: Props) => {
@@ -79,6 +82,8 @@ export const PasswordModal = (props: Props) => {
               type="password"
               name="password"
               id="password"
+              value={props.password}
+              onChange={(e) => props.setPassword(e.target.value)}
               className="bg-blue-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  outline-none dark:placeholder-gray-400 "
               required
             />
@@ -87,6 +92,7 @@ export const PasswordModal = (props: Props) => {
           <button
             type="submit"
             className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            onClick={props.authHandler}
           >
             Confirm
           </button>

@@ -46,6 +46,11 @@ class user {
     const sql = `SELECT * FROM users`
     return db.execute(sql); 
   }
+
+  static async findByEmail(email) {
+    const sql = `SELECT * FROM users where email = '${email}'`
+    return db.execute(sql); 
+  }
 }
 
 export default user;

@@ -5,8 +5,13 @@ import { Sidebar } from "./Sidebar";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { Template } from "./Template";
 import { PasswordModal } from "./PasswordModal";
+import api from '../../utils/api'
+import { useAppSelector } from "../../app/hooks";
+import { userSelector } from "../../features/user/User";
 
 const Report = () => {
+
+  const { user }: any = useAppSelector(userSelector);
   
   // ? report state
   const [title, setTitle] = useState<string>("");
@@ -26,6 +31,9 @@ const Report = () => {
 
   //ref
   const uploadRef = useRef<HTMLInputElement>(null);
+
+  //user
+  const [password, setPassword] = useState<string>('');
 
   const contentHandler = (e: any) => {
     if (e.key === "Enter") {
@@ -85,15 +93,45 @@ const Report = () => {
     const tempArr: any = [];
 
     console.log(e.target.files);
-    [...e.target.files].map((file) => {
-      return tempArr.push({
-        data: file,
-        url: URL.createObjectURL(file),
-      });
-    });
+    tempArr.push(...e.target.files)
 
     setPhoto(tempArr);
     setIsPhoto(true);
+  };
+
+  const authHandler = async (e: any) => {
+    
+    e.preventDefault();
+
+    const email = user.email
+    const reqPassword = password
+
+    await api.post('/api/user/auth', {email, reqPassword})
+    .then(res => {
+      console.log(res);
+      formHandler(e)
+    })
+  };
+
+  const formHandler = async (e: any) => {
+    
+    e.preventDefault();
+
+    const formData: any = new FormData(); // Currently empty
+    console.log(photo);
+    photo.forEach(tag => formData.append('upload', tag))
+    formData.append("title", title);
+    formData.append("date", date);
+    formData.append("organizer", organizer);
+    formData.append("venue", venue);
+    formData.append("content", content);
+    tentative.forEach((tentative: any) => formData.append("tentative", JSON.stringify(tentative)));
+    ajk.forEach((ajk: any) => formData.append("ajk", JSON.stringify(ajk)));
+    
+    await api.post('/api/report/createReport', formData)
+    .then(res => {
+      console.log(res);
+    })
   };
 
 
@@ -127,6 +165,8 @@ const Report = () => {
         editMode={editMode}
         setEditMode={setEditMode}
         showModal={showModal} setShowModal={setShowModal}
+        password={password}
+        formHandler={formHandler}
       />
 
       <section className="hidden lg:flex flex-col col-start-3 col-end-[-1] bg-[#525659] ">
@@ -209,7 +249,8 @@ const Report = () => {
 
                           {row.tentative.activities.split("\n").map((act: string, num: number) => {
                             return(
-                              <p key={num} className="absolute left-[200px] max-w-[200px] break-words">{act}</p>
+                              //fix absolute
+                              <p key={num} className="  max-w-[200px] break-words">{act}</p>
                             )
                           })}
                           </section>
@@ -289,7 +330,7 @@ const Report = () => {
         ) : null}
       </section>  
 
-      <PasswordModal showModal={showModal} setShowModal={setShowModal} />
+      <PasswordModal showModal={showModal} setShowModal={setShowModal} password={password} setPassword={setPassword} authHandler={authHandler} />
       </section>
     </div>
   );

@@ -3,6 +3,8 @@ import { Input } from "../../components/Input";
 import { Image } from "../../icons/Image";
 import Toast from '../../components/Toast';
 
+
+
 type Props = {
   title: string;
   content: string;
@@ -20,6 +22,7 @@ type Props = {
   setDate: React.Dispatch<React.SetStateAction<string>>;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  formHandler: any
 
   showModal: boolean;
   addTentativeHandler: any;
@@ -30,6 +33,7 @@ type Props = {
   handleAjk: any;
   ajk: any;
   editMode: boolean;
+  password: string
 
   contentHandler: (e: any) => void;
   uploadFile: () => void;
@@ -38,18 +42,19 @@ type Props = {
 };
 
 export const Sidebar = (props: Props) => {
-  const formHandler = (e: any) => {
-    e.preventDefault();
-  };
+
+
+  
+
 
   const toastRef = useRef<any>(null);
 
   const userAuthHandler = () => {
     if (
-      props.title !== "" ||
-      props.date !== "" ||
-      props.organizer !== "" ||
-      props.venue !== ""
+      props.title.length > 0 &&
+      props.date.length > 0 &&
+      props.organizer.length > 0 &&
+      props.content.length > 0
     ) {
       props.setShowModal(!props.showModal);
     } else {
@@ -63,9 +68,9 @@ export const Sidebar = (props: Props) => {
       {/* heading */}
       <h1 className="text-center font-medium text-2xl">Report Maker</h1>
 
-      <Toast ref={toastRef} status={'error'} message={'Please fill all the required field!'} />
+      <Toast ref={toastRef} status={'error'} message={'Please fill all the required field! '} />
 
-      <form action="" onSubmit={formHandler}>
+     
         <div className="mt-10">
           <section className="w-full my-5">
             <p className="my-1 text-sm text-gray-400 ml-1">
@@ -90,7 +95,7 @@ export const Sidebar = (props: Props) => {
                 value={props.date}
                 data-date-format="DD MMMM YYYY"
                 disabled={props.editMode}
-                required
+
                 onChange={(e) => props.setDate(e.target.value)}
               />
             </div>
@@ -104,7 +109,7 @@ export const Sidebar = (props: Props) => {
                 className="bg-blue-50 px-3 py-3 rounded-lg outline-none w-full"
                 value={props.organizer}
                 disabled={props.editMode}
-                required
+
                 onChange={(e) => props.setOrganizer(e.target.value)}
               />
             </div>
@@ -120,14 +125,15 @@ export const Sidebar = (props: Props) => {
                 className="bg-blue-50 px-3 py-3 rounded-lg outline-none w-full"
                 value={props.venue}
                 disabled={props.editMode}
-                required
+
                 onChange={(e) => props.setVenue(e.target.value)}
               />
             </div>
 
             <section
               className="mt-5 flex items-center text-blue-400 cursor-pointer 
-            "
+              
+            " 
               onClick={props.uploadFile}
             >
               <div className="px-3 py-2 rounded-md bg-blue-50">
@@ -139,6 +145,7 @@ export const Sidebar = (props: Props) => {
                 accept="image/*"
                 multiple={true}
                 name="upload"
+                id="upload"
                 className="hidden"
                 disabled={props.editMode}
                 ref={props.uploadRef}
@@ -158,7 +165,6 @@ export const Sidebar = (props: Props) => {
               onChange={props.contentHandler}
               disabled={props.editMode}
               onKeyPress={props.contentHandler}
-              required
               className="bg-blue-50 px-3 py-3 rounded-lg outline-none w-full resize-none"
             />
           </section>
@@ -271,7 +277,7 @@ export const Sidebar = (props: Props) => {
             </button>
           </div>
         </div>
-      </form>
     </section>
   );
 };
+
