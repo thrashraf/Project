@@ -8,11 +8,11 @@ const Admin = () => {
 
   return (
       <div className="flex flex-no-wrap " >
-      
         {/* Sidebar starts */}
         <div className="z-50">
           <Sidebar setTabs={setTabs} tabs={tabs}/>
         </div>
+
         {/* Sidebar ends */}
         <Users tabs={tabs}/>
 

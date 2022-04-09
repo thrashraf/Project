@@ -2,23 +2,38 @@ import React, { useRef, useState } from "react";
 import { Preview } from "./Preview";
 import { ImageTemplate } from "./ImageTemplate";
 import { Sidebar } from "./Sidebar";
-import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 import { Template } from "./Template";
+import { PasswordModal } from "./PasswordModal";
+import api from '../../utils/api'
+import { useAppSelector } from "../../app/hooks";
+import { userSelector } from "../../features/user/User";
 
 const Report = () => {
+
+  const { user }: any = useAppSelector(userSelector);
+  
+  // ? report state
   const [title, setTitle] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [programName, setProgramName] = useState<string>("");
   const [organizer, setOrganizer] = useState<string>("");
   const [venue, setVenue] = useState<string>("");
-
   const [isPhoto, setIsPhoto] = useState<boolean>(false);
   const [photo, setPhoto] = useState<any[]>([]);
+  const [tentative, setTentative] = useState<any>([]);
+  const [ajk, setAjk] = useState<any>([]);
 
+  //? utils
   const [editMode, setEditMode] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
+  //ref
   const uploadRef = useRef<HTMLInputElement>(null);
+
+  //user
+  const [password, setPassword] = useState<string>('');
 
   const contentHandler = (e: any) => {
     if (e.key === "Enter") {
@@ -33,19 +48,90 @@ const Report = () => {
     }
   };
 
+  const addTentativeHandler = () => {
+    setTentative([...tentative, { tentative: {time: '', activities: ''}}])
+  }
+
+  const removeTentativeHandler = (index: number) => {
+    const tentativeList = [...tentative];
+    tentativeList.splice(index);
+    setTentative(tentativeList);
+  }
+
+  const handleTentative = (e: any, index: number) => {
+    const {name, value} = e.target
+    const tentativeList = [...tentative];
+
+    if (e.key === "Enter") {
+      tentativeList[index]['tentative']['activities'] = value + '\n';
+    }
+    
+    tentativeList[index]['tentative'][name] = value;
+    setTentative(tentativeList);
+  }
+
+  const addAjkHandler = () => {
+    setAjk([...ajk, { ajk: {role: '', names: ''}}])
+  }
+
+  const removeAjkHandler = (index: number) => {
+    const AjkList = [...ajk];
+    AjkList.splice(index);
+    setAjk(AjkList);
+  }
+
+  const handleAjk = (e: any, index: number) => {
+    const {name, value} = e.target
+    const AjkList = [...ajk];
+    
+    AjkList[index]['ajk'][name] = value;
+    setAjk(AjkList);
+  }
+
+
   const fileSelectorHandler = (e: any) => {
     const tempArr: any = [];
 
     console.log(e.target.files);
-    [...e.target.files].map((file) => {
-      return tempArr.push({
-        data: file,
-        url: URL.createObjectURL(file),
-      });
-    });
+    tempArr.push(...e.target.files)
 
     setPhoto(tempArr);
     setIsPhoto(true);
+  };
+
+  const authHandler = async (e: any) => {
+    
+    e.preventDefault();
+
+    const email = user.email
+    const reqPassword = password
+
+    await api.post('/api/user/auth', {email, reqPassword})
+    .then(res => {
+      console.log(res);
+      formHandler(e)
+    })
+  };
+
+  const formHandler = async (e: any) => {
+    
+    e.preventDefault();
+
+    const formData: any = new FormData(); // Currently empty
+    console.log(photo);
+    photo.forEach(tag => formData.append('upload', tag))
+    formData.append("title", title);
+    formData.append("date", date);
+    formData.append("organizer", organizer);
+    formData.append("venue", venue);
+    formData.append("content", content);
+    tentative.forEach((tentative: any) => formData.append("tentative", JSON.stringify(tentative)));
+    ajk.forEach((ajk: any) => formData.append("ajk", JSON.stringify(ajk)));
+    
+    await api.post('/api/report/createReport', formData)
+    .then(res => {
+      console.log(res);
+    })
   };
 
 
@@ -68,12 +154,32 @@ const Report = () => {
         uploadFile={uploadFile}
         uploadRef={uploadRef}
         fileSelectorHandler={fileSelectorHandler}
-
+        tentative={tentative}
+        addTentativeHandler={addTentativeHandler}
+        removeTentativeHandler={removeTentativeHandler}
+        handleTentative={handleTentative}
+        addAjkHandler={addAjkHandler}
+        removeAjkHandler={removeAjkHandler}
+        handleAjk={handleAjk}
+        ajk={ajk}
+        editMode={editMode}
+        setEditMode={setEditMode}
+        showModal={showModal} setShowModal={setShowModal}
+        password={password}
+        formHandler={formHandler}
       />
 
       <section className="hidden lg:flex flex-col col-start-3 col-end-[-1] bg-[#525659] ">
-        <div className="h-[800px] w-[500px] m-auto mt-10">
-        
+        <div className="h-[800px] overflow-y-auto overflow-x-hidden w-[500px] m-auto mt-10 fixed left-[50%]">
+
+          {/* <PDFViewer 
+            showToolbar={false}
+            style={{
+              width: '100%',
+              height: '95%',
+            }}>
+
+          </PDFViewer> */}
             <Preview
               title={title}
               content={content}
@@ -82,57 +188,121 @@ const Report = () => {
               date={date}
               venue={venue}
               isPhoto={isPhoto}
-              photo={photo}
+              photo={photo} 
+              tentative={tentative}
+              ajk={ajk}
             />
-          </div>
-
-        {content.length > 2186 ? (
-          <div className="my-2.5 h-[800px] w-[500px] font-Arimo font-normal m-auto bg-white rounded-sm p-10 flex flex-col text-[12px] relative">
-            {content
-              .slice(2186, content.length)
-              .split("\n")
-              .map((text, index) => {
-                console.log(text.length);
-                return (
-                  <p key={index} className=" indent-8 mt-2.5 text-justify leading-[10px]">
-                    {text}
-                  </p>
-                );
-              })}
+            {content.length > 2186 ? (
+              <div className="my-2.5 h-[800px] w-[500px] font-Arimo font-normal m-auto bg-white rounded-sm p-10 flex flex-col text-[12px] relative">
+                {content
+                  .slice(2186, content.length)
+                  .split("\n")
+                  .map((text, index) => {
+                    console.log(text.length);
+                    return (
+                      <p key={index} className=" indent-8 mt-2.5 text-justify leading-[10px]">
+                        {text}
+                      </p>
+                    );
+                  })}
 
 
-            <section
-              className={`mt-10 ${
-                content.length > 2186 ? null : "hidden"
-              } absolute bottom-10`}
-            >
-              <p>Disediakan oleh: </p>
-              <div className=" border-b-2 border-dotted border-black w-[80px] mt-2 h-[30px]">
-                <img
-                  src="/assets/signature.png"
-                  alt="signature"
-                  className="object-cover h-[30px] mx-auto"
-                />
+                <section
+                  className={`mt-10 ${
+                    content.length > 2186 ? null : "hidden"
+                  } absolute bottom-10`}
+                >
+                  <p>Disediakan oleh: </p>
+                  <div className=" border-b-2 border-dotted border-black w-[80px] mt-2 h-[30px]">
+                    <img
+                      src="/assets/signature.png"
+                      alt="signature"
+                      className="object-cover h-[30px] mx-auto"
+                    />
+                  </div>
+                  <section className="text-[8px]">
+                    <p>(MUHAMMAD ZULASRAF BIN ZULKIFLI)</p>
+                    <p>(PENGARAH)</p>
+                  </section>
+                </section>
+
               </div>
-              <section className="text-[8px]">
-                <p>(MUHAMMAD ZULASRAF BIN ZULKIFLI)</p>
-                <p>(PENGARAH)</p>
-              </section>
-            </section>
+            ) : null}
+            
+            <ImageTemplate isPhoto={isPhoto} photo={photo} />
 
+            {tentative.length >= 1 ? (
+              <div className="my-2.5 h-[800px] w-[500px] font-Arimo font-normal m-auto bg-white rounded-sm p-10 flex flex-col text-[12px] relative">
+                <h1 className="font-bold">TENTATIF PROGRAM</h1>
+
+                <div className="ml-10">
+                  <section className="flex flex-row py-[8px] font-bold mt-10">
+                    <p className="mr-10">MASA</p>
+                    <p className="absolute left-[200px] max-w-[200px] break-words">AKTIVITI</p>
+                  </section>
+                  <section>
+                    {tentative.map((row: any, index: number) => {
+                      return(
+                        <section key={index} className="flex flex-row py-[8px]">
+                          <p className="mr-10">{row.tentative.time}</p>
+                          <section>
+
+                          {row.tentative.activities.split("\n").map((act: string, num: number) => {
+                            return(
+                              //fix absolute
+                              <p key={num} className="  max-w-[200px] break-words">{act}</p>
+                            )
+                          })}
+                          </section>
+                        </section>
+                      )
+                    })}
+                  </section>
+
+                </div>
+              </div>
+            ): null}
+
+            {ajk.length >= 1 ? (
+              <div className="my-2.5 h-[800px] w-[500px] font-Arimo font-normal m-auto bg-white rounded-sm p-10 flex flex-col text-[12px] relative whitespace-pre-line">
+                <h1 className="font-bold">JAWATANKUASA</h1>
+
+                <div className="ml-10">
+                  <section className="flex flex-row py-[8px] font-bold mt-10">
+                    <p >JAWATAN</p>
+                    <p className="absolute left-[200px] ">NAMA</p>
+                  </section>
+                  <section>
+                    {ajk.map((row: any, index: number) => {
+                      return(
+                        <section key={index} className="flex flex-row py-[8px]">
+                          <section className="max-w-[110px] break-words">
+                            <p >{row.ajk.role}</p>
+                          </section>
+                          <section className="max-w-[300px] break-words">
+                          {row.ajk.names.split("\n").map((act: string, num: number) => {
+                            return(
+                              <p className="absolute left-[200px]  max-w-[200px] break-words" key={num} >{act}</p>
+                            )
+                          })}
+                          </section>
+                        </section>
+                      )
+                    })}
+                  </section>
+
+                </div>
+              </div>
+            ): null}
           </div>
-        ) : null}
-        
-        <ImageTemplate isPhoto={isPhoto} photo={photo} />
 
-        )
+
         <section className="mt-10 flex justify-end mr-10">
-          <button className="mt-10 bg-green-500 text-white px-3 py-2 rounded-lg transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-green-400 cursor-pointer w-[100px] mr-5">
-            Submit
-            </button>
-
-        <button className="mt-10 bg-blue-500 text-white px-3 py-2 rounded-lg transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-400 cursor-pointer w-[100px] " onClick={() => setEditMode(!editMode)} >
-          {editMode ? (
+         
+        {editMode ? (
+          <button className="mt-10 bg-blue-500 text-white px-3 py-2 rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-400 cursor-pointer w-[70px] h-[70px] fixed right-5 bottom-5
+           " onClick={() => setEditMode(!editMode)} >
+          
           <PDFDownloadLink
             document={
               <Template
@@ -144,23 +314,26 @@ const Report = () => {
                 venue={venue}
                 isPhoto={isPhoto}
                 photo={photo}
+                tentative={tentative}
+                ajk={ajk}
               />
             }
             fileName={title}
           >
             {({ loading }: any) =>
-              loading ? "Loading document..." : "Download"
+              loading ? <img src="/assets/loading.svg" className="w-[30px] h-[30px] animate-spin m-auto" alt="loading" /> : <i className="fa-solid fa-file-arrow-down fa-xl"></i>
             }
+            
           </PDFDownloadLink>
-          ) : 'Confirm'}
           
         </button>
+        ) : null}
       </section>  
+
+      <PasswordModal showModal={showModal} setShowModal={setShowModal} password={password} setPassword={setPassword} authHandler={authHandler} />
       </section>
     </div>
   );
 };
-
-
 
 export default Report;

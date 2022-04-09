@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../app/Store";
+import api from "../../utils/api";
+
 
 export const adminSlice = createSlice({
     name: "Admin",
@@ -25,32 +27,34 @@ export const adminSlice = createSlice({
           builder.addCase(getAllUser.rejected, (state, { payload }: any) => {
             state.isFetching = false;
             state.isError = true;
-            state.errorMessage = payload.message;
+            
         });
     }
 });
 
 export const getAllUser = createAsyncThunk(
     "/api/admin/getAllUser",
-    async ( token: any, thunkAPI) => {
+    async ( _, thunkAPI) => {
       try {
-          console.log(token);
-        const response = await fetch("/api/user/getAllUser", {
+          
+          const response = await api.get("/api/user/getAllUser", {
           method: "GET", 
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
+            
           },
         });
-        let data = await response.json();
+        let data = await response.data;
   
         if (response.status === 200) {
+          console.log(data, response);
           return data;
         } else {
           return thunkAPI.rejectWithValue(data);
         }
       } catch (e: any) {
+        console.log(e);
         console.log("Error", e.response.data);
         return thunkAPI.rejectWithValue(e.response.data);
       }

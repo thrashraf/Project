@@ -50,6 +50,7 @@ export const loginUser = async (req, res) => {
       email,
       password
     } = req.body;
+    
 
     //check for existing email
     const [checkExistingEmail] = await user.checkEmail(email);
@@ -83,7 +84,7 @@ export const loginUser = async (req, res) => {
         profile_picture: userInfo.profile_picture
       },
       process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "20s",
+        expiresIn: "15s",
       }
     );
     console.log(accessToken);
@@ -162,3 +163,49 @@ export const Logout = async (req, res) => {
   res.clearCookie("refreshToken");
   return res.sendStatus(200);
 };
+
+export const testDelete = async(req, res) => {
+  try {
+    res.status(200).json({
+      message: 'auth'
+    })
+  } catch (error) {
+    res.status(400).json({
+      message: 'who are u?'
+    })
+  }
+}
+
+export const authUser = async(req, res) => {
+  try {
+    
+    const { email, reqPassword } = req.body;
+
+    console.log(email, reqPassword);
+
+    const [userInfo] = await user.findByEmail(email);
+
+    console.log(userInfo)
+
+    const password = userInfo[0].password;
+    const isValid = bcrypt.compareSync(reqPassword, password);
+
+    if (!isValid) {
+      res.status(400).json({
+        message: 'Incorrect password'
+      })
+    }
+
+    res.status(200).json({
+      message: 'successful confirmation!'
+    })
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(400).json({
+      message: 'Something went wrong'
+    })
+  }
+}

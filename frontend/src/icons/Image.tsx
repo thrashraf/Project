@@ -4,8 +4,8 @@ export const Image = () => {
       id="Layer_1"
       version="1.1"
       viewBox="0 0 512 512"
-      width={50}
-      height={70}
+      width={40}
+      height={40}
       stroke="currentColor"
       fill="currentColor"
       xmlSpace="preserve"

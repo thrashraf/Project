@@ -5,6 +5,7 @@ import { Table } from "./Table";
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { getAllUser } from '../../../features/admin/Admin';
 import { userSelector } from '../../../features/user/User';
+import api from '../../../utils/api'
 interface User {
   id: string;
   name: string;
@@ -31,17 +32,20 @@ const Users = (props: props) => {
     //show one detail user to pass into modal
     const [user, setUser] = useState<Object>({});
 
-
-
     const dispatch = useAppDispatch();
 
     const { token } = useAppSelector(userSelector);
   
     useEffect(() => {
-      console.log(token);
-      dispatch(getAllUser(token));
+      dispatch(getAllUser());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [token]);
+
+    const clickHandler = () => {
+      console.log(`api` + api);
+      api.delete('/api/user/delete', {headers: {authorization: `Bearer ${token}`}}).then((res) => console.log(res.data))
+      .catch(err => console.log(err))
+    }
   
   const showMoreHandler = (id: string, user: object) => {
     setUser(user);
@@ -72,6 +76,7 @@ const Users = (props: props) => {
         allUser={allUser}
         setAllUser={setAllUser}
       />
+      <button onClick={clickHandler}>Click</button>
       {/* Remove class [ border-dashed border-2 border-gray-300 ] to remove dotted border */}
       <Table
         allUser={allUser}

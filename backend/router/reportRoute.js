@@ -4,6 +4,6 @@ import * as report from '../controller/reportController.js';
 
 const reportRoute = express.Router();
 
-reportRoute.post('/report/uploadPhoto', upload.array('upload', 10), report.uploadPhoto);
+reportRoute.post('/report/createReport', upload.array('upload', 10), report.createReport);
 
 export default reportRoute;
