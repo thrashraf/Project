@@ -4,8 +4,13 @@ import crypto from "crypto";
 export const getReport = async (req, res) => {
   try {
     
+    const [allReport] = await report.getAllreport();
+    res.status(200).json({reports: allReport})
+
   } catch (error) {
-    
+    console.log(err)
+
+    res.status(400).json({message: 'something went wrong'})
   }
 }
 
@@ -33,12 +38,10 @@ export const createReport = async (req, res, next) => {
 
     const images =
       files.length >= 0 ?
-      files.map((images) => {
-        return images.filename;
-      }) :
+      files.map((images) => images.filename) :
       null;
 
-    //console.log(images)
+    console.log(images)
 
     const [insertReport] = await report.createReport(
       userId,

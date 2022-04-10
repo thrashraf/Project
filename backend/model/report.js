@@ -34,6 +34,11 @@ class report {
             )`;
     return db.execute(sql);
   }
+
+  static async getAllreport() {
+    const sql = `SELECT * FROM report`
+    return db.execute(sql);
+  }
 }
 
 export default report;
