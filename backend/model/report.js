@@ -21,7 +21,7 @@ class report {
             (
                 '${userId}',
                 '${owner}',
-                ${profile_picture}',
+                '${profile_picture}',
                 '${id}',
                 '${title}',
                 '${date}',

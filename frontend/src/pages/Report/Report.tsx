@@ -113,6 +113,8 @@ const Report = () => {
     })
   };
 
+  console.log(photo);
+
   const formHandler = async (e: any) => {
     
     e.preventDefault();
