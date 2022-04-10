@@ -1,6 +1,14 @@
 import report from "../model/report.js";
 import crypto from "crypto";
 
+export const getReport = async (req, res) => {
+  try {
+    
+  } catch (error) {
+    
+  }
+}
+
 export const createReport = async (req, res, next) => {
   try {
     const id = crypto.randomBytes(16).toString("hex");
@@ -8,6 +16,9 @@ export const createReport = async (req, res, next) => {
     console.log(files);
 
     const {
+      userId,
+      owner,
+      profile_picture,
       title,
       date,
       organizer,
@@ -30,6 +41,9 @@ export const createReport = async (req, res, next) => {
     //console.log(images)
 
     const [insertReport] = await report.createReport(
+      userId,
+      owner,
+      profile_picture,
       id,
       title,
       date,
@@ -51,7 +65,7 @@ export const createReport = async (req, res, next) => {
   } catch (error) {
     console.log(error);
     res.status(400).json({
-      message: "something went wrong..."
+      message: "something went wrong"
     });
   }
 };

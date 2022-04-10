@@ -118,13 +118,16 @@ const Report = () => {
     e.preventDefault();
 
     const formData: any = new FormData(); // Currently empty
-    console.log(photo);
-    photo.forEach(tag => formData.append('upload', tag))
+
+    formData.append('userId', user.id);
+    formData.append('owner', user.name);
+    formData.append('profile_picture', user.profile_picture);
     formData.append("title", title);
     formData.append("date", date);
     formData.append("organizer", organizer);
     formData.append("venue", venue);
     formData.append("content", content);
+    photo.forEach(tag => formData.append('upload', tag));
     tentative.forEach((tentative: any) => formData.append("tentative", JSON.stringify(tentative)));
     ajk.forEach((ajk: any) => formData.append("ajk", JSON.stringify(ajk)));
     
@@ -221,8 +224,8 @@ const Report = () => {
                     />
                   </div>
                   <section className="text-[8px]">
-                    <p>(MUHAMMAD ZULASRAF BIN ZULKIFLI)</p>
-                    <p>(PENGARAH)</p>
+                    <p>({user && user.name})</p>
+                    {/* <p>(PENGARAH)</p> */}
                   </section>
                 </section>
 
@@ -250,7 +253,7 @@ const Report = () => {
                           {row.tentative.activities.split("\n").map((act: string, num: number) => {
                             return(
                               //fix absolute
-                              <p key={num} className="  max-w-[200px] break-words">{act}</p>
+                              <p key={num} className="max-w-[200px] break-words relative left-[50px]">{act}</p>
                             )
                           })}
                           </section>
@@ -282,7 +285,7 @@ const Report = () => {
                           <section className="max-w-[300px] break-words">
                           {row.ajk.names.split("\n").map((act: string, num: number) => {
                             return(
-                              <p className="absolute left-[200px]  max-w-[200px] break-words" key={num} >{act}</p>
+                              <p className="max-w-[200px] break-words relative left-[90px]" key={num} >{act}</p>
                             )
                           })}
                           </section>
