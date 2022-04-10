@@ -1,12 +1,12 @@
-import React, { useRef } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { createPopper } from "@popperjs/core";
 
 const IndexDropdown = () => {
   // dropdown props
   const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
-  const btnDropdownRef = useRef <any>(null);
-  const popoverDropdownRef = useRef <any>(null);
+  const btnDropdownRef = React.createRef();
+  const popoverDropdownRef = React.createRef();
   const openDropdownPopover = () => {
     createPopper(btnDropdownRef.current, popoverDropdownRef.current, {
       placement: "bottom-start",
@@ -19,16 +19,15 @@ const IndexDropdown = () => {
   return (
     <>
       <a
-        className="hover:text-blue-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-        href=""
+        className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
+        href="#pablo"
         ref={btnDropdownRef}
         onClick={(e) => {
           e.preventDefault();
           dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover();
         }}
       >
-        MENU
-        
+        Demo Pages
       </a>
       <div
         ref={popoverDropdownRef}
@@ -39,71 +38,74 @@ const IndexDropdown = () => {
       >
         <span
           className={
-            "text-sm pt-2 pb-0 px-4 font-bold block w-full whitespace-nowrap bg-transparent "
+            "text-sm pt-2 pb-0 px-4 font-bold block w-full whitespace-nowrap bg-transparent text-blueGray-400"
           }
         >
-          Layout
+          kj Layout
         </span>
         <Link
           to="/kj/dashboard"
-          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:text-blue-500"
+          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
         >
           Dashboard
         </Link>
         <Link
           to="/kj/settings"
-          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:text-blue-500"
+          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
         >
           Settings
         </Link>
-        
+        <Link
+          to="/kj/tables"
+          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
+        >
+          Tables
+        </Link>
+        <Link
+          to="/kj/maps"
+          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
+        >
+          Maps
+        </Link>
         <div className="h-0 mx-4 my-2 border border-solid border-blueGray-100" />
         <span
           className={
-            "text-sm pt-2 pb-0 px-4 font-bold block w-full whitespace-nowrap bg-transparent "
+            "text-sm pt-2 pb-0 px-4 font-bold block w-full whitespace-nowrap bg-transparent text-blueGray-400"
           }
         >
           Auth Layout
         </span>
         <Link
           to="/auth/login"
-          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:text-blue-500"
+          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
         >
-           Profile
-        </Link>
-        <Link
-          to="/"
-          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:text-blue-500 "
-          >
-        
           Login
         </Link>
         <Link
-          to="/register"
-          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:text-blue-500"
+          to="/auth/register"
+          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
         >
           Register
         </Link>
-        <div className="h-0 mx-4 my-2 border border-solid border-blueGray-100 hover:text-blue-500" />
+        <div className="h-0 mx-4 my-2 border border-solid border-blueGray-100" />
         <span
           className={
             "text-sm pt-2 pb-0 px-4 font-bold block w-full whitespace-nowrap bg-transparent text-blueGray-400"
           }
         >
-          
-          Activity
+          No Layout
         </span>
         <Link
-          to="/innovation"
-          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:text-blue-500"
+          to="/landing"
+          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
         >
-          Innovation
+          Landing
         </Link>
         <Link
-          to="/publication"
-          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:text-blue-500"
+          to="/profile"
+          className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
         >
-          Publication
+          Profile
         </Link>
       </div>
     </>

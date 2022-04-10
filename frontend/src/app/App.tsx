@@ -8,6 +8,8 @@ import { useAppDispatch } from './hooks';
 import { useEffect } from 'react';
 import {  refreshUser } from '../features/user/User';
 import Middleware from '../middleware/Middleware';
+import KJ from '../pages/HD/KJ';
+
 
 function App() {
 
@@ -27,6 +29,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/' element={<Home/>} />
+          <Route path='/kj/*' element={<KJ/>} />
 
           {/* protected route */}
           <Route element={<Middleware />}> 
