@@ -17,11 +17,11 @@ export default function KJ() {
   return (
     <>
       <Sidebar />
-      <div className="relative md:ml-64 bg-blueGray-100">
+      <div className="relative md:ml-64 bg-blueGray-100 ">
         <AdminNavbar />
         {/* Header */}
         <HeaderStats />
-        <div className="px-4 md:px-10 mx-auto w-full -m-24">
+        <div className="px-4 md:px-10 h-full mx-auto w-full -m-24">
           <Routes>
             <Route element={<Middleware />}>
               <Route index element={<Dashboard />} />

@@ -18,8 +18,6 @@ const Toast = forwardRef((props: Props, ref) => {
     },
   }));
 
-
-
   return (
     <div
       className={`${
@@ -27,7 +25,7 @@ const Toast = forwardRef((props: Props, ref) => {
       } z-50 p-5  sm:w-1/2 fixed inset-x-0 mx-auto top-10 rounded-lg animate-fade-in-down`}
     >
       <div
-        className={`flex max-w-[400px] justify-center m-auto p-4 mb-4 text-sm   rounded-lg ${props.status === 'success' ? 'text-green-600 bg-green-100' : 'text-red-700 bg-red-100'} dark:bg-red-200 dark:text-red-800`}
+        className={`flex max-w-[400px] justify-center m-auto p-4 mb-4 text-sm   rounded-lg ${props.status === 'success' ? 'text-green-600 bg-green-100' : 'text-red-700 bg-red-100'} `}
         role="alert"
       >
         <svg

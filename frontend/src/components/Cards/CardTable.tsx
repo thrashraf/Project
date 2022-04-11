@@ -7,25 +7,16 @@ import { useNavigate } from "react-router-dom";
 
 type Props = {
   reports: any;
-  setReport: any
+  setReport: any;
+  modal: boolean;
+  setModal: any;
+  verifyReport: any;
+  setReportId: any;
 };
 export default function CardTable(props: Props, { color }: any) {
 
   const navigate = useNavigate();
 
-  const verifyReport = (status: string, id: any) => {
-    axios.post('/api/report/verify', { status, id } ).then(res => {
-      //console.log(res);
-      const index = props.reports.findIndex((report: any) => report.id === id);
-      const tempArr = [...props.reports];
-      tempArr[index].status = status;
-
-      props.setReport(tempArr);
-
-    }).catch(err => {
-      //console.log(err);
-    })
-  }
 
   return (
     <>
@@ -145,21 +136,23 @@ export default function CardTable(props: Props, { color }: any) {
                       <button
                         type="submit"
                         className=" bg-green-400 text-white p-2 rounded-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-green-300 cursor-pointer w-[70px]  "
-                        onClick={() => verifyReport('verified', report.id)}
+                        onClick={() => props.verifyReport('verified', report.id)}
                       >
                         Verify
                       </button>
                       <button
                         type="submit"
                         className=" bg-red-400 text-white p-2 rounded-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-red-300 cursor-pointer w-[70px] "
-                        onClick={() => verifyReport('declined', report.id)}
+                        onClick={() => {
+                          props.setModal!(!props.modal);
+                          props.setReportId(report.id);
+                        }}
                       >
                         Decline
                       </button>
 
                       </div>
                     </td>
-                   
                   </tr>
                 );
               })}
