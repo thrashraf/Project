@@ -16,7 +16,7 @@ class report {
     ajk
   ) {
     const sql = `INSERT INTO
-                report (userId, owner, profile_picture, id, program_name, date, organizer, venue, images, content, tentative, committee)
+                report (userId, owner, profile_picture, id, program_name, date, organizer, venue, images, content, tentative, committee, status)
             VALUES
             (
                 '${userId}',
@@ -30,13 +30,19 @@ class report {
                 '${JSON.stringify(images)}',
                 '${content}',
                 '${JSON.stringify(tentative)}',
-                '${JSON.stringify(ajk)}'
+                '${JSON.stringify(ajk)}',
+                'pending'
             )`;
     return db.execute(sql);
   }
 
   static async getAllreport() {
     const sql = `SELECT * FROM report`
+    return db.execute(sql);
+  }
+
+  static async verifyReport(id, status) {
+    const sql = `update report SET status='${status}' WHERE id = '${id}'`
     return db.execute(sql);
   }
 }

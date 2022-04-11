@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import {  refreshUser } from '../features/user/User';
 import Middleware from '../middleware/Middleware';
 import KJ from '../pages/HD/KJ';
+import VerifyReport from '../pages/HD/VerifyReport';
 
 
 function App() {
@@ -29,12 +30,13 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/' element={<Home/>} />
-          <Route path='/kj/*' element={<KJ/>} />
 
           {/* protected route */}
           <Route element={<Middleware />}> 
             <Route path='/create-report' element={<Report />} />
             <Route path='/admin' element={<Admin />} />
+            <Route path='/verify-report/:id' element={<VerifyReport />} />
+            <Route path='/kj/*' element={<KJ/>} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -317,7 +317,6 @@ const Report = () => {
                 organizer={organizer}
                 date={date}
                 venue={venue}
-                isPhoto={isPhoto}
                 photo={photo}
                 tentative={tentative}
                 ajk={ajk}

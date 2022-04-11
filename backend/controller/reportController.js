@@ -72,3 +72,18 @@ export const createReport = async (req, res, next) => {
     });
   }
 };
+
+export const verifyReport = async (req, res) => {
+  try {
+    
+    const { status, id } = req.body
+
+    const [allReport] = await report.verifyReport(id, status);
+    res.status(200).json({message: 'successful update!'})
+
+  } catch (error) {
+    console.log(error)
+
+    res.status(400).json({message: 'something went wrong'})
+  }
+}

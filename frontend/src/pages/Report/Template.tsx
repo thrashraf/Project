@@ -18,7 +18,6 @@ type Props = {
   organizer: string;
   date: string;
   venue: string;
-  isPhoto: boolean;
   photo: any;
   tentative: any;
   ajk: any;
@@ -209,7 +208,7 @@ export const Template = (props: Props) => {
             </View>
           </View>
 
-          {props.isPhoto ? (
+          {props.photo.length >= 0 ? (
             <View break>
               <Text style={styles.aboutProgram}>
                 GAMBAR-GAMBAR SEPANJANG AKTIVITI
@@ -219,7 +218,7 @@ export const Template = (props: Props) => {
                 return (
                   <View style={styles.photoContainer}>
                     <Image
-                      src={`${img.url}`}
+                      src={`/assets/${img}`}
                       key={index}
                       style={styles.image}
                     />
@@ -230,7 +229,7 @@ export const Template = (props: Props) => {
             </View>
           ) : null}
 
-          {props.tentative.length > 0 ? (
+          {props.tentative !== 'undefined' && props.tentative.length > 0 ? (
             <View break>
               <Text style={styles.aboutProgram}>TENTATIF PROGRAM</Text>
 
@@ -263,9 +262,9 @@ export const Template = (props: Props) => {
                 );
               })}
             </View>
-          ) : null}
+          ) : null} 
 
-          {props.ajk.length > 0 ? (
+          {props.tentative !== 'undefined'&& props.ajk.length > 0  ? (
             <View break>
               <Text style={styles.aboutProgram}>JAWATANKUASA</Text>
 

@@ -110,8 +110,8 @@ export const loginUser = async (req, res) => {
     //create dynamic routes based on role
     if (userInfo.role === 'Admin') {
       route = '/admin'
-    } else if (userInfo.role === 'HD') {
-      route = '/head-department'
+    } else if (userInfo.role === 'hd') {
+      route = '/kj/dashboard'
     } else {
       route = '/'
     }

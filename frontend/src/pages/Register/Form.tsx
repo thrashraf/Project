@@ -100,7 +100,7 @@ export const Form = () => {
       <section className="flex justify-center items-center text-sm mt-10 text-gray-400">
         <input type="checkbox" name="agree" className="mr-3" />
         <p>
-          I accept <a href="http://google.com">Terms & Condition</a>.
+          I accept <a href=" ">Terms & Condition</a>.
         </p>
       </section>
 
