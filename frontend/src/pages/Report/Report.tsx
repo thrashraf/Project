@@ -320,6 +320,7 @@ const Report = () => {
                 photo={photo}
                 tentative={tentative}
                 ajk={ajk}
+                staffName={user.name}
               />
             }
             fileName={title}
