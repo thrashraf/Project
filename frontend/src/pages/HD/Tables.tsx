@@ -8,25 +8,28 @@ import Toast from "../../components/Toast";
 import CardTable from "../../components/Cards/CardTable";
 
 export default function Tables() {
+
   const [allReport, setAllReport] = useState<any>([]);
   const [modal, setModal] = useState<boolean>(false);
   const [id, setReportId] = useState<string>("");
 
-  //toast state
-  const [status, setStatus] = useState<string>("");
+  //declined message
   const [message, setMessage] = useState<string>("");
 
   const toastRef = useRef<any>(null);
 
   const verifyReport = (status: string, id: any) => {
+
     axios
-      .post("/api/report/verify", { status, id })
+      .post("/api/report/verify", { status, id, message})
       .then((res) => {
         //console.log(res);
         const index = allReport.findIndex((report: any) => report.id === id);
         const tempArr = [...allReport];
         tempArr[index].status = status;
 
+        //clear message
+        setMessage("");
         setAllReport(tempArr);
         toastHandler(status);
       })
@@ -38,8 +41,6 @@ export default function Tables() {
   const toastHandler = (status: any) => {
     if (toastRef.current !== null) {
       if (status !== "verified") {
-        setStatus("success");
-        setMessage("Successful send notification to user!");
         toastRef.current.showToast();
       }
     }
@@ -56,7 +57,7 @@ export default function Tables() {
   console.log(allReport);
   return (
     <>
-      <Toast status={status} message={message} ref={toastRef} />
+      <Toast status={'success'} message={'Successful send notification to user!'} ref={toastRef} />
       <div className="flex flex-wrap mt-4">
         <div className="w-full mb-12 px-4">
           <CardTable
@@ -73,6 +74,8 @@ export default function Tables() {
             setModal={setModal}
             verifyReport={verifyReport}
             id={id}
+            message={message}
+            setMessage={setMessage}
           />
         </div>
       </div>

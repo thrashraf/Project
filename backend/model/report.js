@@ -45,6 +45,11 @@ class report {
     const sql = `update report SET status='${status}' WHERE id = '${id}'`
     return db.execute(sql);
   }
+
+  static async selectReportById(id) {
+    const sql = `SELECT * FROM report WHERE id = '${id}'`;
+    return db.execute(sql);
+  }
 }
 
 export default report;

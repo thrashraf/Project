@@ -38,6 +38,7 @@ const VerifyReport = () => {
                 photo={report.images}
                 tentative={report.tentative}
                 ajk={report.ajk}
+                staffName={report.owner}
                 />
             </PDFViewer>
             </div>

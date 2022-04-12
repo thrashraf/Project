@@ -1,16 +1,22 @@
 import report from "../model/report.js";
 import crypto from "crypto";
+import transporter from '../config/nodemail.js';
+import user from "../model/users.js";
 
 export const getReport = async (req, res) => {
   try {
-    
+
     const [allReport] = await report.getAllreport();
-    res.status(200).json({reports: allReport})
+    res.status(200).json({
+      reports: allReport
+    })
 
   } catch (error) {
     console.log(err)
 
-    res.status(400).json({message: 'something went wrong'})
+    res.status(400).json({
+      message: 'something went wrong'
+    })
   }
 }
 
@@ -60,9 +66,9 @@ export const createReport = async (req, res, next) => {
 
     if (insertReport.affectedRows > 1) {
 
-        res.status(200).json({
-          message: "successful"
-        });
+      res.status(200).json({
+        message: "successful"
+      });
     }
 
   } catch (error) {
@@ -75,15 +81,56 @@ export const createReport = async (req, res, next) => {
 
 export const verifyReport = async (req, res) => {
   try {
-    
-    const { status, id } = req.body
+
+    const {
+      status,
+      id,
+      message
+    } = req.body
+
+    const subject = status === 'declined' ? 'Fix your report' : 'Successful verified!';
+
+    // get user's report
+    const [userReport] = await report.selectReportById(id);
+    const reportUser = userReport[0];
+
+    const [selectUser] = await user.getUserById(reportUser.userId);
+    const userInfo = selectUser[0];
 
     const [allReport] = await report.verifyReport(id, status);
-    res.status(200).json({message: 'successful update!'})
+
+    const emailOptions = {
+      from: 'samsjtmkpsmza@gmail.com',
+      to: userInfo.email,
+      subject: subject,
+      html: `
+            <p>Assalamualaikum dan Salam Sejahtera</p>
+            <p>Kepada ${userInfo.name}</p>
+            ${status === 'declined' 
+            ? `<p>Sila perbaiki report ${reportUser.program_name}</p>` 
+            : `<p>Report ${reportUser.program_name} sudah diluluskan</p>`}
+            <p>${message}</p>
+            <p>Sekian, terima kasih.</p>
+      `
+    }
+
+    transporter.sendMail(emailOptions, (err, info) => {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log(info)
+        res.status(200).json({
+          message: 'successful update!'
+        })
+    
+      }
+    })
 
   } catch (error) {
     console.log(error)
 
-    res.status(400).json({message: 'something went wrong'})
+    res.status(400).json({
+      message: 'something went wrong'
+    })
   }
 }
