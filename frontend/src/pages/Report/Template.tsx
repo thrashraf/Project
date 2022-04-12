@@ -163,6 +163,18 @@ export const Template = (props: Props) => {
     },
   });
 
+  const timeConvertor = (time: any) => {
+    // first checks the correct time format and then split it into components
+    time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+  
+    if (time.length > 1) { // If the time format is correct
+      time = time.slice (1);  // Remove full string match value
+      time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM based on given hour
+      time[0] = +time[0] % 12 || 12; // change the hour based on AM/PM
+    }
+    return time.join (''); // return new time format as a String
+  }
+
   return (
     <>
       <Document>
@@ -179,7 +191,7 @@ export const Template = (props: Props) => {
 
             <Text style={styles.aboutProgram}>1.0 BUTIRAN PROGRAM</Text>
             <Text style={styles.aboutContent}>
-              a) Nama Program : {props.name}
+              a) Nama Program : {props.title}
             </Text>
             <Text style={styles.aboutContent}>
               b) Penganjur : {props.organizer}
@@ -219,7 +231,7 @@ export const Template = (props: Props) => {
                 return (
                   <View style={styles.photoContainer}>
                     <Image
-                      src={`/assets/${img}`}
+                      src={`${URL.createObjectURL(img)}`}
                       key={index}
                       style={styles.image}
                     />
@@ -249,7 +261,7 @@ export const Template = (props: Props) => {
               {props.tentative.map((row: any, index: number) => {
                 return (
                   <View key={index} style={styles.row}>
-                    <Text style={styles.row1}>{row.tentative.time}</Text>
+                    <Text style={styles.row1}>{timeConvertor(row.tentative.time)}</Text>
                     {row.tentative.activities
                       .split("\n\n")
                       .map((act: string, num: number) => {

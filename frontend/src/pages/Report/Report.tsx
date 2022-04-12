@@ -113,7 +113,17 @@ const Report = () => {
     })
   };
 
-  console.log(photo);
+  const timeConvertor = (time: any) => {
+    // first checks the correct time format and then split it into components
+    time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+  
+    if (time.length > 1) { // If the time format is correct
+      time = time.slice (1);  // Remove full string match value
+      time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM based on given hour
+      time[0] = +time[0] % 12 || 12; // change the hour based on AM/PM
+    }
+    return time.join (''); // return new time format as a String
+  }
 
   const formHandler = async (e: any) => {
     
@@ -249,7 +259,7 @@ const Report = () => {
                     {tentative.map((row: any, index: number) => {
                       return(
                         <section key={index} className="flex flex-row py-[8px]">
-                          <p className="mr-10">{row.tentative.time}</p>
+                          <p className="mr-10">{timeConvertor(row.tentative.time)}</p>
                           <section>
 
                           {row.tentative.activities.split("\n").map((act: string, num: number) => {
