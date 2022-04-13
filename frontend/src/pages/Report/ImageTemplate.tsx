@@ -22,6 +22,7 @@ export const ImageTemplate = (props: Props) => {
             <section className=" mt-10">
               
               {image.map((img: any, index: number) => {
+                console.log(URL.createObjectURL(img));
                 return(
                   <section className="mt-5 whitespace-normal">
                     <img src={`${URL.createObjectURL(img)}`} alt="pho" key={index} className="w-[200px] h-[200px] object-cover m-auto"/>

@@ -17,7 +17,6 @@ export default function CardTable(props: Props, { color }: any) {
 
   const navigate = useNavigate();
 
-
   return (
     <>
       <div

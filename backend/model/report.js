@@ -29,8 +29,8 @@ class report {
                 '${venue}',
                 '${JSON.stringify(images)}',
                 '${content}',
-                '${JSON.stringify(tentative)}',
-                '${JSON.stringify(ajk)}',
+                '[${tentative}]',
+                '[${ajk}]',
                 'pending'
             )`;
     return db.execute(sql);

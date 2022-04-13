@@ -29,16 +29,16 @@ const VerifyReport = () => {
                 }}
             >
                 <Template
-                title={report.program_name}
-                content={report.content}
-                name={report.program_name}
-                organizer={report.organizer}
-                date={report.date}
-                venue={report.venue}
-                photo={report.images}
-                tentative={report.tentative}
-                ajk={report.ajk}
-                staffName={report.owner}
+                    title={report.program_name}
+                    content={report.content}
+                    name={report.program_name}
+                    organizer={report.organizer}
+                    date={report.date}
+                    venue={report.venue}
+                    photo={report.images}
+                    tentative={report.tentative}
+                    ajk={report.ajk}
+                    staffName={report.owner}
                 />
             </PDFViewer>
             </div>

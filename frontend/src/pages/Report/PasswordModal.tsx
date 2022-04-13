@@ -17,7 +17,7 @@ export const PasswordModal = (props: Props) => {
 
   return (
     <ModalUser modal={props.showModal} setModal={props.setShowModal} >
-      <div className="relative bg-white max-w-md rounded-lg shadow z-50">
+      <div className="relative mx-auto bg-white max-w-md rounded-lg shadow z-50">
         <div className="flex justify-end p-2">
           <button
             type="button"

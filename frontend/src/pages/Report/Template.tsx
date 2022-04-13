@@ -164,6 +164,7 @@ export const Template = (props: Props) => {
   });
 
   const timeConvertor = (time: any) => {
+    console.log(time);
     // first checks the correct time format and then split it into components
     time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
   
@@ -221,7 +222,7 @@ export const Template = (props: Props) => {
             </View>
           </View>
 
-          {props.photo.length >= 0 ? (
+          {props.photo !== 'undefined'&& props.photo.length >= 0 ? (
             <View break>
               <Text style={styles.aboutProgram}>
                 GAMBAR-GAMBAR SEPANJANG AKTIVITI
@@ -231,7 +232,7 @@ export const Template = (props: Props) => {
                 return (
                   <View style={styles.photoContainer}>
                     <Image
-                      src={`${URL.createObjectURL(img)}`}
+                      src={`/assets/${img}`}
                       key={index}
                       style={styles.image}
                     />
@@ -241,8 +242,7 @@ export const Template = (props: Props) => {
               })}
             </View>
           ) : null}
-
-          {props.tentative !== 'undefined' && props.tentative.length > 0 ? (
+          {props.tentative !== undefined ? (props.tentative.length > 0 ? (
             <View break>
               <Text style={styles.aboutProgram}>TENTATIF PROGRAM</Text>
 
@@ -261,8 +261,8 @@ export const Template = (props: Props) => {
               {props.tentative.map((row: any, index: number) => {
                 return (
                   <View key={index} style={styles.row}>
-                    <Text style={styles.row1}>{timeConvertor(row.tentative.time)}</Text>
-                    {row.tentative.activities
+                    <Text style={styles.row1}>{timeConvertor(row.time)}</Text>
+                    {row.activities
                       .split("\n\n")
                       .map((act: string, num: number) => {
                         return (
@@ -275,9 +275,9 @@ export const Template = (props: Props) => {
                 );
               })}
             </View>
-          ) : null} 
-
-          {props.tentative !== 'undefined'&& props.ajk.length > 0  ? (
+          ) : null ) : null}
+          
+          {props.ajk !== undefined ? (props.ajk.length > 0  ? (
             <View break>
               <Text style={styles.aboutProgram}>JAWATANKUASA</Text>
 
@@ -296,8 +296,8 @@ export const Template = (props: Props) => {
               {props.ajk.map((row: any, index: number) => {
                 return (
                   <View key={index} style={styles.row}>
-                    <Text style={styles.row1}>{row.ajk.role}</Text>
-                    {row.ajk.names.split("\n\n").map((act: any, num: any) => {
+                    <Text style={styles.row1}>{row.role}</Text>
+                    {row.names.split("\n\n").map((act: any, num: any) => {
                       return (
                         <Text key={num} style={styles.activities}>
                           {act}
@@ -308,7 +308,8 @@ export const Template = (props: Props) => {
                 );
               })}
             </View>
-          ) : null}
+          ) : null) : null}
+          
         </Page>
       </Document>
     </>

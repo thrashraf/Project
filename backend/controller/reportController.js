@@ -7,12 +7,15 @@ export const getReport = async (req, res) => {
   try {
 
     const [allReport] = await report.getAllreport();
+
+    console.log(allReport)
+
     res.status(200).json({
       reports: allReport
     })
 
   } catch (error) {
-    console.log(err)
+    console.log(error)
 
     res.status(400).json({
       message: 'something went wrong'
@@ -24,7 +27,6 @@ export const createReport = async (req, res, next) => {
   try {
     const id = crypto.randomBytes(16).toString("hex");
     const files = req.files;
-    console.log(files);
 
     const {
       userId,
@@ -46,8 +48,8 @@ export const createReport = async (req, res, next) => {
       files.length >= 0 ?
       files.map((images) => images.filename) :
       null;
-
-    console.log(images)
+    
+    const committee = ajk === undefined ? null : ajk
 
     const [insertReport] = await report.createReport(
       userId,
@@ -61,7 +63,7 @@ export const createReport = async (req, res, next) => {
       images,
       content,
       tentative,
-      ajk
+      committee
     );
 
     if (insertReport.affectedRows > 1) {

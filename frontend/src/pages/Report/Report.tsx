@@ -49,8 +49,10 @@ const Report = () => {
   };
 
   const addTentativeHandler = () => {
-    setTentative([...tentative, { tentative: {time: '', activities: ''}}])
+    setTentative([...tentative,{time: '', activities: ''}])
   }
+
+  console.log(tentative);
 
   const removeTentativeHandler = (index: number) => {
     const tentativeList = [...tentative];
@@ -62,16 +64,12 @@ const Report = () => {
     const {name, value} = e.target
     const tentativeList = [...tentative];
 
-    if (e.key === "Enter") {
-      tentativeList[index]['tentative']['activities'] = value + '\n';
-    }
-    
-    tentativeList[index]['tentative'][name] = value;
+    tentativeList[index][name] = value;
     setTentative(tentativeList);
   }
 
   const addAjkHandler = () => {
-    setAjk([...ajk, { ajk: {role: '', names: ''}}])
+    setAjk([...ajk, {role: '', names: ''}])
   }
 
   const removeAjkHandler = (index: number) => {
@@ -84,7 +82,7 @@ const Report = () => {
     const {name, value} = e.target
     const AjkList = [...ajk];
     
-    AjkList[index]['ajk'][name] = value;
+    AjkList[index][name] = value;
     setAjk(AjkList);
   }
 
@@ -140,7 +138,7 @@ const Report = () => {
     formData.append("venue", venue);
     formData.append("content", content);
     photo.forEach(tag => formData.append('upload', tag));
-    tentative.forEach((tentative: any) => formData.append("tentative", JSON.stringify(tentative)));
+    tentative.forEach((tentative: any) => formData.append("tentative",JSON.stringify(tentative)));
     ajk.forEach((ajk: any) => formData.append("ajk", JSON.stringify(ajk)));
     
     await api.post('/api/report/createReport', formData)
@@ -259,10 +257,10 @@ const Report = () => {
                     {tentative.map((row: any, index: number) => {
                       return(
                         <section key={index} className="flex flex-row py-[8px]">
-                          <p className="mr-10">{timeConvertor(row.tentative.time)}</p>
+                          <p className="mr-10">{timeConvertor(row.time)}</p>
                           <section>
 
-                          {row.tentative.activities.split("\n").map((act: string, num: number) => {
+                          {row.activities.split("\n").map((act: string, num: number) => {
                             return(
                               //fix absolute
                               <p key={num} className="max-w-[200px] break-words relative left-[50px]">{act}</p>
@@ -292,10 +290,10 @@ const Report = () => {
                       return(
                         <section key={index} className="flex flex-row py-[8px]">
                           <section className="max-w-[110px] break-words">
-                            <p >{row.ajk.role}</p>
+                            <p >{row.role}</p>
                           </section>
                           <section className="max-w-[300px] break-words">
-                          {row.ajk.names.split("\n").map((act: string, num: number) => {
+                          {row.names.split("\n").map((act: string, num: number) => {
                             return(
                               <p className="max-w-[200px] break-words relative left-[90px]" key={num} >{act}</p>
                             )
