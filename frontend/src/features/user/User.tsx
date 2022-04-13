@@ -8,11 +8,6 @@ interface loginInterface{
   password: string;
 
 }
-interface user {
-  name: string;
-  email: string;
-  password: string;
-}
 
 const initialState = () => ({
   user: null,
@@ -108,8 +103,9 @@ export const userSlice = createSlice({
 
 export const signupUser = createAsyncThunk(
   "users/signupUser",
-  async ({ name, email, password }: user, thunkAPI) => {
+  async ({ userName, userEmail, userPassword }: any, thunkAPI) => {
     try {
+      console.log(userName, userEmail, userPassword);
       const response = await fetch("/api/user/register", {
         method: "POST",
         headers: {
@@ -117,9 +113,9 @@ export const signupUser = createAsyncThunk(
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name,
-          email,
-          password,
+          userName,
+          userEmail,
+          userPassword,
         }),
       });
       let data = await response.json();

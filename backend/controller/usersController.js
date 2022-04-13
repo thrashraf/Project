@@ -8,14 +8,14 @@ export const registerUser = async (req, res) => {
   try {
     //get value from frontend
     const {
-      name,
-      email,
-      password
+      userName,
+      userEmail,
+      userPassword
     } = req.body;
     //console.log(firstName, lastName, email, password);
 
     //want to check if user exist
-    const [checkExistingEmail] = await user.checkEmail(email);
+    const [checkExistingEmail] = await user.checkEmail(userEmail);
 
     //if user already thrown an error
     if (checkExistingEmail.length > 0) {
@@ -26,12 +26,12 @@ export const registerUser = async (req, res) => {
     }
 
     //hash user password
-    const hashPassword = bcrypt.hashSync(password);
+    const hashPassword = bcrypt.hashSync(userPassword);
 
     console.log(hashPassword)
 
     //create user
-    await user.register(name, email, hashPassword);
+    await user.register(userName, userEmail, hashPassword);
 
     //response successful create user 🎉
     res.status(200).json({
