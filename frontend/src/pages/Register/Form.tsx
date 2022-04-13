@@ -27,11 +27,6 @@ export const Form = () => {
   const [status, setStatus] = useState<string>("success");
   const [message, setMessage] = useState<string>("successful !");
 
-  const validation = () => {
-
-  }
-
-
   useEffect(() => {
     if (isSuccess) {
       dispatch(clearState())
