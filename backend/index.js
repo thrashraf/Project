@@ -12,6 +12,7 @@ const port = 5000 || process.env.PORT;
 import usersRoute from './router/usersRoute.js';
 import adminRoute from './router/adminRoute.js';
 import innoRoute from './router/innoRoute.js';
+import publicationRoute from './router/publicationRoute.js'
 import reportRoute from './router/reportRoute.js';
 
 const app = express();
@@ -23,6 +24,7 @@ app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use('/api', usersRoute, adminRoute, innoRoute, publicationRoute);
 app.use('/api', usersRoute, adminRoute, innoRoute, reportRoute);
 
 

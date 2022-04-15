@@ -1,8 +1,6 @@
 /*eslint-disable*/
 import React from "react";
 import { Link } from "react-router-dom";
-
-
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
@@ -334,7 +332,7 @@ export const Home =() =>{
                   <h5 className="text-xl font-semibold pb-4 text-center">
                     Login Page
                   </h5>
-                  <Link to="/profile">
+                  <Link to="/login">
                     <div className=" hover:scale-110 relative flex flex-col min-w-0 break-words bg-white w-full mb-2 shadow-lg rounded-lg ease-linear transition-all duration-150">
                       <img
                         alt="..."
