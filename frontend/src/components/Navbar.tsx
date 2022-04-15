@@ -62,6 +62,17 @@ export default function Navbar(props:any) {
             id="example-navbar-warning"
           >
             
+            <ul className="flex flex-col lg:flex-row list-none mr-auto">
+              <li className="flex items-center">
+                <a
+                  className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
+                  onClick={() => navigate('/create-report')}
+                >
+                  <i className="text-[#47487a] far fa-file-alt text-lg leading-lg mr-2" />{" "}
+                  Reports
+                </a>
+              </li>
+            </ul>
             <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
               <li className="flex items-center">
                 <NavDrop />

@@ -10,6 +10,8 @@ import {  refreshUser } from '../features/user/User';
 import Middleware from '../middleware/Middleware';
 import { Publication } from '../pages/Publication/Publication'
 import { Innovation } from '../pages/Innovation.tsx/Innovation';
+import KJ from '../pages/HD/KJ';
+import VerifyReport from '../pages/HD/VerifyReport';
 
 
 function App() {
@@ -38,6 +40,8 @@ function App() {
           <Route element={<Middleware />}> 
             <Route path='/create-report' element={<Report />} />
             <Route path='/admin' element={<Admin />} />
+            <Route path='/verify-report/:id' element={<VerifyReport />} />
+            <Route path='/kj/*' element={<KJ/>} />
           </Route>
         </Routes>
       </BrowserRouter>

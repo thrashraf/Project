@@ -14,6 +14,7 @@ export const Input = (props: props) => {
       placeholder={props.placeholder}
       className="bg-blue-50 px-3 py-3 rounded-lg outline-none w-full"
       value={props.value}
+      required
       onChange={props.onChange}
     />
   );

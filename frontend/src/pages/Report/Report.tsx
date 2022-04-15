@@ -2,28 +2,38 @@ import React, { useRef, useState } from "react";
 import { Preview } from "./Preview";
 import { ImageTemplate } from "./ImageTemplate";
 import { Sidebar } from "./Sidebar";
-import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 import { Template } from "./Template";
+import { PasswordModal } from "./PasswordModal";
+import api from '../../utils/api'
+import { useAppSelector } from "../../app/hooks";
+import { userSelector } from "../../features/user/User";
 
 const Report = () => {
+
+  const { user }: any = useAppSelector(userSelector);
   
+  // ? report state
   const [title, setTitle] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [programName, setProgramName] = useState<string>("");
   const [organizer, setOrganizer] = useState<string>("");
   const [venue, setVenue] = useState<string>("");
-
   const [isPhoto, setIsPhoto] = useState<boolean>(false);
   const [photo, setPhoto] = useState<any[]>([]);
-
   const [tentative, setTentative] = useState<any>([]);
-
   const [ajk, setAjk] = useState<any>([]);
 
+  //? utils
   const [editMode, setEditMode] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
+  //ref
   const uploadRef = useRef<HTMLInputElement>(null);
+
+  //user
+  const [password, setPassword] = useState<string>('');
 
   const contentHandler = (e: any) => {
     if (e.key === "Enter") {
@@ -39,8 +49,10 @@ const Report = () => {
   };
 
   const addTentativeHandler = () => {
-    setTentative([...tentative, { tentative: {time: '', activities: ''}}])
+    setTentative([...tentative,{time: '', activities: ''}])
   }
+
+  console.log(tentative);
 
   const removeTentativeHandler = (index: number) => {
     const tentativeList = [...tentative];
@@ -52,16 +64,12 @@ const Report = () => {
     const {name, value} = e.target
     const tentativeList = [...tentative];
 
-    if (e.key === "Enter") {
-      tentativeList[index]['tentative']['activities'] = value + '\n';
-    }
-    
-    tentativeList[index]['tentative'][name] = value;
+    tentativeList[index][name] = value;
     setTentative(tentativeList);
   }
 
   const addAjkHandler = () => {
-    setAjk([...ajk, { ajk: {role: '', names: ''}}])
+    setAjk([...ajk, {role: '', names: ''}])
   }
 
   const removeAjkHandler = (index: number) => {
@@ -74,7 +82,7 @@ const Report = () => {
     const {name, value} = e.target
     const AjkList = [...ajk];
     
-    AjkList[index]['ajk'][name] = value;
+    AjkList[index][name] = value;
     setAjk(AjkList);
   }
 
@@ -83,15 +91,60 @@ const Report = () => {
     const tempArr: any = [];
 
     console.log(e.target.files);
-    [...e.target.files].map((file) => {
-      return tempArr.push({
-        data: file,
-        url: URL.createObjectURL(file),
-      });
-    });
+    tempArr.push(...e.target.files)
 
     setPhoto(tempArr);
     setIsPhoto(true);
+  };
+
+  const authHandler = async (e: any) => {
+    
+    e.preventDefault();
+
+    const email = user.email
+    const reqPassword = password
+
+    await api.post('/api/user/auth', {email, reqPassword})
+    .then(res => {
+      console.log(res);
+      formHandler(e)
+    })
+  };
+
+  const timeConvertor = (time: any) => {
+    // first checks the correct time format and then split it into components
+    time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+  
+    if (time.length > 1) { // If the time format is correct
+      time = time.slice (1);  // Remove full string match value
+      time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM based on given hour
+      time[0] = +time[0] % 12 || 12; // change the hour based on AM/PM
+    }
+    return time.join (''); // return new time format as a String
+  }
+
+  const formHandler = async (e: any) => {
+    
+    e.preventDefault();
+
+    const formData: any = new FormData(); // Currently empty
+
+    formData.append('userId', user.id);
+    formData.append('owner', user.name);
+    formData.append('profile_picture', user.profile_picture);
+    formData.append("title", title);
+    formData.append("date", date);
+    formData.append("organizer", organizer);
+    formData.append("venue", venue);
+    formData.append("content", content);
+    photo.forEach(tag => formData.append('upload', tag));
+    tentative.forEach((tentative: any) => formData.append("tentative",JSON.stringify(tentative)));
+    ajk.forEach((ajk: any) => formData.append("ajk", JSON.stringify(ajk)));
+    
+    await api.post('/api/report/createReport', formData)
+    .then(res => {
+      console.log(res);
+    })
   };
 
 
@@ -124,6 +177,9 @@ const Report = () => {
         ajk={ajk}
         editMode={editMode}
         setEditMode={setEditMode}
+        showModal={showModal} setShowModal={setShowModal}
+        password={password}
+        formHandler={formHandler}
       />
 
       <section className="hidden lg:flex flex-col col-start-3 col-end-[-1] bg-[#525659] ">
@@ -178,8 +234,8 @@ const Report = () => {
                     />
                   </div>
                   <section className="text-[8px]">
-                    <p>(MUHAMMAD ZULASRAF BIN ZULKIFLI)</p>
-                    <p>(PENGARAH)</p>
+                    <p>({user && user.name})</p>
+                    {/* <p>(PENGARAH)</p> */}
                   </section>
                 </section>
 
@@ -201,12 +257,13 @@ const Report = () => {
                     {tentative.map((row: any, index: number) => {
                       return(
                         <section key={index} className="flex flex-row py-[8px]">
-                          <p className="mr-10">{row.tentative.time}</p>
+                          <p className="mr-10">{timeConvertor(row.time)}</p>
                           <section>
 
-                          {row.tentative.activities.split("\n").map((act: string, num: number) => {
+                          {row.activities.split("\n").map((act: string, num: number) => {
                             return(
-                              <p key={num} className="absolute left-[200px] max-w-[200px] break-words">{act}</p>
+                              //fix absolute
+                              <p key={num} className="max-w-[200px] break-words relative left-[50px]">{act}</p>
                             )
                           })}
                           </section>
@@ -233,12 +290,12 @@ const Report = () => {
                       return(
                         <section key={index} className="flex flex-row py-[8px]">
                           <section className="max-w-[110px] break-words">
-                            <p >{row.ajk.role}</p>
+                            <p >{row.role}</p>
                           </section>
                           <section className="max-w-[300px] break-words">
-                          {row.ajk.names.split("\n").map((act: string, num: number) => {
+                          {row.names.split("\n").map((act: string, num: number) => {
                             return(
-                              <p className="absolute left-[200px]  max-w-[200px] break-words" key={num} >{act}</p>
+                              <p className="max-w-[200px] break-words relative left-[90px]" key={num} >{act}</p>
                             )
                           })}
                           </section>
@@ -255,9 +312,10 @@ const Report = () => {
 
         <section className="mt-10 flex justify-end mr-10">
          
-
-        <button className="mt-10 bg-blue-500 text-white px-3 py-2 rounded-lg transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-400 cursor-pointer w-[100px] " onClick={() => setEditMode(!editMode)} >
-          {editMode ? (
+        {editMode ? (
+          <button className="mt-10 bg-blue-500 text-white px-3 py-2 rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-400 cursor-pointer w-[70px] h-[70px] fixed right-5 bottom-5
+           " onClick={() => setEditMode(!editMode)} >
+          
           <PDFDownloadLink
             document={
               <Template
@@ -267,22 +325,25 @@ const Report = () => {
                 organizer={organizer}
                 date={date}
                 venue={venue}
-                isPhoto={isPhoto}
                 photo={photo}
                 tentative={tentative}
                 ajk={ajk}
+                staffName={user.name}
               />
             }
             fileName={title}
           >
             {({ loading }: any) =>
-              loading ? "Loading document..." : "Download"
+              loading ? <img src="/assets/loading.svg" className="w-[30px] h-[30px] animate-spin m-auto" alt="loading" /> : <i className="fa-solid fa-file-arrow-down fa-xl"></i>
             }
+            
           </PDFDownloadLink>
-          ) : 'Save'}
           
         </button>
+        ) : null}
       </section>  
+
+      <PasswordModal showModal={showModal} setShowModal={setShowModal} password={password} setPassword={setPassword} authHandler={authHandler} />
       </section>
     </div>
   );

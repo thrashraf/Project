@@ -8,14 +8,14 @@ export const registerUser = async (req, res) => {
   try {
     //get value from frontend
     const {
-      name,
-      email,
-      password
+      userName,
+      userEmail,
+      userPassword
     } = req.body;
     //console.log(firstName, lastName, email, password);
 
     //want to check if user exist
-    const [checkExistingEmail] = await user.checkEmail(email);
+    const [checkExistingEmail] = await user.checkEmail(userEmail);
 
     //if user already thrown an error
     if (checkExistingEmail.length > 0) {
@@ -26,12 +26,12 @@ export const registerUser = async (req, res) => {
     }
 
     //hash user password
-    const hashPassword = bcrypt.hashSync(password);
+    const hashPassword = bcrypt.hashSync(userPassword);
 
     console.log(hashPassword)
 
     //create user
-    await user.register(name, email, hashPassword);
+    await user.register(userName, userEmail, hashPassword);
 
     //response successful create user 🎉
     res.status(200).json({
@@ -110,8 +110,8 @@ export const loginUser = async (req, res) => {
     //create dynamic routes based on role
     if (userInfo.role === 'Admin') {
       route = '/admin'
-    } else if (userInfo.role === 'HD') {
-      route = '/head-department'
+    } else if (userInfo.role === 'hd') {
+      route = '/kj/dashboard'
     } else {
       route = '/'
     }
@@ -172,6 +172,40 @@ export const testDelete = async(req, res) => {
   } catch (error) {
     res.status(400).json({
       message: 'who are u?'
+    })
+  }
+}
+
+export const authUser = async(req, res) => {
+  try {
+    
+    const { email, reqPassword } = req.body;
+
+    console.log(email, reqPassword);
+
+    const [userInfo] = await user.findByEmail(email);
+
+    console.log(userInfo)
+
+    const password = userInfo[0].password;
+    const isValid = bcrypt.compareSync(reqPassword, password);
+
+    if (!isValid) {
+      res.status(400).json({
+        message: 'Incorrect password'
+      })
+    }
+
+    res.status(200).json({
+      message: 'successful confirmation!'
+    })
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(400).json({
+      message: 'Something went wrong'
     })
   }
 }

@@ -12,7 +12,6 @@ usersRoute.get('/user/token', refreshToken);
 usersRoute.get('/user/getAllUser', users.getAllUser); 
 usersRoute.delete('/user/logout', users.Logout);
 usersRoute.delete('/user/delete', verifytoken, users.testDelete);
-
-
+usersRoute.post('/user/auth', verifytoken, users.authUser);
 
 export default usersRoute
