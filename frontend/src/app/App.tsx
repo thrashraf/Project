@@ -10,6 +10,7 @@ import {  refreshUser } from '../features/user/User';
 import Middleware from '../middleware/Middleware';
 import KJ from '../pages/HD/KJ';
 import VerifyReport from '../pages/HD/VerifyReport';
+import { Profile } from '../pages/Profile/Profile';
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
             <Route path='/admin' element={<Admin />} />
             <Route path='/verify-report/:id' element={<VerifyReport />} />
             <Route path='/kj/*' element={<KJ/>} />
+            <Route path='/profile/*' element={<Profile/>} />
           </Route>
         </Routes>
       </BrowserRouter>

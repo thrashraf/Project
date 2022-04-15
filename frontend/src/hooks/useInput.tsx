@@ -7,9 +7,14 @@ const useInput = (initialValue: any) => {
         setValue(e.target.value);
     }
 
+    const setInput = (value: any) => {
+        setValue(value);
+    }
+
     return {
         value,
-        onChange: handleChange
+        onChange: handleChange,
+        setInput
     }
 }
 

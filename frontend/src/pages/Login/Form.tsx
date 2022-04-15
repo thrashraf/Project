@@ -56,7 +56,6 @@ export const Form = () => {
     <form onSubmit={onSubmithandler} action="" className=" flex flex-col mt-10">
 
       <Toast 
-      
       status = {status}
       message = {message}
       ref = {toastRef}
