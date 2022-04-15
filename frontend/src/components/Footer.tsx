@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
@@ -18,30 +19,38 @@ export default function Footer() {
               We make it simple for the next generation of evolution to come up with ideas.
               </h5>
               <div className="mt-6 lg:mb-0 mb-6">
+              <a href="https://web.facebook.com/mypsmza?_rdc=1&_rdr" target={"_blank"}>
                 <button
                   className="bg-white text-blue-300 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2"
                   type="button"
                 >
                   <i className="fab fa-twitter"></i>
                 </button>
+                </a>
+                <a href="https://web.facebook.com/mypsmza?_rdc=1&_rdr" target={"_blank"}>
                 <button
                   className="bg-white text-blue-600 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2"
                   type="button"
                 >
                   <i className="fab fa-facebook-square"></i>
                 </button>
+                </a>
+                <a href="https://web.facebook.com/mypsmza?_rdc=1&_rdr" target={"_blank"}>
                 <button
                   className="bg-white text-red-500 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2"
                   type="button"
                 >
                   <i className="fab fa-instagram"></i>
                 </button>
+                </a>
+                <a href="https://web.facebook.com/mypsmza?_rdc=1&_rdr" target={"_blank"}>
                 <button
                   className="bg-white text-blueGray-800 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2"
                   type="button"
                 >
                   <i className="fab fa-github"></i>
                 </button>
+                </a>
               </div>
             </div>
             <div className="w-full lg:w-6/12 px-4">
@@ -79,7 +88,7 @@ export default function Footer() {
                     <li>
                       <a
                         className="text-blueGray-600 hover:text-blueGray-800 font-semibold block pb-2 text-sm"
-                        href=""
+                        href="https://psmza.mypolycc.edu.my/" target={"_blank"}
                       >
                         PSMZA PORTAL
                       </a>

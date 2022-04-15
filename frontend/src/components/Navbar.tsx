@@ -40,12 +40,12 @@ export default function Navbar(props:any) {
       <nav className="top-0 fixed z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 navbar-expand-lg bg-white shadow">
         <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
           <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
-            <Link
-              to="/"
+            <a
+              href="/"
               className="text-[#47487a] text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase"
             >
               SAMS
-            </Link>
+            </a>
             <button
               className="cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
               type="button"
@@ -61,17 +61,7 @@ export default function Navbar(props:any) {
             }
             id="example-navbar-warning"
           >
-            <ul className="flex flex-col lg:flex-row list-none mr-auto">
-              <li className="flex items-center">
-                <a
-                  className="hover:text-blueGray-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-                  href="/"
-                >
-                  <i className="text-[#47487a] far fa-file-alt text-lg leading-lg mr-2" />{" "}
-                  Reports
-                </a>
-              </li>
-            </ul>
+            
             <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
               <li className="flex items-center">
                 <NavDrop />
@@ -79,11 +69,11 @@ export default function Navbar(props:any) {
               <li className="flex items-center">
                 <a
                   className="hover:text-blue-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-                  href=""
+                  href="https://web.facebook.com/mypsmza?_rdc=1&_rdr"
                   target="_blank"
                 >
                   <i className="text-blueGray-400 fab fa-facebook text-lg leading-lg " />
-                  <span className="lg:hidden inline-block ml-2">Share</span>
+                  <span className="lg:hidden inline-block ml-2">Facebook</span>
                 </a>
               </li>
 
@@ -92,11 +82,11 @@ export default function Navbar(props:any) {
               <li className="flex items-center">
                 <a
                   className="hover:text-blue-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-                  href=""
+                  href="https://www.instagram.com/mypsmza/"
                   target="_blank"
                 >
                   <i className="text-blueGray-400 fab fa-instagram text-lg leading-lg " />
-                  <span className="lg:hidden inline-block ml-2">Star</span>
+                  <span className="lg:hidden inline-block ml-2">Instagram</span>
                 </a>
               </li>
 

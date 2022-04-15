@@ -8,6 +8,9 @@ import { useAppDispatch } from './hooks';
 import { useEffect } from 'react';
 import {  refreshUser } from '../features/user/User';
 import Middleware from '../middleware/Middleware';
+import { Publication } from '../pages/Publication/Publication'
+import { Innovation } from '../pages/Innovation.tsx/Innovation';
+
 
 function App() {
 
@@ -27,6 +30,9 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/' element={<Home/>} />
+          <Route path='/publication' element={<Publication/>} />
+          <Route path='/innovation' element={<Innovation/>} />
+
 
           {/* protected route */}
           <Route element={<Middleware />}> 
