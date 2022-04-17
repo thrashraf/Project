@@ -58,7 +58,7 @@ const IndexDropdown = () => {
            Profile
         </Link>
         <Link
-          to="/reports"
+          to="/create-report"
           className="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:text-blue-500"
         >
            Reports

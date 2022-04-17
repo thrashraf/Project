@@ -20,7 +20,6 @@ type Props = {
   setOrganizer: React.Dispatch<React.SetStateAction<string>>;
   setVenue: React.Dispatch<React.SetStateAction<string>>;
   setDate: React.Dispatch<React.SetStateAction<string>>;
-  setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   formHandler: any
 
@@ -32,7 +31,6 @@ type Props = {
   removeAjkHandler: any;
   handleAjk: any;
   ajk: any;
-  editMode: boolean;
   password: string
 
   contentHandler: (e: any) => void;
@@ -42,10 +40,6 @@ type Props = {
 };
 
 export const Sidebar = (props: Props) => {
-
-
-  
-
 
   const toastRef = useRef<any>(null);
 
@@ -70,7 +64,6 @@ export const Sidebar = (props: Props) => {
 
       <Toast ref={toastRef} status={'error'} message={'Please fill all the required field! '} />
 
-     
         <div className="mt-10">
           <section className="w-full my-5">
             <p className="my-1 text-sm text-gray-400 ml-1">
@@ -91,11 +84,10 @@ export const Sidebar = (props: Props) => {
               </p>
               <input
                 type="date"
+                required
                 className="bg-blue-50 px-3 py-3 rounded-lg outline-none w-full"
                 value={props.date}
                 data-date-format="DD MMMM YYYY"
-                disabled={props.editMode}
-
                 onChange={(e) => props.setDate(e.target.value)}
               />
             </div>
@@ -106,9 +98,9 @@ export const Sidebar = (props: Props) => {
               </p>
               <input
                 type="string"
+                required
                 className="bg-blue-50 px-3 py-3 rounded-lg outline-none w-full"
                 value={props.organizer}
-                disabled={props.editMode}
 
                 onChange={(e) => props.setOrganizer(e.target.value)}
               />
@@ -124,7 +116,7 @@ export const Sidebar = (props: Props) => {
                 type="string"
                 className="bg-blue-50 px-3 py-3 rounded-lg outline-none w-full"
                 value={props.venue}
-                disabled={props.editMode}
+                required
 
                 onChange={(e) => props.setVenue(e.target.value)}
               />
@@ -147,7 +139,7 @@ export const Sidebar = (props: Props) => {
                 name="upload"
                 id="upload"
                 className="hidden"
-                disabled={props.editMode}
+                
                 ref={props.uploadRef}
                 onChange={(e) => props.fileSelectorHandler(e)}
               />
@@ -162,8 +154,9 @@ export const Sidebar = (props: Props) => {
               cols={30}
               rows={13}
               value={props.content}
+              required
               onChange={props.contentHandler}
-              disabled={props.editMode}
+              
               onKeyPress={props.contentHandler}
               className="bg-blue-50 px-3 py-3 rounded-lg outline-none w-full resize-none"
             />
@@ -180,7 +173,7 @@ export const Sidebar = (props: Props) => {
                     <input
                       type="time"
                       name="time"
-                      disabled={props.editMode}
+                      
                       value={ten.date}
                       onChange={(e) => props.handleTentative(e, index)}
                       className="bg-blue-50 outline-none p-2 rounded-lg"
@@ -188,7 +181,7 @@ export const Sidebar = (props: Props) => {
                     <textarea
                       className="bg-blue-50 px-4 rounded-lg outline-none w-[60%]"
                       name="activities"
-                      disabled={props.editMode}
+                      
                       value={ten.activities}
                       onChange={(e) => props.handleTentative(e, index)}
                     />
@@ -226,7 +219,7 @@ export const Sidebar = (props: Props) => {
                     <input
                       type="text"
                       name="role"
-                      disabled={props.editMode}
+                      
                       value={ajk.role}
                       onChange={(e) => props.handleAjk(e, index)}
                       className="bg-blue-50 outline-none p-2 rounded-lg w-[120px] "
@@ -235,7 +228,7 @@ export const Sidebar = (props: Props) => {
                       className="bg-blue-50 px-4 rounded-lg outline-none w-[60%]"
                       name="names"
                       value={ajk.names}
-                      disabled={props.editMode}
+                      
                       onChange={(e) => props.handleAjk(e, index)}
                     />
                     {props.ajk.length >= 1 && (
@@ -260,18 +253,10 @@ export const Sidebar = (props: Props) => {
             )}
           </section>
 
-          <div className="flex justify-center">
+          <div className="flex">
             <button
               type="submit"
-              onClick={() => props.setEditMode(!props.editMode)}
-              className="mt-10 bg-blue-500 text-white px-3 py-2 rounded-lg transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-400 cursor-pointer w-[100px] mx-5"
-            >
-              {props.editMode ? "Edit" : "Save"}
-            </button>
-
-            <button
-              type="submit"
-              className="mt-10 bg-green-500 text-white px-3 py-2 rounded-lg transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-green-400 cursor-pointer w-[100px] mx-5"
+              className="mt-10 w-full bg-blue-500 text-white px-3 py-2 rounded-lg transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-400 cursor-pointer mx-5"
               onClick={userAuthHandler}
             >
               Verify

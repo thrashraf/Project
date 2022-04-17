@@ -42,14 +42,15 @@ export const createReport = async (req, res, next) => {
     } =
     req.body;
 
-    //console.log(title, date, organizer, venue, content, tentative, ajk);
+    console.log(title, date, organizer, venue, content, tentative, ajk);
 
     const images =
       files.length >= 0 ?
       files.map((images) => images.filename) :
       null;
     
-    const committee = ajk === undefined ? null : ajk
+    const ten = tentative === undefined ? '' : tentative
+    const committee = ajk === undefined ? '' : ajk
 
     const [insertReport] = await report.createReport(
       userId,
@@ -62,16 +63,13 @@ export const createReport = async (req, res, next) => {
       venue,
       images,
       content,
-      tentative,
+      ten,
       committee
     );
-
-    if (insertReport.affectedRows > 1) {
 
       res.status(200).json({
         message: "successful"
       });
-    }
 
   } catch (error) {
     console.log(error);
