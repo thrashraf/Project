@@ -2,12 +2,12 @@ import React, { useRef, useState } from "react";
 import { Preview } from "./Preview";
 import { ImageTemplate } from "./ImageTemplate";
 import { Sidebar } from "./Sidebar";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import { Template } from "./Template";
 import { PasswordModal } from "./PasswordModal";
 import api from '../../utils/api'
 import { useAppSelector } from "../../app/hooks";
 import { userSelector } from "../../features/user/User";
+import { useNavigate } from "react-router-dom";
+import Toast from "../../components/Toast";
 
 const Report = () => {
 
@@ -26,14 +26,19 @@ const Report = () => {
   const [ajk, setAjk] = useState<any>([]);
 
   //? utils
-  const [editMode, setEditMode] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
 
   //ref
   const uploadRef = useRef<HTMLInputElement>(null);
+  const toastRef = useRef<any>(null);
 
   //user
   const [password, setPassword] = useState<string>('');
+
+  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState("");
+  const navigate = useNavigate();
+
 
   const contentHandler = (e: any) => {
     if (e.key === "Enter") {
@@ -51,8 +56,6 @@ const Report = () => {
   const addTentativeHandler = () => {
     setTentative([...tentative,{time: '', activities: ''}])
   }
-
-  console.log(tentative);
 
   const removeTentativeHandler = (index: number) => {
     const tentativeList = [...tentative];
@@ -143,13 +146,26 @@ const Report = () => {
     
     await api.post('/api/report/createReport', formData)
     .then(res => {
-      console.log(res);
+      setMessage('Successful submit report! 🎉');
+      setStatus('success')
+      toastRef.current.showToast();
+      setTimeout(() => {
+        navigate('/profile/documents');
+      }, 4000)
+    })
+    .catch(err => {
+      console.log(err);
+      setMessage('Something went wrong...');
+      setStatus('error');
+      toastRef.current.showToast();
     })
   };
 
 
   return (
     <div className="lg:grid grid-cols-5 h-full">
+
+      <Toast message={message} status={status} ref={toastRef} />
       <Sidebar
         title={title}
         content={content}
@@ -175,16 +191,15 @@ const Report = () => {
         removeAjkHandler={removeAjkHandler}
         handleAjk={handleAjk}
         ajk={ajk}
-        editMode={editMode}
-        setEditMode={setEditMode}
-        showModal={showModal} setShowModal={setShowModal}
+        showModal={showModal} 
+        setShowModal={setShowModal}
         password={password}
         formHandler={formHandler}
       />
 
       <section className="hidden lg:flex flex-col col-start-3 col-end-[-1] bg-[#525659] ">
         <div className="h-[800px] overflow-y-auto overflow-x-hidden w-[500px] m-auto mt-10 fixed left-[50%]">
-
+          
           {/* <PDFViewer 
             showToolbar={false}
             style={{
@@ -218,7 +233,6 @@ const Report = () => {
                       </p>
                     );
                   })}
-
 
                 <section
                   className={`mt-10 ${
@@ -308,41 +322,6 @@ const Report = () => {
               </div>
             ): null}
           </div>
-
-
-        <section className="mt-10 flex justify-end mr-10">
-         
-        {editMode ? (
-          <button className="mt-10 bg-blue-500 text-white px-3 py-2 rounded-full transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-400 cursor-pointer w-[70px] h-[70px] fixed right-5 bottom-5
-           " onClick={() => setEditMode(!editMode)} >
-          
-          <PDFDownloadLink
-            document={
-              <Template
-                title={title}
-                content={content}
-                name={programName}
-                organizer={organizer}
-                date={date}
-                venue={venue}
-                photo={photo}
-                tentative={tentative}
-                ajk={ajk}
-                staffName={user.name}
-              />
-            }
-            fileName={title}
-          >
-            {({ loading }: any) =>
-              loading ? <img src="/assets/loading.svg" className="w-[30px] h-[30px] animate-spin m-auto" alt="loading" /> : <i className="fa-solid fa-file-arrow-down fa-xl"></i>
-            }
-            
-          </PDFDownloadLink>
-          
-        </button>
-        ) : null}
-      </section>  
-
       <PasswordModal showModal={showModal} setShowModal={setShowModal} password={password} setPassword={setPassword} authHandler={authHandler} />
       </section>
     </div>

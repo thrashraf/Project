@@ -1,6 +1,6 @@
 import axios from "axios"
 import jwt_decode from 'jwt-decode'
-import { instance, refreshUser } from "../features/user/User"
+import { instance } from "../features/user/User"
 
 let store: any;
 
@@ -10,7 +10,6 @@ export const injectStore = (_store: any) => {
 
 const api = axios.create();
 
-
 api.interceptors.request.use(async (config) => {
   
   const state = store.getState();
@@ -18,10 +17,10 @@ api.interceptors.request.use(async (config) => {
 
   
   const currentDate = new Date();
-  console.log(expired * 1000 < currentDate.getTime());
+  // console.log(expired * 1000 < currentDate.getTime());
 
   
-  console.log(state.user)
+  // console.log(state.user)
 
     if (expired) {
 
@@ -29,7 +28,7 @@ api.interceptors.request.use(async (config) => {
         
         const response = await axios.get('/api/user/token');
   
-        console.log('set New token');
+        //console.log('set New token');
   
         if (!config?.headers) {
           throw new Error(`Expected 'config' and 'config.headers' not to be undefined`);
@@ -37,17 +36,17 @@ api.interceptors.request.use(async (config) => {
         config.headers["authorization"] = `Bearer ${response.data.accessToken}`;
   
         const user: any = jwt_decode(response.data.accessToken);
-        console.log("user", user)
+        //console.log("user", user)
 
         store.dispatch(instance(response.data.accessToken));
-        console.log(user);
+        //console.log(user);
         
       } else {
         api.defaults.headers.common = {'authorization': `bearer ${state.user.token}`}
 
       }
     }
-    console.log(config)
+    //console.log(config)
     return config
   }, (err) => {
     console.log(err);
