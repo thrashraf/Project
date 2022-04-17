@@ -49,8 +49,10 @@ const Report = () => {
   };
 
   const addTentativeHandler = () => {
-    setTentative([...tentative, { tentative: {time: '', activities: ''}}])
+    setTentative([...tentative,{time: '', activities: ''}])
   }
+
+  console.log(tentative);
 
   const removeTentativeHandler = (index: number) => {
     const tentativeList = [...tentative];
@@ -62,16 +64,12 @@ const Report = () => {
     const {name, value} = e.target
     const tentativeList = [...tentative];
 
-    if (e.key === "Enter") {
-      tentativeList[index]['tentative']['activities'] = value + '\n';
-    }
-    
-    tentativeList[index]['tentative'][name] = value;
+    tentativeList[index][name] = value;
     setTentative(tentativeList);
   }
 
   const addAjkHandler = () => {
-    setAjk([...ajk, { ajk: {role: '', names: ''}}])
+    setAjk([...ajk, {role: '', names: ''}])
   }
 
   const removeAjkHandler = (index: number) => {
@@ -84,7 +82,7 @@ const Report = () => {
     const {name, value} = e.target
     const AjkList = [...ajk];
     
-    AjkList[index]['ajk'][name] = value;
+    AjkList[index][name] = value;
     setAjk(AjkList);
   }
 
@@ -113,19 +111,34 @@ const Report = () => {
     })
   };
 
+  const timeConvertor = (time: any) => {
+    // first checks the correct time format and then split it into components
+    time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+  
+    if (time.length > 1) { // If the time format is correct
+      time = time.slice (1);  // Remove full string match value
+      time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM based on given hour
+      time[0] = +time[0] % 12 || 12; // change the hour based on AM/PM
+    }
+    return time.join (''); // return new time format as a String
+  }
+
   const formHandler = async (e: any) => {
     
     e.preventDefault();
 
     const formData: any = new FormData(); // Currently empty
-    console.log(photo);
-    photo.forEach(tag => formData.append('upload', tag))
+
+    formData.append('userId', user.id);
+    formData.append('owner', user.name);
+    formData.append('profile_picture', user.profile_picture);
     formData.append("title", title);
     formData.append("date", date);
     formData.append("organizer", organizer);
     formData.append("venue", venue);
     formData.append("content", content);
-    tentative.forEach((tentative: any) => formData.append("tentative", JSON.stringify(tentative)));
+    photo.forEach(tag => formData.append('upload', tag));
+    tentative.forEach((tentative: any) => formData.append("tentative",JSON.stringify(tentative)));
     ajk.forEach((ajk: any) => formData.append("ajk", JSON.stringify(ajk)));
     
     await api.post('/api/report/createReport', formData)
@@ -221,8 +234,8 @@ const Report = () => {
                     />
                   </div>
                   <section className="text-[8px]">
-                    <p>(MUHAMMAD ZULASRAF BIN ZULKIFLI)</p>
-                    <p>(PENGARAH)</p>
+                    <p>({user && user.name})</p>
+                    {/* <p>(PENGARAH)</p> */}
                   </section>
                 </section>
 
@@ -244,13 +257,13 @@ const Report = () => {
                     {tentative.map((row: any, index: number) => {
                       return(
                         <section key={index} className="flex flex-row py-[8px]">
-                          <p className="mr-10">{row.tentative.time}</p>
+                          <p className="mr-10">{timeConvertor(row.time)}</p>
                           <section>
 
-                          {row.tentative.activities.split("\n").map((act: string, num: number) => {
+                          {row.activities.split("\n").map((act: string, num: number) => {
                             return(
                               //fix absolute
-                              <p key={num} className="  max-w-[200px] break-words">{act}</p>
+                              <p key={num} className="max-w-[200px] break-words relative left-[50px]">{act}</p>
                             )
                           })}
                           </section>
@@ -277,12 +290,12 @@ const Report = () => {
                       return(
                         <section key={index} className="flex flex-row py-[8px]">
                           <section className="max-w-[110px] break-words">
-                            <p >{row.ajk.role}</p>
+                            <p >{row.role}</p>
                           </section>
                           <section className="max-w-[300px] break-words">
-                          {row.ajk.names.split("\n").map((act: string, num: number) => {
+                          {row.names.split("\n").map((act: string, num: number) => {
                             return(
-                              <p className="absolute left-[200px]  max-w-[200px] break-words" key={num} >{act}</p>
+                              <p className="max-w-[200px] break-words relative left-[90px]" key={num} >{act}</p>
                             )
                           })}
                           </section>
@@ -312,10 +325,10 @@ const Report = () => {
                 organizer={organizer}
                 date={date}
                 venue={venue}
-                isPhoto={isPhoto}
                 photo={photo}
                 tentative={tentative}
                 ajk={ajk}
+                staffName={user.name}
               />
             }
             fileName={title}

@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { getAllUser } from '../../../features/admin/Admin';
 import { userSelector } from '../../../features/user/User';
 import api from '../../../utils/api'
+import axios from "axios";
 interface User {
   id: string;
   name: string;
@@ -37,9 +38,13 @@ const Users = (props: props) => {
     const { token } = useAppSelector(userSelector);
   
     useEffect(() => {
-      dispatch(getAllUser());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [token]);
+      const fetchData = async () => {
+        const response = await axios.get("/api/user/getAllUser");
+        setAllUser(response.data.allUser);
+      };
+      fetchData();
+    }, []);
+
 
     const clickHandler = () => {
       console.log(`api` + api);
@@ -49,7 +54,7 @@ const Users = (props: props) => {
   
   const showMoreHandler = (id: string, user: object) => {
     setUser(user);
-    setShowMore(id);
+    setShowMore(id); 
   };
 
   const modalHandler = () => {

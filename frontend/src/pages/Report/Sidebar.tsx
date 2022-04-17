@@ -173,6 +173,7 @@ export const Sidebar = (props: Props) => {
             <h2 className="text-gray-400 text-center mb-10">Tentative</h2>
 
             {props.tentative.map((ten: any, index: number) => {
+              console.log(ten);
               return (
                 <div key={index} className="my-5">
                   <section className="flex items-start justify-between">
@@ -180,7 +181,7 @@ export const Sidebar = (props: Props) => {
                       type="time"
                       name="time"
                       disabled={props.editMode}
-                      value={ten.tentative.date}
+                      value={ten.date}
                       onChange={(e) => props.handleTentative(e, index)}
                       className="bg-blue-50 outline-none p-2 rounded-lg"
                     />
@@ -188,7 +189,7 @@ export const Sidebar = (props: Props) => {
                       className="bg-blue-50 px-4 rounded-lg outline-none w-[60%]"
                       name="activities"
                       disabled={props.editMode}
-                      value={ten.tentative.activities}
+                      value={ten.activities}
                       onChange={(e) => props.handleTentative(e, index)}
                     />
                     {props.tentative.length >= 1 && (

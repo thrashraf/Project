@@ -5,6 +5,7 @@ import { Pagination } from "../components/Pagination"
 
 export const Table = () => {
   const [allInno, setAllInno] = useState<any>()
+  
 
 
   useEffect(() => {
@@ -28,11 +29,12 @@ export const Table = () => {
 
 
   return (
-    <div className="pt-10  pb-10" id='Inno'>
+    <div className="mt-20  pb-10" id='Inno'>
       <h1 className=" font-extrabold lg:text-5xl mb-8 text-center rounded-2xl border-gray-800 border-2 w-[50%] mx-auto p-2">
         Innovation
       </h1>
-    <div className="h-full mb-[150px]">
+      
+    <div className="h-full mb-[150px] mx-[5%]">
       <div className="mx-auto container bg-white dark:bg-gray-800 shadow rounded">
         {/* <div className="flex flex-col lg:flex-row p-4 lg:p-8 justify-between items-start lg:items-stretch w-full">
           
@@ -54,6 +56,16 @@ export const Table = () => {
               <th className="text-gray-600 dark:text-gray-400 font-normal  text-center text-sm  tracking-normal leading-4">
                 Name
               </th>
+              <th className="text-gray-600 dark:text-gray-400 font-normal  text-center text-sm  tracking-normal leading-4">
+                Program
+              </th>
+              <th className="text-gray-600 dark:text-gray-400 font-normal  text-center text-sm  tracking-normal leading-4">
+                Level
+              </th>
+              <th className="text-gray-600 dark:text-gray-400 font-normal  text-center text-sm  tracking-normal leading-4">
+                Medal
+              </th>
+              
              
 
             </tr>
@@ -71,17 +83,26 @@ export const Table = () => {
                   <td className="text-sm pr-5 text-center whitespace-no-wrap text-gray-800  tracking-normal leading-4">
                     {inno.id}
                   </td>
-                  <td className=" whitespace-no-wrap">
+                  <td className=" whitespace-pre-line max-w-[100px]">
                     <div className="flex items-center">
                       
-                      <p className=" text-gray-800 ] text-center tracking-normal leading-4 text-sm">
+                      <p className=" text-gray-800 ] text-left tracking-normal leading-4 text-sm">
                         {inno.Title}
                       </p>
                     </div>
                   </td>
-                  <td className="text-sm whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
+                  <td className="text-sm whitespace-pre-line max-w-[200px] text-center text-gray-800  tracking-normal leading-4">
                     {inno.Name}
                   </td>
+                  <td className="text-sm whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
+                    {inno.Program}
+                  </td>
+                  <td className="text-sm whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
+                    {inno.Level}
+                  </td> <td className="text-sm whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
+                    {inno.Medal}
+                  </td>
+                  
 
                 
                 

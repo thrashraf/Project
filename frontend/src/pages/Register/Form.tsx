@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import Toast from "../../components/Toast";
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { userSelector, signupUser, clearState } from "../../features/user/User";
+import { validEmail, validPassword} from '../../utils/Regex';
+import useInput from '../../hooks/useInput';
 
 export const Form = () => {
   // create an instance for useNavigate
@@ -17,9 +19,9 @@ export const Form = () => {
   const { isFetching, isSuccess, isError, errorMessage } = useAppSelector(userSelector)
 
   // state
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const name = useInput("");
+  const email = useInput("");
+  const password = useInput("");
   
   // toast state
   const [status, setStatus] = useState<string>("success");
@@ -49,13 +51,38 @@ export const Form = () => {
     //? to prevent refresh after submit
     e.preventDefault();
 
-    const data = {
-      name,
-      email,
-      password
+    const userName = name.value;
+    const userEmail = email.value;
+    const userPassword = password.value;
+
+    const isEmailValid = validEmail.test(userEmail);
+    const isPasswordValid = validPassword.test(userPassword);
+
+    if (!isEmailValid) {
+      setMessage('invalid email, try another one');
+      setStatus('error');
+      
+      toastRef.current && toastRef.current.showToast();
+      return;
     }
 
-    dispatch(signupUser(data))
+    if (!isPasswordValid) {
+      setMessage('Password at least 8 minimum character, One uppercase & Lowercase letter');
+      setStatus('error');
+      console.log('lol');
+      toastRef.current && toastRef.current.showToast();
+      return;
+    }
+
+    console.log(isEmailValid);
+
+    const data = {
+      userName,
+      userEmail,
+      userPassword
+    }
+
+    dispatch(signupUser(data));
   };
 
   const createUserHandler = (status: string, message: string) => {
@@ -74,8 +101,8 @@ export const Form = () => {
         <Input
           type="text"
           placeholder="Full Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={name.value}
+          onChange={name.onChange}
         />
       </section>
 
@@ -83,8 +110,8 @@ export const Form = () => {
         <Input
           type="email"
           placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={email.value}
+          onChange={email.onChange}
         />
       </section>
 
@@ -92,15 +119,15 @@ export const Form = () => {
         <Input
           type="password"
           placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={password.value}
+          onChange={password.onChange}
         />
       </section>
 
       <section className="flex justify-center items-center text-sm mt-10 text-gray-400">
         <input type="checkbox" name="agree" className="mr-3" />
         <p>
-          I accept <a href="http://google.com">Terms & Condition</a>.
+          I accept <a href=" ">Terms & Condition</a>.
         </p>
       </section>
 

@@ -51,6 +51,11 @@ class user {
     const sql = `SELECT * FROM users where email = '${email}'`
     return db.execute(sql); 
   }
+
+  static async getUserById(id) {
+    const sql = `SELECT * FROM users where id = '${id}'`
+    return db.execute(sql); 
+  }
 }
 
 export default user;
