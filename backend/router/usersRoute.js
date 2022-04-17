@@ -2,6 +2,7 @@ import express from 'express';
 import * as users from '../controller/usersController.js';
 import { verifytoken } from '../middleware/verifytoken.js';
 import { refreshToken } from '../controller/refreshToken.js';
+import { upload } from '../config/upload.js';
 
 
 const usersRoute = express.Router();
@@ -13,5 +14,6 @@ usersRoute.get('/user/getAllUser', users.getAllUser);
 usersRoute.delete('/user/logout', users.Logout);
 usersRoute.delete('/user/delete', verifytoken, users.testDelete);
 usersRoute.post('/user/auth', verifytoken, users.authUser);
+usersRoute.post('/user/uploadSignature', upload.single('upload'), users.uploadImage);
 
 export default usersRoute

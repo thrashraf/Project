@@ -4,6 +4,7 @@ import { DynamicInput } from "../../components/DynamicInput";
 import useInput from '../../hooks/useInput';
 import { useAppSelector } from '../../app/hooks';
 import { userSelector } from '../../features/user/User';
+import Draw from './Draw'
 
 type Props = {};
 
@@ -17,6 +18,8 @@ export const Information = (props: Props) => {
   const position = useInput("");
   const email = useInput("");
   const phoneNumber = useInput("");
+
+  const [show, setShow] = useState<boolean>(false);
 
   useEffect(() => {
     if(user) {
@@ -47,6 +50,7 @@ export const Information = (props: Props) => {
 
   return (
     <div className=" ">
+      <Draw modal={show} setModal={setShow} />
       <section className="w-full mt-5">
         <section className="relative">
           <div>
@@ -119,7 +123,9 @@ export const Information = (props: Props) => {
           <section className="relative mt-5 ">
             <span className="absolute bg-blue-500 w-[15px] h-[15px] rounded-full animate-ping -top-2 -left-1"/>
             <span className="absolute bg-blue-500 w-[15px] h-[15px] rounded-full -top-2 -left-1"/>
-            <div className="w-[300px] h-[150px] border-dashed border-2 border-blue-100 rounded-lg flex justify-center items-center cursor-pointer">
+            <div className="w-[300px] h-[150px] border-dashed border-2 border-blue-100 rounded-lg flex justify-center items-center cursor-pointer"
+            onClick={() => setShow(!show)}
+            >
               <img src="/assets/add_signature.png" alt="plus" className="w-[50px] h-[50px] object-cover" />
             </div>
           </section>

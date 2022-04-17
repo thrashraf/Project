@@ -50,6 +50,8 @@ export const loginUser = async (req, res) => {
       email,
       password
     } = req.body;
+
+    console.log(email, password)
     
 
     //check for existing email
@@ -209,3 +211,12 @@ export const authUser = async(req, res) => {
     })
   }
 }
+
+
+export const uploadImage = async(req, res) => {
+   try {
+     console.log(req.files)
+   } catch (error) {
+     console.log(error)
+   }
+ }
