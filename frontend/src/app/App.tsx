@@ -8,7 +8,7 @@ import { useAppDispatch } from './hooks';
 import { useEffect } from 'react';
 import {  refreshUser } from '../features/user/User';
 import Middleware from '../middleware/Middleware';
-import { Publication } from '../pages/Publication/Publication'
+import { Publications } from '../pages/Publication/Publications'
 import { Innovation } from '../pages/Innovation.tsx/Innovation';
 import KJ from '../pages/HD/KJ';
 import VerifyReport from '../pages/HD/VerifyReport';
@@ -32,7 +32,7 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/' element={<Home/>} />
-          <Route path='/publication' element={<Publication/>} />
+          <Route path='/publication' element={<Publications/>} />
           <Route path='/innovation' element={<Innovation/>} />
 
 

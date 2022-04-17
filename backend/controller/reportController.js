@@ -26,7 +26,7 @@ export const getReport = async (req, res) => {
 export const createReport = async (req, res, next) => {
   try {
     const id = crypto.randomBytes(16).toString("hex");
-    const files = req.files;
+    const files = req.files;           
 
     const {
       userId,

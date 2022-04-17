@@ -1,35 +1,50 @@
-import React, { useState } from "react";
-import Publication from "./Publication";
+import React, { useEffect, useState } from "react";
 
 type Props = {
   show: boolean;
   setShow: any;
+  publication: any;
 };
 
 const Modal2 = (props: Props) => {
+
+  const [publication, setPublication] = useState<any>(null);
+
+  useEffect(() => {
+    if (props.publication) {
+      setPublication(props.publication)
+    }
+  }, [props.publication])
+
   return (
     <div>
       <div>
-        {props.show && (
+        {props.show && props.publication &&  (
           <div
-            className="py-12   transition duration-150 ease-in-out z-10 absolute top-0  bottom-0 right-0 left-0"
+            className="py-12 transition duration-150 ease-in-out z-10 absolute top-0  bottom-0 right-0 left-0"
+            
             id="modal"
           >
+            <div className="bg-[#00000055] fixed inset-0 "  onClick={() => props.setShow(!props.show)} />
             <div
               role="alert"
               className="container mx-auto w-11/12 md:w-2/3 max-w-lg"
             >
-              <div className="  mt-20 lg:mx-[50px]  py-8 px-8 md:px-16  bg-white  dark:bg-gray-800 fixed dark:border-gray-700 shadow-md rounded border border-gray-400">
+              <div className="  mt-20 lg:mx-auto max-w-lg break-words  py-8 px-8 md:px-16  bg-white  dark:bg-gray-800 fixed dark:border-gray-700 shadow-md rounded-lg border border-gray-400">
                 <div className="w-full flex justify-center text-green-400 mb-4"></div>
-                <h1 className="text-center text-gray-800 dark:text-gray-100 font-lg font-bold tracking-normal leading-tight mb-4">
-                  Diges PSMZA
+                <img src={`/assets/${publication?.img_url}`}  className=" rounded-lg mb-10"></img>
+                <h1 className="text-center text-gray-800 dark:text-gray-100 font-extrabold tracking-normal leading-tight mb-4">
+                  {publication?.Title}
                 </h1>
                 <p className="mb-5 text-sm text-gray-600 dark:text-gray-400 text-center font-normal">
-                  Thank you for explore with us.
+                {publication?.Description}
+                </p>
+                <p className="mb-5 text-sm text-gray-600 dark:text-gray-400 text-center font-normal">
+                  ISBN: 978-967-2099-64-2
                 </p>
                 <div className="flex items-center justify-center w-full">
                   <button className="focus:outline-none transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm">
-                    View Detail
+                    View Publication
                   </button>
                   <button
                     className="focus:outline-none ml-3 bg-gray-100 dark:bg-gray-700 dark:border-gray-700 
