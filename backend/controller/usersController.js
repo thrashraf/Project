@@ -83,7 +83,10 @@ export const loginUser = async (req, res) => {
         id: userInfo.id,
         name: userInfo.name,
         email: userInfo.email,
-        profile_picture: userInfo.profile_picture
+        profile_picture: userInfo.profile_picture,
+        phone_number: userInfo.phone_number,
+        position: userInfo.position,
+        signature: userInfo.signature,
       },
       process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: "15s",
@@ -96,7 +99,10 @@ export const loginUser = async (req, res) => {
         name: userInfo.name,
         email: userInfo.email,
         role: userInfo.role,
-        profile_picture: userInfo.profile_picture
+        profile_picture: userInfo.profile_picture,
+        phone_number: userInfo.phone_number,
+        position: userInfo.position,
+        signature: userInfo.signature,
       },
       process.env.REFRESH_TOKEN_SECRET, {
         expiresIn: "1d",
@@ -218,5 +224,24 @@ export const uploadImage = async(req, res) => {
      console.log(req.files)
    } catch (error) {
      console.log(error)
+   }
+ }
+
+ export const updateUserInformation = async(req, res) => {
+   try {
+     const { id, name, position, email, phoneNumber} = req.body;
+
+     const [updateUser] = await user.updateUserInformation(id, name, position, email, phoneNumber);
+
+     console.log(updateUser)
+    //  res.status(200).json({
+    //   user: 
+    // });
+
+   } catch (error) {
+     console.log(error)
+    res.status(400).json({
+      message: 'Something went wrong'
+    })
    }
  }

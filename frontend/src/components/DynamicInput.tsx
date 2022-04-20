@@ -1,3 +1,4 @@
+import Notify from './Notify';
 
 type Props = {
   editMode: boolean;
@@ -8,21 +9,18 @@ type Props = {
 
 export const DynamicInput = (props: Props) => {
   return (
-    <div>
+    <div className='relative'>
       <p className="text-[12px] text-gray-500 mb-2">{props.title}</p>
-      <h1
-        className="text-lg px-6 py-3 bg-blue-50 rounded-lg"
-        style={props.editMode ? { display: "none" } : { display: "block" }}
-      >
-        {props.content}
-      </h1>
-      <input
+      <section className='relative'>
+        <input
         type="text"
         value={props.content}
-        style={props.editMode ? { display: "block" } : { display: "none" }}
+        disabled={props.editMode}
         className="text-lg px-6 py-3 bg-blue-50 rounded-lg w-full"
         onChange={props.onChange}
       />
+      {props.content.length <= 0 && <Notify />}
+      </section>
     </div>
   );
 };

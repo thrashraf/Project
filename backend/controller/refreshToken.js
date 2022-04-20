@@ -27,7 +27,10 @@ export const refreshToken = async (req, res) => {
                 name: userInfo[0].name,
                 email: userInfo[0].email,
                 role: userInfo[0].role,
-                profile_picture: userInfo[0].profile_picture
+                profile_picture: userInfo[0].profile_picture,
+                phone_number: userInfo[0].phone_number,
+                position: userInfo[0].position,
+                signature: userInfo[0].signature,
 
             }, process.env.ACCESS_TOKEN_SECRET, {
                 expiresIn: '15s'
