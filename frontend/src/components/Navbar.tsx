@@ -20,19 +20,7 @@ export default function Navbar(props:any) {
   const navigate = useNavigate();
   console.log(user);
 
-  const logoutHandler = () => {
-    axios
-      .delete("/api/user/logout")
-      .then((res) => {
-        console.log(res);
-        dispatch(clearState());
-        localStorage.clear()
-        navigate("/");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+ 
 
 
   return (
