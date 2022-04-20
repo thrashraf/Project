@@ -12,6 +12,8 @@ import { Publications } from '../pages/Publication/Publications'
 import { Innovation } from '../pages/Innovation.tsx/Innovation';
 import KJ from '../pages/HD/KJ';
 import VerifyReport from '../pages/HD/VerifyReport';
+import { Profile } from '../pages/Profile/Profile';
+import Activites from '../pages/Activities/Activities'
 
 
 function App() {
@@ -42,6 +44,8 @@ function App() {
             <Route path='/admin' element={<Admin />} />
             <Route path='/verify-report/:id' element={<VerifyReport />} />
             <Route path='/kj/*' element={<KJ/>} />
+            <Route path='/profile/*' element={<Profile/>} />
+            <Route path='/activities' element={<Activites/>} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -54,7 +54,7 @@ const Users = (props: props) => {
   
   const showMoreHandler = (id: string, user: object) => {
     setUser(user);
-    setShowMore(id);
+    setShowMore(id); 
   };
 
   const modalHandler = () => {

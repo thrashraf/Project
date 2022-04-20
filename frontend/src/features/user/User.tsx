@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../app/Store";
 import jwt_decode from 'jwt-decode';
 import axios from "axios";
+import api from "../../utils/api";
 
 interface loginInterface{
   email: string;
@@ -95,8 +96,20 @@ export const userSlice = createSlice({
       state.isFetching = false;
       state.isSuccess = false;
       state.isError = false
-      
     });
+    // builder.addCase(updateUserInformation.fulfilled, (state, { payload }: any) => {
+    //   state.isFetching = false;
+    //   state.isSuccess = true;
+    //   // state.user.name = payl
+    // });
+    // builder.addCase(updateUserInformation.pending, (state) => {
+    //   state.isFetching = true;
+    // });
+    // builder.addCase(updateUserInformation.rejected, (state, { payload }: any) => {
+    //   state.isFetching = false;
+    //   state.isError = true;
+    //   state.errorMessage = payload.message;
+    // });
 
   },
 });
@@ -180,6 +193,32 @@ export const refreshUser = createAsyncThunk(
         }
       )
       let data = await response.json()
+      console.log("response", data)
+      if (response.status === 200) {
+        return data
+      } else {
+        return thunkAPI.rejectWithValue(data)
+      }
+    } catch (e: any) {
+      console.log("Error", e.response.data)
+      thunkAPI.rejectWithValue(e.response.data)
+    }
+  }
+);
+
+export const updateUserInformation = createAsyncThunk(
+  "users/update",
+  async ({id, name, email, position, phoneNumber}: any, thunkAPI: any) => {
+    try {
+      const response = await api.post('/api/user/updateInformation', {
+        id,
+        name,
+        email,
+        position,
+        phoneNumber
+      });
+
+      let data = await response.data
       console.log("response", data)
       if (response.status === 200) {
         return data

@@ -15,24 +15,12 @@ export default function Navbar(props:any) {
   const [profile, setProfile] = useState(false);
 
 
-  const { user } = useAppSelector(userSelector);
+  const { user }: any = useAppSelector(userSelector);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   console.log(user);
 
-  const logoutHandler = () => {
-    axios
-      .delete("/api/user/logout")
-      .then((res) => {
-        console.log(res);
-        dispatch(clearState());
-        localStorage.clear()
-        navigate("/");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+ 
 
 
   return (
@@ -61,45 +49,24 @@ export default function Navbar(props:any) {
             }
             id="example-navbar-warning"
           >
-            
-           
             <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
               <li className="flex items-center">
                 <NavDrop />
               </li>
-              <li className="flex items-center">
-                <a
-                  className="hover:text-blue-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-                  href="https://web.facebook.com/mypsmza?_rdc=1&_rdr"
-                  target="_blank"
-                >
-                  <i className="text-blueGray-400 fab fa-facebook text-lg leading-lg " />
-                  <span className="lg:hidden inline-block ml-2">Facebook</span>
-                </a>
-              </li>
 
-              
-
-              <li className="flex items-center">
-                <a
-                  className="hover:text-blue-500 text-blueGray-700 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-                  href="https://www.instagram.com/mypsmza/"
-                  target="_blank"
-                >
-                  <i className="text-blueGray-400 fab fa-instagram text-lg leading-lg " />
-                  <span className="lg:hidden inline-block ml-2">Instagram</span>
-                </a>
-              </li>
-
-              <li className="flex items-center">
+              <li className="flex items-center ml-10">
               {user ? (
-                <button
-                  className="bg-blue-500 text-white active:bg-blue-500 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
-                  type="button"
-                  onClick={logoutHandler}
-                >
-                  <i className="fas fa-arrow-alt-circle-down"></i> Logout
-                </button>
+                // <button
+                //   className="bg-blue-500 text-white active:bg-blue-500 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
+                //   type="button"
+                //   onClick={logoutHandler}
+                // >
+                //   <i className="fas fa-arrow-alt-circle-down"></i> Logout
+                // </button>
+                  <div className="flex items-center space-x-4 relative cursor-pointer" onClick={() => navigate('/profile/account')}>
+                    <img className="w-10 h-10 rounded-full" src={`${user.profile_picture !== 'null' ? user.profile_picture : '/assets/dummy_profile.png'}`} alt=""/>
+                    <span className="w-[10px] h-[10px] bg-green-400 rounded-full absolute right-0 -bottom-0" />
+                  </div>
                 ) : (
                   <button
                   className="bg-blue-500 text-white active:bg-blue-500 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"

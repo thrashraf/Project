@@ -14,6 +14,7 @@ import adminRoute from './router/adminRoute.js';
 import innoRoute from './router/innoRoute.js';
 import publicationRoute from './router/publicationRoute.js'
 import reportRoute from './router/reportRoute.js';
+import activitiesRoute from './router/activitiesRoute.js';
 
 const app = express();
 
@@ -24,8 +25,7 @@ app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use('/api', usersRoute, adminRoute, innoRoute, publicationRoute);
-app.use('/api', usersRoute, adminRoute, innoRoute, reportRoute);
+app.use('/api', usersRoute, adminRoute, innoRoute, publicationRoute, reportRoute, activitiesRoute );
 
 
 app.listen(port, console.log(`server running on port ${port}`))

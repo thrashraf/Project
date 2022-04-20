@@ -56,6 +56,16 @@ class user {
     const sql = `SELECT * FROM users where id = '${id}'`
     return db.execute(sql); 
   }
+
+  static async updateUserInformation(id, name, position, email, phoneNumber) {
+    const sql = `UPDATE users 
+                SET name = '${name}',
+                email = '${email}',
+                position = '${position}', 
+                phone_number = '${phoneNumber}'
+                where id = '${id}'`;
+    return db.execute(sql); 
+  }
 }
 
 export default user;
