@@ -42,7 +42,7 @@ export const Publications = () => {
       <section>
         <div className="pt-[10px]">
           <div
-            className=" px-20 pb-16 pt-6 right-0 left-0 w-full bg-no-repeat bg-cover"
+            className=" px-20 pb-16 pt-6 right-0 left-0 lg:h-screen w-full bg-no-repeat bg-cover"
             style={background}
           >
             <CardPublication

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+
 type Props = {
   show: boolean;
   setShow: any;
@@ -30,30 +31,24 @@ const Modal2 = (props: Props) => {
               role="alert"
               className="container mx-auto w-11/12 md:w-2/3 max-w-lg"
             >
-              <div className="  mt-20 lg:mx-auto max-w-lg break-words  py-8 px-8 md:px-16  bg-white  dark:bg-gray-800 fixed dark:border-gray-700 shadow-md rounded-lg border border-gray-400">
+              <div className="  mt-10 left-0 right-0 mx-6 lg:mx-auto lg:max-w-lg break-words  py-8 px-8 lg:md:px-16  bg-white   fixed  shadow-md rounded-lg border border-gray-400">
                 <div className="w-full flex justify-center text-green-400 mb-4"></div>
                 <img src={`/assets/${publication?.img_url}`}  className=" rounded-lg mb-10"></img>
-                <h1 className="text-center text-gray-800 dark:text-gray-100 font-extrabold tracking-normal leading-tight mb-4">
+                <h1 className="text-center text-black  font-extrabold tracking-normal leading-tight mb-4">
                   {publication?.Title}
                 </h1>
-                <p className="mb-5 text-sm text-gray-600 dark:text-gray-400 text-center font-normal">
+                <p className="mb-5 text-sm text-gray-900 dark:text-gray-400 text-center font-normal">
                 {publication?.Description}
                 </p>
-                <p className="mb-5 text-sm text-gray-600 dark:text-gray-400 text-center font-normal">
-                  ISBN: 978-967-2099-64-2
+                <p className="mb-5 text-sm text-gray-900 dark:text-gray-400 text-center font-normal">
+                ISBN:{publication?.isbn}
                 </p>
                 <div className="flex items-center justify-center w-full">
-                  <button className="focus:outline-none transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm">
-                    View Publication
+                  <button className="focus:outline-none transition duration-150 ease-in-out hover:bg-indigo-600 bg-blue-500 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm">
+                    <a href={`/assets/${publication?.pdf_url}`} target="_blank">View Publication</a>
+                    
                   </button>
-                  <button
-                    className="focus:outline-none ml-3 bg-gray-100 dark:bg-gray-700 dark:border-gray-700 
-                                dark:hover:bg-gray-600 transition duration-150 text-gray-600 dark:text-gray-400 ease-in-out hover:border-gray-400
-                                 hover:bg-gray-300 border rounded px-8 py-2 text-sm"
-                    onClick={() => props.setShow(!props.show)}
-                  >
-                    Cancel
-                  </button>
+                  
                 </div>
                 <div
                   className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-500 transition duration-150 ease-in-out"

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { More } from "../icons/More";
-import { Pagination } from "../components/Pagination"
+import { Categories } from "./Categories";
+
 
 
 export const Table = () => {
@@ -33,6 +34,7 @@ export const Table = () => {
       <h1 className=" font-extrabold lg:text-5xl mb-8 text-center rounded-2xl border-gray-800 border-2 w-[50%] mx-auto p-2">
         Innovation
       </h1>
+      <Categories/>
       
     <div className="h-full mb-[150px] mx-[5%]">
       <div className="mx-auto container bg-white dark:bg-gray-800 shadow rounded">
@@ -114,7 +116,6 @@ export const Table = () => {
             })}
           </tbody>
         </table>
-        <Pagination/>
       </div>
     </div>
   </div>
