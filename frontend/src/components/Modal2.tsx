@@ -43,13 +43,20 @@ const Modal2 = (props: Props) => {
                 <p className="mb-5 text-sm text-gray-900 dark:text-gray-400 text-center font-normal">
                 ISBN:{publication?.isbn}
                 </p>
-                <div className="flex items-center justify-center w-full">
+                <div className="flex items-center mr-3 justify-center w-full">
                   <button className="focus:outline-none transition duration-150 ease-in-out hover:bg-indigo-600 bg-blue-500 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm">
                     <a href={`/assets/${publication?.pdf_url}`} target="_blank">View Publication</a>
+                    
+                    
+                  </button>
+                  <button className="focus:outline-none transition duration-150 ease-in-out mx-3  hover:bg-gray-600 bg-gray-500 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm">
+                    <a>Edit</a>
+                    
                     
                   </button>
                   
                 </div>
+                
                 <div
                   className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-500 transition duration-150 ease-in-out"
                   onClick={() => props.setShow(!props.show)}

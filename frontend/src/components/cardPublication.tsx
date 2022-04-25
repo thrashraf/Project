@@ -15,11 +15,11 @@ console.log(props.allPublication)
         return (
             <div
             key={publication.key}
-            className="relative mt-[100px] "
+            className="relative hover:scale-110 duration-500 mt-[100px] "
             onClick={() => props.viewPublicationHandler(publication.key, publication)}
           >
-            <img src={`/assets/${publication.img_url}`} alt="/" className="object-cover h-[150px] w-full" />
-            <div className="bg-gray-900/30 absolute top-0 left-0 lg:w-full h-full cursor-pointer"></div>
+            <img src={`/assets/${publication.img_url}`} alt="/" className="object-cover   h-[150px] w-full" />
+            <div className="absolute top-0 left-0 lg:w-full h-full  cursor-pointer"></div>
           </div>
         )
        
