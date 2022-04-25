@@ -1,24 +1,66 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
-import Skeleton from "../../components/Skeletons/Skeleton";
-import Dropdown from "../../components/Dropdown";
-import CardSkeleton from "../../components/Skeletons/CardSkeleton";
+import { Calendar } from "react-big-calendar";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import moment from "moment";
+import { momentLocalizer } from "react-big-calendar";
+import { SideCard } from "./SideCard";
+import { Header } from "./Header";
+import { List } from "./List";
+import { ModalActivities } from "./ModalActivities";
+// import Dropdown from "../../components/Dropdown";
+// import CardSkeleton from "../../components/Skeletons/CardSkeleton";
 
 const Activities = () => {
+  //for activities and filter for list
   const [activities, setActivities] = useState<any>(null);
-  const [filterActivities, setFilterActivities] = useState<any>(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const [filter, setFilter] = useState("Default");
+  //for view
+  const [view, setView] = useState<string>("calendar");
+  //for modal
+  const [showActivity, setShowActivity] = useState<boolean>(false);
+  //for query
+  const [query, setQuery] = useState<string>("");
+  //for sideCard
+  const [activitiesMonth, setActivitiesMonth] = useState<any>(null);
+  //for show filter data
+  const [showFilter, setShowFilter] = useState<boolean>(false);
+  const [filterData, setFilterData] = useState<any>([]);
+  //for modal
+  const [detailActivities, setDetailActivities] = useState<any>(null);
+
+  //for filter activity by draft or done;
+  const [filterBy, setFilterBy] = useState<string>("all");
+
+  const localizer = momentLocalizer(moment);
 
   useEffect(() => {
     const fetchData = async () => {
       axios
-        .get("/api/activities/getAllActivities")
+        .get(`/api/activities/getAllActivities?q=${query}`)
         .then((res) => {
-          const allActivities = res.data.allActivities;
-          setActivities(allActivities);
-          setFilterActivities(allActivities);
+          const allActivities = res.data;
+          const structureActivities = allActivities.sort(
+            (start: any, end: any) =>
+              (new Date(start.end) as any) - (new Date(end.end) as any)
+          );
+          setActivities(structureActivities);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    fetchData();
+  }, [filterData, query]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      axios
+        .get(`/api/activities/getAllActivities?q=`)
+        .then((res) => {
+          const allActivities = res.data;
+          setActivitiesMonth(allActivities);
         })
         .catch((err) => {
           console.log(err);
@@ -28,97 +70,89 @@ const Activities = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    if (!activities || filter !== 'soon') return;
-    const filteredActivities = activities.filter(
-      (act: any) => act.act_date >= new Date().toISOString().slice(0, 10)
-    );
-    console.log(filteredActivities);
-    setFilterActivities(filteredActivities)
-  }, [activities, filter]);
+  const viewDetailActivities = (e: any) => {
+    setDetailActivities(e);
+    setShowActivity(!showActivity);
+  };
 
   useEffect(() => {
-    if (!activities || filter !== 'Completed') return;
-    const filteredActivities = activities.filter(
-      (act: any) => act.act_date <= new Date().toISOString().slice(0, 10)
-    );
-    console.log(filteredActivities);
-    setFilterActivities(filteredActivities)
-  }, [activities, filter]);
+    if (!activities) return; 
 
-  useEffect(() => {
-    if (!activities || filter !== 'Default') return;
-    setFilterActivities(activities)
-  }, [activities, filter]);
+    if (filterBy === "all") {
+      setActivities(activitiesMonth)
+    } else if (filterBy === "draft") {
+      const filterActivity = activitiesMonth.filter(
+        (item: any) => (new Date(item.end) as any) > new Date()
+      );
+      setActivities(filterActivity)
+    } else {
+      const filterActivity = activitiesMonth.filter(
+        (item: any) => (new Date(item.end) as any) < new Date()
+      );
+      setActivities(filterActivity)
+    }
+  }, [filterBy]);
 
   return (
-    <div>
+    <div className="h-full">
       <Navbar />
-      <div className="mt-20 px-5 ">
-        <section className="flex justify-between items-center">
-          <section>
-            <h1 className="lg:text-2xl font-semibold">Activities</h1>
-            <p className="text-xs text-gray-500 lg:text-xl">
-              Manage all the activities
-            </p>
-          </section>
 
-          <Dropdown
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            setFilter={setFilter}
-            filter={filter}
-          />
-        </section>
+      <ModalActivities
+        showActivity={showActivity}
+        setShowActivity={setShowActivity}
+        activity={detailActivities}
+      />
 
-        <div className="lg:grid grid-cols-3 w-full">
-          {filterActivities ? (
-            filterActivities.map((act: any, index: number) => (
-              <section key={index} className="my-10">
-                <div className="max-w-sm max-h-[350px] bg-white rounded-lg border border-gray-200 shadow-md ">
-                  <a href="something">
-                    <img
-                      className="rounded-t-lg h-[150px] object-cover w-full "
-                      src={act.img_url ? act.img_url : '/assets/default-placeholder.jpg'}
-                      alt=""
-                    />
-                  </a>
-                  <div className="p-5">
-                    <a href="something">
-                      <h5 className="mb-2  font-bold tracking-tight text-gray-900 ">
-                        {act.title}
-                      </h5>
-                    </a>
-                    <section className="flex justify-between mt-5 text-sm">
-                      <p className="mb-3 text-gray-700 dark:text-gray-400">
-                        {act.act_date.split('-').reverse().join('/')}
-                      </p>
-                      <p className="mb-3 text-gray-700 dark:text-gray-400">
-                        {act.venue}
-                      </p>
-                    </section>
+      <div className="mt-28 px-5 lg:grid grid-cols-3 gap-16 max-w-[1500px] m-auto">
+        <SideCard activities={activitiesMonth} />
 
-                    <section className="flex justify-between items-center mt-3 h-10">
-                      <span className="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">
-                        {act.organizer}
-                      </span>
-                      {new Date().toISOString().slice(0, 10) > act.act_date && (
-                        <button
-                        className=" items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                      >
-                        Create Report
-                        <i className="ml-2 fa-solid fa-arrow-right-long" />
-                      </button>
-                      )}
-                    </section>
-                  </div>
+        <section className=" col-span-2">
+          {activities && (
+            <div>
+              <Header
+                activity={activities}
+                view={view}
+                setView={setView}
+                filterData={filterData}
+                setFilterData={setFilterData}
+                setQuery={setQuery}
+                query={query}
+                showFilter={showFilter}
+                setShowFilter={setShowFilter}
+                setFilterItem={setFilterBy}
+              />
+
+              {view === "calendar" ? (
+                <div className="mt-10">
+                  <Calendar
+                    localizer={localizer}
+                    events={activities}
+                    startAccessor="start"
+                    endAccessor="end"
+                    onSelectEvent={(e) => viewDetailActivities(e)}
+                    style={{
+                      height: 550,
+                      border: "1px solid #ccc",
+                      borderRadius: "10px",
+                      padding: "20px",
+                    }}
+                    eventPropGetter={(event) => ({
+                      style: {
+                        backgroundColor: "#3b82f6",
+                        fontSize: "14px",
+                      },
+                    })}
+                    views={["month"]}
+                  />
                 </div>
-              </section>
-            ))
-          ) : (
-            <CardSkeleton />
+              ) : (
+                <div className="first:rounded-t-lg mt-10">
+                  <List activities={activities} filteredData={filterData} />
+                </div>
+              )}
+            </div>
           )}
-        </div>
+        </section>
       </div>
     </div>
   );
