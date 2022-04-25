@@ -13,27 +13,54 @@ import { ModalActivities } from "./ModalActivities";
 // import CardSkeleton from "../../components/Skeletons/CardSkeleton";
 
 const Activities = () => {
+  //for activities and filter for list
   const [activities, setActivities] = useState<any>(null);
+  //for view
   const [view, setView] = useState<string>("calendar");
+  //for modal
   const [showActivity, setShowActivity] = useState<boolean>(false);
-
+  //for query
+  const [query, setQuery] = useState<string>("");
+  //for sideCard
+  const [activitiesMonth, setActivitiesMonth] = useState<any>(null);
+  //for show filter data
+  const [showFilter, setShowFilter] = useState<boolean>(false);
+  const [filterData, setFilterData] = useState<any>([]);
+  //for modal
   const [detailActivities, setDetailActivities] = useState<any>(null);
+
+  //for filter activity by draft or done;
+  const [filterBy, setFilterBy] = useState<string>("all");
+
   const localizer = momentLocalizer(moment);
 
   useEffect(() => {
     const fetchData = async () => {
       axios
-        .get("/api/activities/getAllActivities")
+        .get(`/api/activities/getAllActivities?q=${query}`)
         .then((res) => {
-          const allActivities = res.data.allActivities;
-          // const structureActivities = allActivities.map((data: any) => {
-          //   return {
-          //     ...data,
-          //     start: new Date(data.start),
-          //     end: new Date(data.end),
-          //   };
-          // });
-          setActivities(allActivities);
+          const allActivities = res.data;
+          const structureActivities = allActivities.sort(
+            (start: any, end: any) =>
+              (new Date(start.end) as any) - (new Date(end.end) as any)
+          );
+          setActivities(structureActivities);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    fetchData();
+  }, [filterData, query]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      axios
+        .get(`/api/activities/getAllActivities?q=`)
+        .then((res) => {
+          const allActivities = res.data;
+          setActivitiesMonth(allActivities);
         })
         .catch((err) => {
           console.log(err);
@@ -48,6 +75,24 @@ const Activities = () => {
     setShowActivity(!showActivity);
   };
 
+  useEffect(() => {
+    if (!activities) return;
+
+    if (filterBy === "all") {
+      setActivities(activitiesMonth)
+    } else if (filterBy === "draft") {
+      const filterActivity = activitiesMonth.filter(
+        (item: any) => (new Date(item.end) as any) > new Date()
+      );
+      setActivities(filterActivity)
+    } else {
+      const filterActivity = activitiesMonth.filter(
+        (item: any) => (new Date(item.end) as any) < new Date()
+      );
+      setActivities(filterActivity)
+    }
+  }, [filterBy]);
+
   return (
     <div className="h-full">
       <Navbar />
@@ -59,12 +104,23 @@ const Activities = () => {
       />
 
       <div className="mt-28 px-5 lg:grid grid-cols-3 gap-16 max-w-[1500px] m-auto">
-        <SideCard activities={activities} />
+        <SideCard activities={activitiesMonth} />
 
         <section className=" col-span-2">
           {activities && (
             <div>
-              <Header view={view} setView={setView} />
+              <Header
+                activity={activities}
+                view={view}
+                setView={setView}
+                filterData={filterData}
+                setFilterData={setFilterData}
+                setQuery={setQuery}
+                query={query}
+                showFilter={showFilter}
+                setShowFilter={setShowFilter}
+                setFilterItem={setFilterBy}
+              />
 
               {view === "calendar" ? (
                 <div className="mt-10">
@@ -91,7 +147,7 @@ const Activities = () => {
                 </div>
               ) : (
                 <div className="first:rounded-t-lg mt-10">
-                  <List activities={activities} />
+                  <List activities={activities} filteredData={filterData} />
                 </div>
               )}
             </div>

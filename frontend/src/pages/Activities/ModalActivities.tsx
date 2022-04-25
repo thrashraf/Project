@@ -15,7 +15,7 @@ export const ModalActivities = (props: Props) => {
           <button
             type="button"
             onClick={() => props.setShowActivity(!props.showActivity)}
-            className="text-gray-400 bg-transparent absolute top-2 right-2ccc z-10 hover:bg-gray-200  rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+            className="text-gray-400 bg-transparent absolute top-2 right-2 z-10 hover:bg-gray-200  rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
             data-modal-toggle="authentication-modal"
           >
             <svg
@@ -31,32 +31,41 @@ export const ModalActivities = (props: Props) => {
               ></path>
             </svg>
           </button>
+          {props.activity && (
+            <>
+              <img
+                src={
+                  props.activity.img_url
+                    ? props.activity.img_url
+                    : "/assets/default-placeholder.jpg"
+                }
+                alt={props.activity.title}
+                className="rounded-t-lg h-[200px] w-full object-cover"
+              />
 
-          <img
-            src={
-              props.activity.img_url
-                ? props.activity.img_url
-                : "/assets/default-placeholder.jpg"
-            }
-            alt={props.activity.title}
-            className="rounded-t-lg h-[200px] w-full object-cover"
-          />
+              <section className="p-4">
+                <section className="flex justify-between items-center text-gray-400 text-sm">
+                  <p>
+                    {props.activity.start
+                      .slice(0, 10)
+                      .split("-")
+                      .reverse()
+                      .join("/")}
+                  </p>
+                  <p>{props.activity.venue}</p>
+                </section>
 
-          <section className="p-4">
-            <section className="flex justify-between items-center text-gray-400 text-sm">
-              <p>{props.activity.start.slice(0, 10).split("-").reverse().join("/")}</p>
-              <p>{props.activity.venue}</p>
-            </section>
-
-            <section className="mt-3">
-              <h1 className="font-bold">{props.activity.title}</h1>
-              <section className="flex justify-between items-center mt-3 h-10">
-                <span className="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">
-                  {props.activity.organizer}
-                </span>
+                <section className="mt-3">
+                  <h1 className="font-bold">{props.activity.title}</h1>
+                  <section className="flex justify-between items-center mt-3 h-10">
+                    <span className="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">
+                      {props.activity.organizer}
+                    </span>
+                  </section>
+                </section>
               </section>
-            </section>
-          </section>
+            </>
+          )}
         </div>
       </div>
     </ModalUser>

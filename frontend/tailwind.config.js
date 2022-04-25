@@ -1,4 +1,5 @@
 const colors = require("tailwindcss/colors");
+const plugin = require('tailwindcss/plugin')
 
 module.exports = {
   mode: 'jit',
@@ -93,5 +94,18 @@ module.exports = {
     
   },
   },
-  plugins: [],
+  plugins: [
+    plugin(({ addUtilities }) => {
+      addUtilities({
+        '.no-scrollbar::-webkit-scrollbar': {
+          display: 'none'
+      },
+      
+        '.no-scrollbar' : {
+            '-ms-overflow-style': 'none',  /* IE and Edge */
+            'scrollbar-width': 'none'  /* Firefox */
+        }
+      })
+    })
+  ],
 }
