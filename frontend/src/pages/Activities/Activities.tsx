@@ -76,7 +76,7 @@ const Activities = () => {
   };
 
   useEffect(() => {
-    if (!activities) return;
+    if (!activities) return; 
 
     if (filterBy === "all") {
       setActivities(activitiesMonth)
