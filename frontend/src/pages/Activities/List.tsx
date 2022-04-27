@@ -1,25 +1,47 @@
 import React from "react";
-import DropDown from '../../components/Dropdown';
-import useModal from '../../hooks/useModal';
+import DropDown from "../../components/Dropdown";
+import useModal from "../../hooks/useModal";
+import generateYears from "../../utils/generateYears";
+import filterActivities from "../../constant/filterActivities";
 
 type Props = {
   activities: any;
   setFilterData: any;
-  setFilterItem: any
+  setFilterItem: any;
 };
 
 export const List = (props: Props) => {
+  const { isShowing: openFilter, toggle: toggleFilter } = useModal();
+  const { isShowing: openYear, toggle: toggleYear } = useModal();
 
-  const { isShowing, toggle } = useModal(); 
+  const years = generateYears();
 
   return (
     <>
-      <div className="flex flex-start my-5">
-        <DropDown isOpen={isShowing} setIsOpen={toggle} setFilterBy={props.setFilterItem} />
+      <div className="flex w-[200px] justify-between my-5 ">
+        <DropDown
+          isOpen={openFilter}
+          setIsOpen={toggleFilter}
+          setFilterBy={props.setFilterItem}
+          navdropArr={filterActivities}
+          title="Filter By"
+          icon="fa-solid fa-filter mr-3"
+        />
+        <DropDown
+          isOpen={openYear}
+          setIsOpen={toggleYear}
+          setFilterBy={props.setFilterItem}
+          navdropArr={years}
+          title="year"
+          icon="fa-solid fa-calendar mr-3"
+        />
       </div>
-      {props.activities
-        .map((item: any) => (
-          <div key={item.title} className="grid grid-cols-6 px-3 text-sm border-[1px] border-gray-300 py-5 shadow-sm first:rounded-t-lg last:rounded-b-lg bg-white">
+      <div className=" first:rounded-t-lg">
+        {props.activities.map((item: any) => (
+          <div
+            key={item.title}
+            className="grid grid-cols-6 px-3 text-sm border-[1px] border-gray-300 py-5 shadow-sm first:rounded-t-lg last:rounded-b-lg bg-white"
+          >
             <h1 className="col-span-2 font-medium">{item.title}</h1>
             <p className="col-span-1 text-center">
               {item.start.slice(0, 10).split("-").reverse().join("/")}
@@ -32,6 +54,7 @@ export const List = (props: Props) => {
             <p className="text-center">{item.venue}</p>
           </div>
         ))}
+      </div>
     </>
   );
 };

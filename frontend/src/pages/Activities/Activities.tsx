@@ -12,7 +12,6 @@ import { ModalActivities } from "./ModalActivities";
 // import Dropdown from "../../components/Dropdown";
 // import CardSkeleton from "../../components/Skeletons/CardSkeleton";
 
-
 const Activities = () => {
   //for activities and filter for list
   const [activities, setActivities] = useState<any>(null);
@@ -77,22 +76,28 @@ const Activities = () => {
   };
 
   useEffect(() => {
-    if (!activities) return; 
+    if (!activities) return;
 
-    if (filterBy === "all") {
-      setActivities(activitiesMonth)
-    } else if (filterBy === "draft") {
+    if (filterBy === "All") {
+      setActivities(activitiesMonth);
+    } else if (filterBy === "Draft activities") {
       const filterActivity = activitiesMonth.filter(
         (item: any) => (new Date(item.end) as any) > new Date()
       );
-      setActivities(filterActivity)
-    } else {
+      setActivities(filterActivity);
+    } else if (filterBy === "Report activities") {
       const filterActivity = activitiesMonth.filter(
         (item: any) => (new Date(item.end) as any) < new Date()
       );
-      setActivities(filterActivity)
+      setActivities(filterActivity);
+    } else {
+      const filterActivity = activitiesMonth.filter(
+        (item: any) =>
+         ((new Date(item.end).getFullYear() as any) === filterBy)
+      );
+      setActivities(filterActivity);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterBy]);
 
   return (
@@ -148,10 +153,11 @@ const Activities = () => {
                   />
                 </div>
               ) : (
-                <div className="first:rounded-t-lg">
-                  <List activities={activities} 
-                setFilterData={setFilterData} setFilterItem={setFilterBy} />
-                </div>
+                <List
+                  activities={activities}
+                  setFilterData={setFilterData}
+                  setFilterItem={setFilterBy}
+                />
               )}
             </div>
           )}
