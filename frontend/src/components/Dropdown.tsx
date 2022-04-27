@@ -10,12 +10,11 @@ const Dropdown = (props: Props) => {
   return (
     <section className="relative">
       <button
-        id="dropdownInformationButton"
-        data-dropdown-toggle="dropdownInformation"
-        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-4 mr-5 text-center inline-flex items-center w-30 "
+        className="text-gray-500 bg-white focus:outline-none focus:ring-blue-300 font-medium rounded-sm text-sm px-2 py-2 text-center inline-flex items-center w-30 "
         onClick={() => props.setIsOpen(!props.isOpen)}
       >
-         <i className="fa-solid fa-filter" />
+         <i className="fa-solid fa-filter mr-3" />
+        Filter
         
       </button>
 

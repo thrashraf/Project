@@ -12,6 +12,7 @@ import { ModalActivities } from "./ModalActivities";
 // import Dropdown from "../../components/Dropdown";
 // import CardSkeleton from "../../components/Skeletons/CardSkeleton";
 
+
 const Activities = () => {
   //for activities and filter for list
   const [activities, setActivities] = useState<any>(null);
@@ -91,6 +92,7 @@ const Activities = () => {
       );
       setActivities(filterActivity)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterBy]);
 
   return (
@@ -146,8 +148,9 @@ const Activities = () => {
                   />
                 </div>
               ) : (
-                <div className="first:rounded-t-lg mt-10">
-                  <List activities={activities} filteredData={filterData} />
+                <div className="first:rounded-t-lg">
+                  <List activities={activities} 
+                setFilterData={setFilterData} setFilterItem={setFilterBy} />
                 </div>
               )}
             </div>

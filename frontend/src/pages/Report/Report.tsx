@@ -8,6 +8,7 @@ import { useAppSelector } from "../../app/hooks";
 import { userSelector } from "../../features/user/User";
 import { useNavigate } from "react-router-dom";
 import Toast from "../../components/Toast";
+import useModal from "../../hooks/useModal";
 
 const Report = () => {
 
@@ -27,6 +28,7 @@ const Report = () => {
 
   //? utils
   const [showModal, setShowModal] = useState<boolean>(false);
+  const { isShowing, toggle } = useModal();
 
   //ref
   const uploadRef = useRef<HTMLInputElement>(null);
@@ -191,8 +193,8 @@ const Report = () => {
         removeAjkHandler={removeAjkHandler}
         handleAjk={handleAjk}
         ajk={ajk}
-        showModal={showModal} 
-        setShowModal={setShowModal}
+        showModal={isShowing} 
+        setShowModal={toggle}
         password={password}
         formHandler={formHandler}
       />
@@ -322,7 +324,7 @@ const Report = () => {
               </div>
             ): null}
           </div>
-      <PasswordModal showModal={showModal} setShowModal={setShowModal} password={password} setPassword={setPassword} authHandler={authHandler} />
+      <PasswordModal showModal={isShowing} setShowModal={toggle} password={password} setPassword={setPassword} authHandler={authHandler} />
       </section>
     </div>
   );

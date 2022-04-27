@@ -5,6 +5,7 @@ export const allActivities = async (req, res) => {
     const { q } = req.query;
     console.log(q)
 
+    //add search by year
     const keys = ["title", "organizer"];
 
     const search = (data) => {

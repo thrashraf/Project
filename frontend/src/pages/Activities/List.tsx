@@ -1,16 +1,25 @@
 import React from "react";
+import DropDown from '../../components/Dropdown';
+import useModal from '../../hooks/useModal';
 
 type Props = {
   activities: any;
-  filteredData: any;
+  setFilterData: any;
+  setFilterItem: any
 };
 
 export const List = (props: Props) => {
+
+  const { isShowing, toggle } = useModal(); 
+
   return (
     <>
+      <div className="flex flex-start my-5">
+        <DropDown isOpen={isShowing} setIsOpen={toggle} setFilterBy={props.setFilterItem} />
+      </div>
       {props.activities
         .map((item: any) => (
-          <div className="grid grid-cols-6 px-3 text-sm border-[1px] border-gray-300 py-5 shadow-sm first:rounded-t-lg last:rounded-b-lg bg-white">
+          <div key={item.title} className="grid grid-cols-6 px-3 text-sm border-[1px] border-gray-300 py-5 shadow-sm first:rounded-t-lg last:rounded-b-lg bg-white">
             <h1 className="col-span-2 font-medium">{item.title}</h1>
             <p className="col-span-1 text-center">
               {item.start.slice(0, 10).split("-").reverse().join("/")}
