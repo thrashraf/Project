@@ -16,7 +16,7 @@ const AddEvent = (props: Props) => {
   const venue = useInput("");
 
   return (
-    <ModalContainer isShowing={props.isShowing} toggle={props.toggle}>
+    <ModalContainer isShowing={props.isShowing} toggle={props.toggle} hide={props.toggle}>
       <div className="relative mx-auto bg-white max-w-lg rounded-lg shadow z-50 ">
         <div className="flex flex-col px-5 py-3">
           <section className="my-5">
@@ -26,7 +26,8 @@ const AddEvent = (props: Props) => {
             </p>
             <input
               type="text"
-              name=""
+              value={title.value}
+              onChange={title.onChange}
               className="bg-blue-50 px-3 py-3 rounded-lg outline-none w-full"
             />
           </section>
@@ -38,7 +39,8 @@ const AddEvent = (props: Props) => {
               </p>
               <input
                 type="date"
-                name=""
+                value={startEvent.value}
+                onChange={startEvent.onChange}
                 className="bg-blue-50 px-3 py-3 rounded-lg outline-none w-full"
               />
             </section>
@@ -49,7 +51,8 @@ const AddEvent = (props: Props) => {
               </p>
               <input
                 type="date"
-                name=""
+                value={endEvent.value}
+                onChange={endEvent.onChange}
                 className="bg-blue-50 px-3 py-3 rounded-lg outline-none w-full"
               />
             </section>
@@ -60,7 +63,8 @@ const AddEvent = (props: Props) => {
               </p>
               <input
                 type="text"
-                name=""
+                value={organizer.value}
+                onChange={organizer.onChange}
                 className="bg-blue-50 px-3 py-3 rounded-lg outline-none w-full"
               />
             </section>
@@ -71,7 +75,8 @@ const AddEvent = (props: Props) => {
               </p>
               <input
                 type="text"
-                name=""
+                value={venue.value}
+                onChange={venue.onChange}
                 className="bg-blue-50 px-3 py-3 rounded-lg outline-none w-full"
               />
             </section>
