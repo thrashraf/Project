@@ -9,8 +9,9 @@ import { SideCard } from "./SideCard";
 import { Header } from "./Header";
 import { List } from "./List";
 import { ModalActivities } from "./ModalActivities";
-// import Dropdown from "../../components/Dropdown";
-// import CardSkeleton from "../../components/Skeletons/CardSkeleton";
+import useModal from "../../hooks/useModal";
+import AddEvent from "./AddEvent";
+
 
 const Activities = () => {
   //for activities and filter for list
@@ -31,6 +32,10 @@ const Activities = () => {
 
   //for filter activity by draft or done;
   const [filterBy, setFilterBy] = useState<string>("all");
+
+  //for add event modal 
+  const { isShowing: isAddEvent, toggle: toggleAdd } =  useModal();
+
 
   const localizer = momentLocalizer(moment);
 
@@ -110,6 +115,8 @@ const Activities = () => {
         activity={detailActivities}
       />
 
+      <AddEvent isShowing={isAddEvent} toggle={toggleAdd} />
+
       <div className="mt-28 px-5 lg:grid grid-cols-3 gap-16 max-w-[1500px] m-auto">
         <SideCard activities={activitiesMonth} />
 
@@ -127,6 +134,7 @@ const Activities = () => {
                 showFilter={showFilter}
                 setShowFilter={setShowFilter}
                 setFilterItem={setFilterBy}
+                toggleAdd={toggleAdd}
               />
 
               {view === "calendar" ? (

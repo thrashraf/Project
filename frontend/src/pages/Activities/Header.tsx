@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import DropDown from '../../components/Dropdown';
 
 type Props = {
   view: string;
@@ -11,12 +9,11 @@ type Props = {
   query: any;
   showFilter: any;
   setShowFilter: any;
-  setFilterItem: any
+  setFilterItem: any;
+  toggleAdd: any;
 };
 
 export const Header = (props: Props) => {
-
-  const [open, setIsOpen] = useState<boolean>(false);
 
   const handleFilter = (e: any) => {
     const searchWord = e.target.value;
@@ -45,7 +42,12 @@ export const Header = (props: Props) => {
     <div>
       <div className="flex justify-between relative">
         <section className="flex py-1 ">
-          {/* <DropDown isOpen={open} setIsOpen={setIsOpen} setFilterBy={props.setFilterItem}/> */}
+
+          <button className="px-4 py-3 rounded-lg bg-blue-500 text-white mr-5"
+          onClick={props.toggleAdd}
+          >
+            <i className="fa-solid fa-plus" />
+          </button>
 
           <section className=" bg-blue-50 rounded-lg">
             <span className="p-2 ml-3 text-gray-400">
