@@ -35,7 +35,7 @@ export const ModalActivities = (props: Props) => {
             <>
               <img
                 src={
-                  props.activity.img_url
+                  props.activity.img_url.length > 0
                     ? props.activity.img_url
                     : "/assets/default-placeholder.jpg"
                 }

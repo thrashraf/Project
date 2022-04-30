@@ -105,6 +105,7 @@ const Activities = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterBy]);
 
+
   return (
     <div className="h-full">
       <Navbar />
@@ -115,7 +116,7 @@ const Activities = () => {
         activity={detailActivities}
       />
 
-      <AddEvent isShowing={isAddEvent} toggle={toggleAdd} />
+      <AddEvent isShowing={isAddEvent} toggle={toggleAdd} setActivities={setActivities} />
 
       <div className="mt-28 px-5 lg:grid grid-cols-3 gap-16 max-w-[1500px] m-auto">
         <SideCard activities={activitiesMonth} />
@@ -135,6 +136,7 @@ const Activities = () => {
                 setShowFilter={setShowFilter}
                 setFilterItem={setFilterBy}
                 toggleAdd={toggleAdd}
+                
               />
 
               {view === "calendar" ? (
