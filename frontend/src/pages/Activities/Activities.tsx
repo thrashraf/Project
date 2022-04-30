@@ -9,8 +9,9 @@ import { SideCard } from "./SideCard";
 import { Header } from "./Header";
 import { List } from "./List";
 import { ModalActivities } from "./ModalActivities";
-// import Dropdown from "../../components/Dropdown";
-// import CardSkeleton from "../../components/Skeletons/CardSkeleton";
+import useModal from "../../hooks/useModal";
+import AddEvent from "./AddEvent";
+
 
 const Activities = () => {
   //for activities and filter for list
@@ -31,6 +32,10 @@ const Activities = () => {
 
   //for filter activity by draft or done;
   const [filterBy, setFilterBy] = useState<string>("all");
+
+  //for add event modal 
+  const { isShowing: isAddEvent, toggle: toggleAdd } =  useModal();
+
 
   const localizer = momentLocalizer(moment);
 
@@ -76,22 +81,30 @@ const Activities = () => {
   };
 
   useEffect(() => {
-    if (!activities) return; 
+    if (!activities) return;
 
-    if (filterBy === "all") {
-      setActivities(activitiesMonth)
-    } else if (filterBy === "draft") {
+    if (filterBy === "All") {
+      setActivities(activitiesMonth);
+    } else if (filterBy === "Draft activities") {
       const filterActivity = activitiesMonth.filter(
         (item: any) => (new Date(item.end) as any) > new Date()
       );
-      setActivities(filterActivity)
-    } else {
+      setActivities(filterActivity);
+    } else if (filterBy === "Report activities") {
       const filterActivity = activitiesMonth.filter(
         (item: any) => (new Date(item.end) as any) < new Date()
       );
-      setActivities(filterActivity)
+      setActivities(filterActivity);
+    } else {
+      const filterActivity = activitiesMonth.filter(
+        (item: any) =>
+         ((new Date(item.end).getFullYear() as any) === filterBy)
+      );
+      setActivities(filterActivity);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterBy]);
+
 
   return (
     <div className="h-full">
@@ -102,6 +115,8 @@ const Activities = () => {
         setShowActivity={setShowActivity}
         activity={detailActivities}
       />
+
+      <AddEvent isShowing={isAddEvent} toggle={toggleAdd} setActivities={setActivities} />
 
       <div className="mt-28 px-5 lg:grid grid-cols-3 gap-16 max-w-[1500px] m-auto">
         <SideCard activities={activitiesMonth} />
@@ -120,6 +135,8 @@ const Activities = () => {
                 showFilter={showFilter}
                 setShowFilter={setShowFilter}
                 setFilterItem={setFilterBy}
+                toggleAdd={toggleAdd}
+                
               />
 
               {view === "calendar" ? (
@@ -146,9 +163,11 @@ const Activities = () => {
                   />
                 </div>
               ) : (
-                <div className="first:rounded-t-lg mt-10">
-                  <List activities={activities} filteredData={filterData} />
-                </div>
+                <List
+                  activities={activities}
+                  setFilterData={setFilterData}
+                  setFilterItem={setFilterBy}
+                />
               )}
             </div>
           )}
