@@ -23,6 +23,11 @@ class activities {
         return db.execute(sql)
     }
 
+    static async deleteActivitiesById(id) {
+        const sql = `DELETE FROM activities where id = '${id}'`;
+        return db.execute(sql)
+    }
+
 }
 
 export default activities;

@@ -5,16 +5,18 @@ import useInput from "../../hooks/useInput";
 import useModal from "../../hooks/useModal";
 import Toast from '../../components/Toast';
 import axios from "axios";
-import { start } from "repl";
-import { end } from "@popperjs/core";
+import { useAppDispatch } from '../../app/hooks';
+import { addNewActivities } from '../../features/activities/Activities';
 
 type Props = {
   isShowing: boolean;
   toggle: any;
-  setActivities: any
 };
 
 const AddEvent = (props: Props) => {
+
+  const dispatch = useAppDispatch();
+
   const title = useInput("");
   const startEvent = useInput("");
   const endEvent = useInput("");
@@ -117,10 +119,11 @@ const AddEvent = (props: Props) => {
           end: endEvent.value,
           organizer: organizer.value,
           venue: venue.value,
-          img_url: validFiles
+          img_url: JSON.stringify(validFiles)
         }
 
-        props.setActivities((prevArr: any) => [...prevArr, newActivities])
+        dispatch(addNewActivities(newActivities));
+        props.toggle();
         
       }
     })

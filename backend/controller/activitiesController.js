@@ -49,3 +49,19 @@ export const createActivities = async (req, res) => {
     });
   }
 };
+
+export const deleteActivities = async (req, res) => {
+  try {
+    const { q }= req.query;
+    console.log(q);
+    const [deletedActivities] = await activities.deleteActivitiesById(q);
+    res.status(200).json("successful");
+
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      message: "can't load data",
+    });
+  }
+};
+
