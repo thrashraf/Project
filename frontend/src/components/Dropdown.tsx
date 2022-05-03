@@ -25,9 +25,11 @@ const Dropdown = (props: Props) => {
           className="py-1 text-sm text-gray-700 "
           aria-labelledby="dropdownInformationButton"
         >
-          {props.navdropArr?.map((item: any) => (
+          {props.navdropArr?.map((item: any, index: number) => (
             <li onClick={() => props.setFilterBy(item)}>
-              <p className="block py-2 px-4 hover:bg-gray-100 cursor-pointer">
+              <p className="block py-2 px-4 hover:bg-gray-100 cursor-pointer"
+              key={index}
+              >
                 {item}
               </p>
             </li>

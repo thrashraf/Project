@@ -4,6 +4,7 @@ import useModal from "../../hooks/useModal";
 import generateYears from "../../utils/generateYears";
 import filterActivities from "../../constant/filterActivities";
 
+
 type Props = {
   activities: any;
   setFilterData: any;
@@ -37,9 +38,9 @@ export const List = (props: Props) => {
         />
       </div>
       <div className=" first:rounded-t-lg">
-        {props.activities.map((item: any) => (
+        {props.activities.map((item: any, index: number) => (
           <div
-            key={item.title}
+            key={index}
             className="grid grid-cols-6 px-3 text-sm border-[1px] border-gray-300 py-5 shadow-sm first:rounded-t-lg last:rounded-b-lg bg-white"
           >
             <h1 className="col-span-2 font-medium">{item.title}</h1>

@@ -2,6 +2,7 @@ import user from "../model/users.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 dotenv.config();
 
 export const registerUser = async (req, res) => {
@@ -25,13 +26,15 @@ export const registerUser = async (req, res) => {
       });
     }
 
+    const id = crypto.randomBytes(16).toString("hex");
+
     //hash user password
     const hashPassword = bcrypt.hashSync(userPassword);
 
     console.log(hashPassword)
 
     //create user
-    await user.register(userName, userEmail, hashPassword);
+    await user.register(id, userName, userEmail, hashPassword);
 
     //response successful create user 🎉
     res.status(200).json({

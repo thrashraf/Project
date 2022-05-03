@@ -6,12 +6,13 @@ class user {
     return db.execute(sql);
   }
 
-  static async register(name, email, password) {
+  static async register(id, name, email, password) {
 
     const sql = `INSERT INTO
-            users (name, email, password, role, RefreshToken, profile_picture)
+            users (id, name, email, password, role, RefreshToken, profile_picture)
         VALUES
         (
+            '${id}',
             '${name}',
             '${email}',
             '${password}',
@@ -30,13 +31,13 @@ class user {
   }
 
   static async findRefreshToken(refreshToken) {
-    const sql = `SELECT * FROM USERS
+    const sql = `SELECT * FROM users
                     WHERE RefreshToken = '${refreshToken}' `;
     return db.execute(sql);
   }
 
   static async deleteRefreshToken(id) {
-    const sql = `UPDATE USERS
+    const sql = `UPDATE users
                     SET RefreshToken = '${null}'
                     WHERE id = '${id}'`;
     return db.execute(sql);

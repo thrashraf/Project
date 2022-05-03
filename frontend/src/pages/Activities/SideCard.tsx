@@ -5,12 +5,7 @@ type Props = {
 };
 
 export const SideCard = (props: Props) => {
-  const filterByMonth = props.activities?.filter((item: any) => {
-    const date = new Date(item.start);
-
-    return date.getMonth() === new Date().getMonth();
-  });
-  console.log(filterByMonth);
+ 
   return (
     <>
       <div className="max-w-md col-span-1 mb-20">
@@ -23,10 +18,10 @@ export const SideCard = (props: Props) => {
             const date = new Date(item.start);
             return date.getMonth() === new Date().getMonth();
           })
-          .map((event: any) => (
-            <section className="shadow-md mt-10">
+          .map((event: any, index: number) => (
+            <section className="shadow-md mt-10 rounded-lg" key={index}>
               <img
-                src={event.img_url ? event.img_url : "/assets/default-placeholder.jpg"}
+                src={event.img_url.lenth > 0 ? event.img_url : "/assets/default-placeholder.jpg"}
                 alt={event.title}
                 className="rounded-t-lg object-cover h-[100px] w-full"
               />
