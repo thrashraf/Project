@@ -8,5 +8,6 @@ const activitiesRoute = express.Router();
 activitiesRoute.get('/activities/getAllActivities', activities.allActivities);
 activitiesRoute.post('/activities/createActivities', upload.array('upload', 3), activities.createActivities);
 activitiesRoute.delete('/activities/deleteActivities', activities.deleteActivities);
+activitiesRoute.post('/activities/updateActivities', activities.updateActivities);
 
 export default activitiesRoute;

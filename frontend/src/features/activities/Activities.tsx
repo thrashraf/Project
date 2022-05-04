@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../../app/Store";
-import api from "../../utils/api";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../../app/Store';
+import api from '../../utils/api';
 
 interface interfaceState {
   [key: string]: any;
@@ -11,10 +11,10 @@ const initialState: interfaceState = {
   activities: null,
 
   //for user view either calendar or list
-  view: "calendar",
+  view: 'calendar',
 
   //for filter user's search
-  query: "",
+  query: '',
 
   //for sidebar activities
   activitiesMonth: null,
@@ -29,18 +29,21 @@ const initialState: interfaceState = {
   detailActivities: null,
 
   //for filter list (by All, draft & done)
-  filterBy: "all",
+  filterBy: 'all',
+
+  //for edit
+  editMode: false,
 
   //* request variables
   isFetching: false,
   isSuccess: false,
   isError: false,
-  errorMessage: "",
+  errorMessage: '',
   //*
 };
 
 export const activitiesSlice = createSlice({
-  name: "activity",
+  name: 'activity',
   initialState,
   reducers: {
     viewDetailActivities: (state, action) => {
@@ -60,8 +63,39 @@ export const activitiesSlice = createSlice({
     },
 
     deleteActivitiesHandler: (state, action) => {
-      const index = state.activities.findIndex((event: any) => event.id === action.payload);
-      state.activities.splice(1, index); 
+      console.log(action.payload);
+      const index = state.activities.findIndex(
+        (event: any) => event.title === action.payload
+      );
+      state.activities.splice(1, index);
+      state.activitiesMonth.splice(1, index);
+    },
+
+    editActivitiesHandler: (state, action) => {
+      const index = state.activities.findIndex(
+        (event: any) => event.id === action.payload.id
+      );
+
+      console.log(action.payload.images);
+
+      state.activities[index].title = action.payload.title;
+      state.activities[index].start = action.payload.start;
+      state.activities[index].venue = action.payload.venue;
+      state.activities[index].organizer = action.payload.organizer;
+      state.activities[index].img_url = JSON.stringify(action.payload.images);
+
+      state.activitiesMonth[index].title = action.payload.title;
+      state.activitiesMonth[index].start = action.payload.start;
+      state.activitiesMonth[index].venue = action.payload.venue;
+      state.activitiesMonth[index].organizer = action.payload.organizer;
+      state.activitiesMonth[index].img_url = JSON.stringify(
+        action.payload.images
+      );
+    },
+
+    //for toggle edit mode
+    editModeHandler: (state) => {
+      state.editMode = !state.editMode;
     },
 
     // filter reducers //
@@ -74,7 +108,7 @@ export const activitiesSlice = createSlice({
       const newFilter = state.activities.filter((value: any) =>
         value.title.toLowerCase().includes(searchWord.toLowerCase())
       );
-      if (searchWord !== "") {
+      if (searchWord !== '') {
         state.filterData = newFilter;
         state.showFilter = true;
       } else {
@@ -131,7 +165,7 @@ export const activitiesSlice = createSlice({
       state.errorMessage = payload.message;
     });
 
-    // ? delete activities 
+    // ? delete activities
     builder.addCase(deleteActivities.fulfilled, (state) => {
       state.isFetching = false;
       state.isSuccess = true;
@@ -144,20 +178,34 @@ export const activitiesSlice = createSlice({
       state.isError = true;
       state.errorMessage = payload.message;
     });
+
+    // ? update activities
+    builder.addCase(updateActivities.fulfilled, (state) => {
+      state.isFetching = false;
+      state.isSuccess = true;
+    });
+    builder.addCase(updateActivities.pending, (state) => {
+      state.isFetching = true;
+    });
+    builder.addCase(updateActivities.rejected, (state, { payload }: any) => {
+      state.isFetching = false;
+      state.isError = true;
+      state.errorMessage = payload.message;
+    });
   },
 });
 
 export const getActivities = createAsyncThunk(
-  "/api/admin/getAllUser",
+  '/api/admin/getAllUser',
   async (query: any, thunkAPI) => {
     try {
       const response = await api.get(
         `/api/activities/getAllActivities?q=${query}`,
         {
-          method: "GET",
+          method: 'GET',
           headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
           },
         }
       );
@@ -171,21 +219,21 @@ export const getActivities = createAsyncThunk(
       }
     } catch (e: any) {
       console.log(e);
-      console.log("Error", e.response.data);
+      console.log('Error', e.response.data);
       return thunkAPI.rejectWithValue(e.response.data);
     }
   }
 );
 
 export const getMonthActivities = createAsyncThunk(
-  "/api/admin/getMonthActivities",
+  '/api/admin/getMonthActivities',
   async (_, thunkAPI) => {
     try {
       const response = await api.get(`/api/activities/getAllActivities?q=`, {
-        method: "GET",
+        method: 'GET',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
       });
       let data = await response.data;
@@ -198,23 +246,26 @@ export const getMonthActivities = createAsyncThunk(
       }
     } catch (e: any) {
       console.log(e);
-      console.log("Error", e.response.data);
+      console.log('Error', e.response.data);
       return thunkAPI.rejectWithValue(e.response.data);
     }
   }
 );
 
 export const deleteActivities = createAsyncThunk(
-  "/api/admin/deleteActivities",
+  '/api/admin/deleteActivities',
   async (id: string, thunkAPI) => {
     try {
-      const response = await api.delete(`/api/activities/delete?q=${id}`, {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await api.delete(
+        `/api/activities/deleteActivities?q=${id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
       let data = await response.data;
 
       if (response.status === 200) {
@@ -225,7 +276,38 @@ export const deleteActivities = createAsyncThunk(
       }
     } catch (e: any) {
       console.log(e);
-      console.log("Error", e.response.data);
+      console.log('Error', e.response.data);
+      return thunkAPI.rejectWithValue(e.response.data);
+    }
+  }
+);
+
+export const updateActivities = createAsyncThunk(
+  '/api/admin/updateActivities',
+  async (newActivities: any, thunkAPI) => {
+    try {
+      const response = await api.post(
+        `/api/activities/updateActivities?q=${newActivities.id}`,
+        { newActivities },
+        {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      let data = await response.data;
+
+      if (response.status === 200) {
+        console.log(data);
+        return data;
+      } else {
+        return thunkAPI.rejectWithValue(data);
+      }
+    } catch (e: any) {
+      console.log(e);
+      console.log('Error', e.response.data);
       return thunkAPI.rejectWithValue(e.response.data);
     }
   }
@@ -238,7 +320,9 @@ export const {
   handleFilter,
   setFilterHandler,
   setViewHandler,
-  deleteActivitiesHandler
+  deleteActivitiesHandler,
+  editModeHandler,
+  editActivitiesHandler,
 } = activitiesSlice.actions;
 export const activitiesSelector = (state: RootState) => state.activities;
 export default activitiesSlice.reducer;

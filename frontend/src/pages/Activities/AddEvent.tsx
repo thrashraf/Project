@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
-import ModalContainer from "../../components/ModalContainer";
-import Dropzone from "../../components/Dropzone";
-import useInput from "../../hooks/useInput";
-import useModal from "../../hooks/useModal";
+import React, { useEffect, useRef, useState } from 'react';
+import ModalContainer from '../../components/ModalContainer';
+import Dropzone from '../../components/Dropzone';
+import useInput from '../../hooks/useInput';
+import useModal from '../../hooks/useModal';
 import Toast from '../../components/Toast';
-import axios from "axios";
+import axios from 'axios';
 import { useAppDispatch } from '../../app/hooks';
 import { addNewActivities } from '../../features/activities/Activities';
 
@@ -14,22 +14,20 @@ type Props = {
 };
 
 const AddEvent = (props: Props) => {
-
   const dispatch = useAppDispatch();
 
-  const title = useInput("");
-  const startEvent = useInput("");
-  const endEvent = useInput("");
-  const organizer = useInput("");
-  const venue = useInput("");
+  const title = useInput('');
+  const startEvent = useInput('');
+  const endEvent = useInput('');
+  const organizer = useInput('');
+  const venue = useInput('');
 
   const [file, setFile] = useState<any>([]);
   const [validFiles, setValidFiles] = useState<any>([]);
-  
 
   //for toast
-  const [status, setStatus] = useState<string>("");
-  const [message, setMessage] = useState<string>("");
+  const [status, setStatus] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
 
   const toastRef = useRef<any>(null);
 
@@ -44,8 +42,8 @@ const AddEvent = (props: Props) => {
       if (validateFile(files[i])) {
         setFile((prevArray: any) => [...prevArray, ...files]);
       } else {
-        setStatus("error")
-        setMessage("Not support file type")
+        setStatus('error');
+        setMessage('Not support file type');
         toastRef.current && toastRef.current.showToast();
       }
     }
@@ -53,7 +51,7 @@ const AddEvent = (props: Props) => {
 
   //for validate file
   const validateFile = (file: any) => {
-    const validTypes = ["image/jpeg", "image/jpg", "image/png"];
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
     console.log(validTypes.indexOf(file.type) === -1);
     if (validTypes.indexOf(file.type) === -1) {
       return false;
@@ -63,11 +61,11 @@ const AddEvent = (props: Props) => {
 
   //to show file size
   const fileSize = (size: any) => {
-    if (size === 0) return "0 Bytes";
+    if (size === 0) return '0 Bytes';
     const k = 1024;
-    const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     const i = Math.floor(Math.log(size) / Math.log(k));
-    return parseFloat((size / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+    return parseFloat((size / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
   //to remove file
@@ -109,28 +107,27 @@ const AddEvent = (props: Props) => {
     formData.append('organizer', organizer.value);
     validFiles.forEach((image: any) => formData.append('upload', image));
 
-    axios.post('/api/activities/createActivities', formData)
-    .then((res: any) => {
-      if (res.status === 200) {
+    axios
+      .post('/api/activities/createActivities', formData)
+      .then((res: any) => {
+        if (res.status === 200) {
+          const newActivities = {
+            title: title.value,
+            start: startEvent.value,
+            end: endEvent.value,
+            organizer: organizer.value,
+            venue: venue.value,
+            img_url: JSON.stringify(validFiles),
+          };
 
-        const newActivities = {
-          title: title.value,
-          start: startEvent.value,
-          end: endEvent.value,
-          organizer: organizer.value,
-          venue: venue.value,
-          img_url: JSON.stringify(validFiles)
+          dispatch(addNewActivities(newActivities));
+          props.toggle();
         }
-
-        dispatch(addNewActivities(newActivities));
-        props.toggle();
-        
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-    })
-  }
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  };
 
   return (
     <ModalContainer
@@ -138,91 +135,99 @@ const AddEvent = (props: Props) => {
       toggle={props.toggle}
       hide={props.toggle}
     >
-      <div className="relative mx-auto bg-white max-w-lg rounded-lg shadow z-50 ">
-        <form className="flex flex-col px-5 py-3" onSubmit={(e) => formHandler(e)}>
-          <section className="my-5">
-            <p className="my-1 text-sm text-gray-400 ml-1">
+      <div className='relative mx-auto bg-white max-w-lg rounded-lg shadow z-50 '>
+        <form
+          className='flex flex-col px-5 py-3'
+          onSubmit={(e) => formHandler(e)}
+        >
+          <section className='my-5'>
+            <p className='my-1 text-sm text-gray-400 ml-1'>
               Title
-              <span className="text-red-500">*</span>
+              <span className='text-red-500'>*</span>
             </p>
             <input
-              type="text"
+              type='text'
               value={title.value}
               onChange={title.onChange}
-              className="bg-blue-50 px-3 py-2 rounded-lg outline-none w-full"
+              required
+              className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
             />
           </section>
-          <div className="grid grid-cols-2 gap-5">
-            <section className="">
-              <p className="my-1 text-sm text-gray-400 ml-1">
+          <div className='grid grid-cols-2 gap-5'>
+            <section className=''>
+              <p className='my-1 text-sm text-gray-400 ml-1'>
                 Start Date
-                <span className="text-red-500">*</span>
+                <span className='text-red-500'>*</span>
               </p>
               <input
-                type="date"
+                type='date'
                 value={startEvent.value}
+                required
                 onChange={startEvent.onChange}
-                className="bg-blue-50 px-3 py-2 rounded-lg outline-none w-full"
+                className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
               />
             </section>
-            <section className="">
-              <p className="my-1 text-sm text-gray-400 ml-1">
+            <section className=''>
+              <p className='my-1 text-sm text-gray-400 ml-1'>
                 End Date
-                <span className="text-red-500">*</span>
+                <span className='text-red-500'>*</span>
               </p>
               <input
-                type="date"
+                type='date'
                 value={endEvent.value}
+                required
                 onChange={endEvent.onChange}
-                className="bg-blue-50 px-3 py-2 rounded-lg outline-none w-full"
+                className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
               />
             </section>
-            <section className="">
-              <p className="my-1 text-sm text-gray-400 ml-1">
+            <section className=''>
+              <p className='my-1 text-sm text-gray-400 ml-1'>
                 Organizer
-                <span className="text-red-500">*</span>
+                <span className='text-red-500'>*</span>
               </p>
               <input
-                type="text"
+                type='text'
                 value={organizer.value}
+                required
                 onChange={organizer.onChange}
-                className="bg-blue-50 px-3 py-2 rounded-lg outline-none w-full"
+                className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
               />
             </section>
-            <section className="">
-              <p className="my-1 text-sm text-gray-400 ml-1">
+            <section className=''>
+              <p className='my-1 text-sm text-gray-400 ml-1'>
                 Venue
-                <span className="text-red-500">*</span>
+                <span className='text-red-500'>*</span>
               </p>
               <input
-                type="text"
+                type='text'
                 value={venue.value}
                 onChange={venue.onChange}
-                className="bg-blue-50 px-3 py-2 rounded-lg outline-none w-full"
+                required
+                className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
               />
             </section>
           </div>
-          <section className="my-5">
+          <section className='my-5'>
             <section
-              className="mt-5 flex  w-[200px] items-center cursor-pointer 
+              className='mt-5 flex  w-[200px] items-center cursor-pointer 
               text-slate-400 hover:text-blue-500
-            "
+            '
               onClick={toggle}
             >
-              <div className="p-5 rounded-md bg-blue-50 ">
-                <i className="fa-solid fa-images fa-2xl"></i>
+              <div className='p-5 rounded-md bg-blue-50 '>
+                <i className='fa-solid fa-images fa-2xl'></i>
               </div>
-              <p className="ml-5 text-sm">Upload Images</p>
+              <p className='ml-5 text-sm'>Upload Images</p>
             </section>
           </section>
-          <section className=" flex justify-end">
+          <section className=' flex justify-end'>
             <button
-              className="flex hover:bg-black hover:text-white px-3 py-2  rounded-lg mr-5"
+              className='flex hover:bg-black hover:text-white px-3 py-2  rounded-lg mr-5'
               onClick={props.toggle}
             >
               Cancel
             </button>
-            <button className="flex bg-blue-500 px-3 py-2 text-white rounded-lg">
+            <button className='flex bg-blue-500 px-3 py-2 text-white rounded-lg'>
               Create
             </button>
           </section>
@@ -235,11 +240,7 @@ const AddEvent = (props: Props) => {
             removeFile={removeFile}
           />
         </form>
-        <Toast
-        ref={toastRef}
-        status={status}
-        message={message}
-        />
+        <Toast ref={toastRef} status={status} message={message} />
       </div>
     </ModalContainer>
   );
