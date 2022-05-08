@@ -28,7 +28,7 @@ export const allActivities = async (req, res) => {
 
 export const createActivities = async (req, res) => {
   try {
-    const {title, start, end, venue, organizer}= req.body;
+    const {title, start, end, venue, organizer, username, email}= req.body;
     const files = req.files;
 
     const id = crypto.randomBytes(16).toString("hex");
@@ -39,7 +39,7 @@ export const createActivities = async (req, res) => {
       null;
 
 
-    const [activitiesCreated] = await activities.createActivities(id, title, start, end, organizer, venue, images);
+    const [activitiesCreated] = await activities.createActivities(id, title, start, end, organizer, venue, images, username, email);
     res.status(200).json("successful");
 
   } catch (error) {
