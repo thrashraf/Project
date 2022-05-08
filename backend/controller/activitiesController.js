@@ -75,7 +75,7 @@ export const updateActivities = async (req, res) => {
     console.log(req.body)
 
     console.log(q);
-    const [updatedActivities] = await activities.updateActivitiesById(q, title, start, organizer, venue, images);
+    const [updatedActivities] = await activities.updateActivitiesById(q, title, start, organizer, venue, JSON.parse(images));
     console.log(updatedActivities.affectedRows);
 
     res.status(200).json("successful");

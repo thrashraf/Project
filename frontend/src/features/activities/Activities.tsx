@@ -67,8 +67,9 @@ export const activitiesSlice = createSlice({
       const index = state.activities.findIndex(
         (event: any) => event.title === action.payload
       );
-      state.activities.splice(1, index);
-      state.activitiesMonth.splice(1, index);
+      console.log(index);
+      state.activities.splice(index, 1);
+      state.activitiesMonth.splice(index, 1);
     },
 
     editActivitiesHandler: (state, action) => {
@@ -82,15 +83,16 @@ export const activitiesSlice = createSlice({
       state.activities[index].start = action.payload.start;
       state.activities[index].venue = action.payload.venue;
       state.activities[index].organizer = action.payload.organizer;
-      state.activities[index].img_url = JSON.stringify(action.payload.images);
+      state.activities[index].img_url = action.payload.images;
 
       state.activitiesMonth[index].title = action.payload.title;
       state.activitiesMonth[index].start = action.payload.start;
       state.activitiesMonth[index].venue = action.payload.venue;
       state.activitiesMonth[index].organizer = action.payload.organizer;
-      state.activitiesMonth[index].img_url = JSON.stringify(
-        action.payload.images
-      );
+      state.activitiesMonth[index].img_url = action.payload.images;
+      console.log(action.payload);
+
+      //! state.detailActivities = action.payload;
     },
 
     //for toggle edit mode

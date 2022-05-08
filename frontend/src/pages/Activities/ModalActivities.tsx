@@ -25,7 +25,7 @@ export const ModalActivities = (props: Props) => {
 
   const dispatch = useDispatch();
 
-  const { detailActivities, isFetching, editMode } =
+  const { detailActivities, isFetching, editMode, isSuccess } =
     useAppSelector(activitiesSelector);
 
   const title = useInput('');
@@ -59,12 +59,12 @@ export const ModalActivities = (props: Props) => {
       start: start.value,
       organizer: organizer.value,
       venue: venue.value,
-      images,
+      images: JSON.stringify(images),
       id,
     };
 
-    // dispatch(editActivitiesHandler(newActivities));
     dispatch(updateActivities(newActivities));
+    isSuccess && dispatch(editActivitiesHandler(newActivities));
   };
 
   return (
