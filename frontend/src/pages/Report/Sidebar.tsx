@@ -20,7 +20,7 @@ type Props = {
   setOrganizer: React.Dispatch<React.SetStateAction<string>>;
   setVenue: React.Dispatch<React.SetStateAction<string>>;
   setDate: React.Dispatch<React.SetStateAction<string>>;
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowModal: any
   formHandler: any
 
   showModal: boolean;
@@ -50,7 +50,7 @@ export const Sidebar = (props: Props) => {
       props.organizer.length > 0 &&
       props.content.length > 0
     ) {
-      props.setShowModal(!props.showModal);
+      props.setShowModal();
     } else {
       toastRef.current !== null && toastRef.current.showToast()
     }

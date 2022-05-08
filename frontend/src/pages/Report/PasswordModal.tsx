@@ -1,7 +1,7 @@
 import React from "react";
-import ModalUser from "../../components/ModalUser";
 import { useAppSelector } from "../../app/hooks";
 import { userSelector } from "../../features/user/User";
+import ModalContainer from '../../components/ModalContainer'
 
 type Props = {
     showModal: boolean,
@@ -16,7 +16,7 @@ export const PasswordModal = (props: Props) => {
   const { user }: any = useAppSelector(userSelector);
 
   return (
-    <ModalUser modal={props.showModal} setModal={props.setShowModal} >
+    <ModalContainer isShowing={props.showModal} hide={props.setShowModal} >
       <div className="relative mx-auto bg-white max-w-md rounded-lg shadow z-50">
         <div className="flex justify-end p-2">
           <button
@@ -98,6 +98,6 @@ export const PasswordModal = (props: Props) => {
           </button>
         </form>
       </div>
-    </ModalUser>
+    </ModalContainer>
   );
 };
