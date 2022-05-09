@@ -13,10 +13,12 @@ class activities {
     end,
     organizer,
     venue,
-    image
+    image,
+    username,
+    email
   ) {
     const sql = `INSERT INTO
-                activities (id, title, start, end, organizer, venue, img_url)
+                activities (id, title, start, end, organizer, venue, img_url, username, email)
             VALUES 
             (
                 '${id}',
@@ -25,7 +27,10 @@ class activities {
                 '${end}',
                 '${organizer}',
                 '${venue}',
-                '${JSON.stringify(image)}'
+                '${JSON.stringify(image)}',
+                '${username}',
+                '${email}'
+
             )`;
     return db.execute(sql);
   }
@@ -49,6 +54,13 @@ class activities {
         venue = '${venue}',
         img_url = '${JSON.stringify(images)}'
         where id = '${id}'`;
+    return db.execute(sql);
+  }
+
+  static async getActivitiesById(
+    id
+  ) {
+    const sql = `SELECT * FROM activities where id = '${id}'`;
     return db.execute(sql);
   }
 }

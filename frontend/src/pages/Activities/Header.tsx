@@ -7,16 +7,6 @@ import {
 } from '../../features/activities/Activities';
 
 type Props = {
-  // view: string;
-  // setView: any;
-  // activity: any;
-  // filterData: any;
-  // setFilterData: any;
-  // setQuery: any;
-  // query: any;
-  // showFilter: any;
-  // setShowFilter: any;
-  // setFilterItem: any;
   toggleAdd: any;
 };
 

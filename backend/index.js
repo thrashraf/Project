@@ -3,11 +3,12 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import cookieParser from "cookie-parser";
 import dotenv from 'dotenv';
+import checkDate from './checkDate.js';
  
 dotenv.config();
 
 const port = 5000 || process.env.PORT;
-
+ 
 //* import route
 import usersRoute from './router/usersRoute.js';
 import adminRoute from './router/adminRoute.js';
@@ -27,5 +28,6 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use('/api', usersRoute, adminRoute, innoRoute, publicationRoute, reportRoute, activitiesRoute );
 
+checkDate();
 
 app.listen(port, console.log(`server running on port ${port}`))
