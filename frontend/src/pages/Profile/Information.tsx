@@ -1,151 +1,171 @@
-import React, {  useEffect, useState } from "react";
-import { DynamicInput } from "../../components/DynamicInput";
+import React, { useEffect, useState } from 'react';
+import { DynamicInput } from '../../components/DynamicInput';
 import useInput from '../../hooks/useInput';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { userSelector, updateUserInformation } from '../../features/user/User';
-import Draw from './Draw'
-import Notify from "../../components/Notify";
+import Draw from './Draw';
+import Notify from '../../components/Notify';
+import useModal from '../../hooks/useModal';
+import Dropzone from '../../components/Dropzone';
 
 type Props = {};
 
 export const Information = (props: Props) => {
- 
   const [editMode, setEditMode] = useState<boolean>(true);
 
   const { user }: any = useAppSelector(userSelector);
   const dispatch = useAppDispatch();
 
-  const name = useInput("");
-  const position = useInput("");
-  const email = useInput("");
-  const phoneNumber = useInput("");
+  const name = useInput('');
+  const position = useInput('');
+  const email = useInput('');
+  const phoneNumber = useInput('');
+
+  const [signature, setSignature] = useState<null>();
+  const [profileImage, setProfileImage] = useState<null>();
+
+  const { isShowing: showUploadSignature, toggle: toggleUploadSignature } =
+    useModal();
+  const { isShowing: showUploadProfile, toggle: toggleUploadProfile } =
+    useModal();
 
   const [show, setShow] = useState<boolean>(false);
 
   useEffect(() => {
-    if(user) {
+    if (user) {
       console.log(user);
-      name.setInput(user.name)
+      name.setInput(user.name);
       email.setInput(user.email);
       phoneNumber.setInput(user.phone_number);
       position.setInput(user.position);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user])
-  
-  const updateUser = () => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
+  const updateUser = () => {
     const data = {
       id: user.id,
       name: name.value,
       email: email.value,
       position: position.value,
-      phoneNumber: phoneNumber.value
-    }
+      phoneNumber: phoneNumber.value,
+    };
 
-    dispatch(updateUserInformation(data))
+    dispatch(updateUserInformation(data));
 
-    setEditMode(!editMode)
+    setEditMode(!editMode);
   };
 
   return (
-    <div className=" ">
+    <div className=' '>
       <Draw modal={show} setModal={setShow} />
-      <section className="w-full mt-5">
-        <section className="relative">
-          <div>
-            <img
-              src="/assets/default-header.jpg"
-              alt=""
-              className="h-[170px] w-full object-cover rounded-t-xl"
-            />
+      <section className='w-full mt-5'>
+        <section className='relative'>
+          <div className='text-white'>
+            <section className='relative text-[14px]'>
+              <img
+                src='/assets/default-header.jpg'
+                alt=''
+                className='h-[170px] w-full object-cover rounded-t-xl'
+              />
+              <i className='fa-solid fa-camera bg-blue-500 rounded-full w-7 h-7 p-1.5 absolute -bottom-7 z-10 left-24 cursor-pointer'></i>
+            </section>
           </div>
 
-          <div className="">
-            <span className="bg-gray-300  px-[30px] py-[25px] rounded-full text-white absolute top-32 left-5">
-              <i className="fas fa-user fa-2x"></i>
+          <div className=''>
+            <span className='bg-gray-300  px-[30px] py-[25px] rounded-full text-white absolute top-32 left-5'>
+              <i className='fas fa-user fa-2x'></i>
             </span>
 
             <button
-              className="bg-blue-500 px-4 py-1 text-sm float-right text-white rounded-md  my-4"
+              className='bg-blue-500 px-4 py-1 text-sm float-right text-white rounded-md  my-4'
               disabled={!editMode}
               onClick={() => setEditMode(!editMode)}
-              style={!editMode ? { backgroundColor: "#dbeafe" } : {}}
+              style={!editMode ? { backgroundColor: '#dbeafe' } : {}}
             >
-              <i className="far fa-edit"></i> edit
+              <i className='far fa-edit'></i> edit
             </button>
 
             <button
-              className={`bg-blue-500 px-4 py-1 text-sm float-right text-white rounded-md  my-4 mx-5 ${editMode && 'hidden'}`}
+              className={`bg-blue-500 px-4 py-1 text-sm float-right text-white rounded-md  my-4 mx-5 ${
+                editMode && 'hidden'
+              }`}
               onClick={updateUser}
             >
-              <i className="far fa-save mr-2"></i>Save
+              <i className='far fa-save mr-2'></i>Save
             </button>
           </div>
         </section>
 
-        {user ? ( 
+        {user ? (
           <div>
-            <section className="lg:grid grid-cols-2 mt-24 gap-5">
+            <section className='lg:grid grid-cols-2 mt-24 gap-5'>
               <DynamicInput
                 content={name.value}
                 editMode={editMode}
-                title="Name"
+                title='Name'
                 onChange={name.onChange}
               />
               <DynamicInput
                 content={position.value}
                 editMode={editMode}
-                title="Position"
+                title='Position'
                 onChange={position.onChange}
               />
 
               <DynamicInput
                 content={email.value}
                 editMode={editMode}
-                title="Email"
+                title='Email'
                 onChange={email.onChange}
               />
 
               <DynamicInput
                 content={phoneNumber.value}
                 editMode={editMode}
-                title="Phone Number"
+                title='Phone Number'
                 onChange={phoneNumber.onChange}
               />
             </section>
           </div>
         ) : null}
-        
-        <div className="my-10 text-gray-500">
+
+        <div className='my-10 text-gray-500'>
           <h3>signature</h3>
 
-          <div className="block lg:flex justify-around">
-            <section className="mt-5 text-sm">
+          <div className='block lg:flex justify-around'>
+            <section className='mt-5 text-sm'>
               <p>Draw signature here</p>
-              <section className="relative mt-5 ">
+              <section className='relative mt-5 '>
                 {user && !user.signature && <Notify />}
-                <div className="w-[300px] h-[150px] border-dashed border-2 border-blue-100 rounded-lg flex justify-center items-center cursor-pointer"
-                onClick={() => setShow(!show)}
+                <div
+                  className='w-[300px] h-[150px] border-dashed border-2 border-blue-100 rounded-lg flex justify-center items-center cursor-pointer'
+                  onClick={() => setShow(!show)}
                 >
-                  <img src="/assets/add_signature.png" alt="plus" className="w-[50px] h-[50px] object-cover" />
+                  <img
+                    src='/assets/add_signature.png'
+                    alt='plus'
+                    className='w-[50px] h-[50px] object-cover'
+                  />
                 </div>
               </section>
             </section>
 
-            <section className="mt-5 text-sm">
+            <section className='mt-5 text-sm'>
               <p>Already have signature? upload here</p>
-              <section className="relative mt-5 ">
+              <section className='relative mt-5 '>
                 {user && !user.signature && <Notify />}
-                <div className="w-[300px] h-[150px] border-dashed border-2 border-blue-100 rounded-lg flex justify-center items-center cursor-pointer"
-                >
-                  <img src="/assets/uploadImage.png" alt="plus" className="w-[50px] h-[50px] object-cover" />
+                <div className='w-[300px] h-[150px] border-dashed border-2 border-blue-100 rounded-lg flex justify-center items-center cursor-pointer'>
+                  <img
+                    src='/assets/uploadImage.png'
+                    alt='plus'
+                    className='w-[50px] h-[50px] object-cover'
+                  />
                 </div>
               </section>
             </section>
           </div>
         </div>
-
       </section>
     </div>
   );

@@ -88,3 +88,20 @@ export const updateActivities = async (req, res) => {
   }
 };
 
+export const getActivitiesById = async (req, res) => {
+  try {
+    const { q }= req.query;
+
+    console.log(q);
+    const [activitiesById] = await activities.getActivitiesById(q);
+
+    res.status(200).json(activitiesById[0]);
+
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      message: "can't load data",
+    });
+  }
+};
+

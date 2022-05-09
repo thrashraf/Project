@@ -6,7 +6,11 @@ import useModal from '../../hooks/useModal';
 import Toast from '../../components/Toast';
 import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { addNewActivities } from '../../features/activities/Activities';
+import {
+  addNewActivities,
+  getActivities,
+  getMonthActivities,
+} from '../../features/activities/Activities';
 import { userSelector } from '../../features/user/User';
 
 type Props = {
@@ -127,6 +131,8 @@ const AddEvent = (props: Props) => {
 
           dispatch(addNewActivities(newActivities));
           props.toggle();
+          dispatch(getActivities(''));
+          dispatch(getMonthActivities());
         }
       })
       .catch((err: any) => {

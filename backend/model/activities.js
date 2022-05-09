@@ -56,6 +56,13 @@ class activities {
         where id = '${id}'`;
     return db.execute(sql);
   }
+
+  static async getActivitiesById(
+    id
+  ) {
+    const sql = `SELECT * FROM activities where id = '${id}'`;
+    return db.execute(sql);
+  }
 }
 
 export default activities;

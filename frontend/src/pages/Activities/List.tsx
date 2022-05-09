@@ -83,7 +83,7 @@ export const List = (props: Props) => {
           </thead>
           <tbody className='shadow-md last:rounded-b-lg'>
             {props.activities.map((item: any, index: number) => (
-              <tr>
+              <tr key={index}>
                 <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
                   <span className='font-bold uppercase text-blue-500 hover:underline cursor-pointer'>
                     {item.title}

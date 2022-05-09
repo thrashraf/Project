@@ -1,18 +1,27 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { useAppSelector } from '../../app/hooks';
+import { activitiesSelector } from '../../features/activities/Activities';
 
 type Props = {
   activities: any;
 };
 
 export const SideCard = (props: Props) => {
+  const { activitiesMonth }: any = useAppSelector(activitiesSelector);
+
   return (
     <>
       <div className='max-w-md col-span-1 mb-20'>
         <section>
           <h1 className='font-bold text-xl text-white'>Upcoming Events</h1>
-          <p className='text-sm  text-white'>All events in April</p>
+          {/* to get current month */}
+          <p className='text-sm  text-white'>
+            All events in{' '}
+            {new Date().toLocaleString('default', { month: 'long' })}
+          </p>
         </section>
-        {props.activities
+        {activitiesMonth
           ?.filter((item: any) => {
             const date = new Date(item.start);
             return date.getMonth() === new Date().getMonth();
@@ -22,6 +31,7 @@ export const SideCard = (props: Props) => {
               className='shadow-md mt-10 rounded-lg bg-white'
               key={index}
             >
+              {console.log(event)}
               <img
                 src={
                   event.img_url.lenth > 0
@@ -47,10 +57,12 @@ export const SideCard = (props: Props) => {
                       {event.organizer}
                     </span>
                     {new Date().toISOString().slice(0, 10) >= event.end && (
-                      <button className=' items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-500 rounded-lg focus:outline-none focus:ring-blue-300  '>
-                        Create Report
-                        <i className='ml-2 fa-solid fa-arrow-right-long' />
-                      </button>
+                      <Link to={`/create-report/${event.id}`}>
+                        <button className=' items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-500 rounded-lg focus:outline-none focus:ring-blue-300  '>
+                          Create Report
+                          <i className='ml-2 fa-solid fa-arrow-right-long' />
+                        </button>
+                      </Link>
                     )}
                   </section>
                 </section>
