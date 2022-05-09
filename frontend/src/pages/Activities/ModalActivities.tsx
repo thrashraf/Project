@@ -1,6 +1,5 @@
 import ModalUser from '../../components/ModalUser';
 import More from '../../components/More';
-import useEditMode from '../../hooks/useEditMode';
 import useModal from '../../hooks/useModal';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
@@ -64,7 +63,9 @@ export const ModalActivities = (props: Props) => {
     };
 
     dispatch(updateActivities(newActivities));
-    isSuccess && dispatch(editActivitiesHandler(newActivities));
+    isSuccess &&
+      dispatch(editActivitiesHandler(newActivities)) &&
+      dispatch(editModeHandler());
   };
 
   return (

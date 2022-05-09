@@ -5,8 +5,13 @@ import useInput from '../../hooks/useInput';
 import useModal from '../../hooks/useModal';
 import Toast from '../../components/Toast';
 import axios from 'axios';
-import { useAppDispatch } from '../../app/hooks';
-import { addNewActivities } from '../../features/activities/Activities';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import {
+  addNewActivities,
+  getActivities,
+  getMonthActivities,
+} from '../../features/activities/Activities';
+import { userSelector } from '../../features/user/User';
 
 type Props = {
   isShowing: boolean;
@@ -15,6 +20,8 @@ type Props = {
 
 const AddEvent = (props: Props) => {
   const dispatch = useAppDispatch();
+
+  const { user }: any = useAppSelector(userSelector);
 
   const title = useInput('');
   const startEvent = useInput('');
@@ -105,6 +112,8 @@ const AddEvent = (props: Props) => {
     formData.append('end', endEvent.value);
     formData.append('venue', venue.value);
     formData.append('organizer', organizer.value);
+    formData.append('username', user?.name);
+    formData.append('email', user?.email);
     validFiles.forEach((image: any) => formData.append('upload', image));
 
     axios
@@ -122,6 +131,8 @@ const AddEvent = (props: Props) => {
 
           dispatch(addNewActivities(newActivities));
           props.toggle();
+          dispatch(getActivities(''));
+          dispatch(getMonthActivities());
         }
       })
       .catch((err: any) => {
