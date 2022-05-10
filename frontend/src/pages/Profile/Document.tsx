@@ -4,17 +4,44 @@ import api from '../../utils/api';
 export const Document = () => {
   const [tabs, setTabs] = useState<number>(0);
   const [document, setDocument] = useState<any>();
+  const [allDocuments, setAllDocuments] = useState<any>();
 
   useEffect(() => {
     api
       .get('/api/report/getAllReport')
       .then((res) => {
-        setDocument(res.data.reports);
+        setAllDocuments(res.data.reports);
+
+        const pendingData = res.data.reports.filter(
+          (item: any) => item.status === 'pending'
+        );
+        setDocument(pendingData);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
+  useEffect(() => {
+    if (!document) return;
+
+    if (tabs === 0) {
+      const filteredDocument = allDocuments.filter(
+        (item: any) => item.status === 'pending'
+      );
+      setDocument(filteredDocument);
+    } else if (tabs === 1) {
+      const filteredDocument = allDocuments.filter(
+        (item: any) => item.status === 'verified'
+      );
+      setDocument(filteredDocument);
+    } else {
+      const filteredDocument = allDocuments.filter(
+        (item: any) => item.status === 'declined'
+      );
+      setDocument(filteredDocument);
+    }
+  }, [tabs]);
 
   return (
     <>
@@ -54,15 +81,18 @@ export const Document = () => {
           <table className='items-center w-full bg-transparent border-collapse text-center '>
             <thead>
               <tr>
-                {['Title', 'Date', 'Status', 'Venue'].map((item: any) => (
-                  <th
-                    className={
-                      'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                    }
-                  >
-                    {item}
-                  </th>
-                ))}
+                {['Title', 'Date', 'Status', 'Submit On'].map(
+                  (item: any, index) => (
+                    <th
+                      key={index}
+                      className={
+                        'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                      }
+                    >
+                      {item}
+                    </th>
+                  )
+                )}
               </tr>
             </thead>
             <tbody className='shadow-md '>
@@ -74,15 +104,24 @@ export const Document = () => {
                           {item.program_name}
                         </span>
                       </td>
-                      {/* <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                        {item.start.split('-').reverse().join('/')}
+                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                        {item.date.split('-').reverse().join('/')}
                       </td>
                       <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                        {item.organizer}
+                        <i
+                          className={`fas fa-circle ${
+                            item.status === 'verified'
+                              ? 'text-green-500'
+                              : item.status === 'pending'
+                              ? 'text-orange-500'
+                              : 'text-red-500'
+                          }  mr-2 `}
+                        ></i>{' '}
+                        {item.status}
                       </td>
                       <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                        {item.venue}
-                      </td> */}
+                        10/05/2022
+                      </td>
                     </tr>
                   ))
                 : null}
