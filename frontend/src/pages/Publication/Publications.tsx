@@ -9,7 +9,7 @@ import AddPublication from "./AddPublication";
 
 export const Publications = () => {
   const background = {
-    backgroundImage: "url(" + "/assets/bookshelves.jpg" + ")",
+    backgroundImage: 'url(' + '/assets/bookshelves.jpg' + ')',
   };
 
   const [show, setShow] = useState(false);
@@ -24,11 +24,11 @@ export const Publications = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("/api/publication/getAllPublication", {
-        method: "GET",
+      const response = await fetch('/api/publication/getAllPublication', {
+        method: 'GET',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
       });
       let data = await response.json();
@@ -43,15 +43,14 @@ export const Publications = () => {
       <Navbar />
 
       <section>
-        <div className="pt-[10px]">
+        <div className='pt-[10px]'>
           <div
-            className=" px-20 pb-16 pt-6 right-0 left-0 lg:h-screen w-full bg-no-repeat bg-cover"
+            className=' px-20 pb-16 pt-6 right-0 left-0 lg:h-screen w-full bg-no-repeat bg-cover'
             style={background}
           >
-            <CardPublication 
+            <CardPublication
               viewPublicationHandler={viewPublicationHandler}
               allPublication={allPublication}
-              
             />
 
             <AddPublication
@@ -61,10 +60,10 @@ export const Publications = () => {
            
             <div className="justify-end flex">
               <button
-                className="inline-flex items-center justify-center w-16 h-16 mr-2 text-pink-100 transition-colors duration-150 bg-blue-700 rounded-full focus:shadow-outline hover:bg-blue-900"
+                className='inline-flex items-center justify-center w-16 h-16 mr-2 text-pink-100 transition-colors duration-150 bg-blue-700 rounded-full focus:shadow-outline hover:bg-blue-900'
                 onClick={() => setEShow(!eShow)}
               >
-                <p className=" text-2xl">+</p>
+                <p className=' text-2xl'>+</p>
               </button>
             </div>
             <Modal2 publication={publication} show={show} setShow={setShow} />

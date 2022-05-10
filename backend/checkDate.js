@@ -3,7 +3,7 @@ import activities from "./model/activities.js";
 import transporter from './config/nodemail.js';
 
 //run everyday at 8 am
-const checkDate = () => cron.schedule('0 14 14 * * *', async () => {
+const checkDate = () => cron.schedule('0 42 9 * * *', async () => {
 
     const [getAllActivities] = await activities.getAllActivities();
 

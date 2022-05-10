@@ -1,7 +1,7 @@
 const generateYears = () => {
 
     let years = [];
-    const maxYear = new Date().getFullYear();
+    const maxYear = 2024;
     const minYear = maxYear - 5;
 
     for (let i = maxYear; i >= minYear; i--) {
