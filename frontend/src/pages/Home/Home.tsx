@@ -32,11 +32,11 @@ export const Home =() =>{
           </div>
         </div>
 
-        <img
+        {/* <img
           className="absolute top-0 b-auto right-0 pt-16 sm:w-6/12 -mt-48 sm:mt-0 w-10/12 max-h-860px"
           src="/assets/pattern_react.png"
           alt="..."
-        />
+        /> */}
       </section> 
 
        <section className="mt-48 md:mt-40 pb-40 relative bg-[#d5deea]">
@@ -173,7 +173,7 @@ export const Home =() =>{
                 <video
                   autoPlay loop muted
                   src="/assets/ER.mp4"
-                  className="w-full align-middle rounded-lg absolute shadow-lg -top-160-px left-260-px max-w-250-px"
+                  className="w-full align-middle rounded-lg flex shadow-lg -top-200-px  mt-[200px] left-260-px max-w-250-px"
                 />
                 
               </div>
@@ -185,7 +185,7 @@ export const Home =() =>{
               <div className="justify-center flex flex-wrap relative">
                 <div className="my-4 w-full lg:w-6/12 px-4">
                   <a
-                    href=""
+                    href="/publication"
                     target="_blank"
                   >
                     <div className="bg-red-600 shadow-lg rounded-lg text-center p-8">
@@ -199,6 +199,10 @@ export const Home =() =>{
                       </p>
                     </div>
                     <div className="bg-[#69AADB] shadow-lg rounded-lg text-center p-8 mt-8">
+                    <a
+                    href="/innovation"
+                    target="_blank"
+                  >
                       <img
                         alt="..."
                         className="shadow-md rounded-full max-w-full w-16 mx-auto p-2 bg-white"
@@ -207,6 +211,7 @@ export const Home =() =>{
                       <p className="text-lg text-white mt-4 font-semibold">
                         Innovation
                       </p>
+                      </a>
                     </div>   
                     <div className="bg-emerald-500 shadow-lg rounded-lg text-center p-8 mt-8">
                       <img

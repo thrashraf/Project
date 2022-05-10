@@ -99,7 +99,7 @@ export default function Footer() {
                   </ul>
                 </div>
                 <div className="w-full lg:w-4/12 px-4">
-                  <span className="block uppercase text-blueGray-500 text-sm font-semibold mb-2">
+                  <span className="block uppercase text-black text-sm font-semibold mb-2">
                     Other Resources
                   </span>
                   <ul className="list-unstyled">
