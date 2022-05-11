@@ -236,10 +236,9 @@ export const uploadImage = async(req, res) => {
 
      const [updateUser] = await user.updateUserInformation(id, name, position, email, phoneNumber);
 
-     console.log(updateUser)
-    //  res.status(200).json({
-    //   user: 
-    // });
+     res.status(200).json({
+      message: 'Successful update' 
+    });
 
    } catch (error) {
      console.log(error)
@@ -248,3 +247,26 @@ export const uploadImage = async(req, res) => {
     })
    }
  }
+
+ export const uploadProfilePicture = async(req, res) => {
+  try {
+
+    const { email } = req.body;
+    const files = req.file;
+    console.log(files)
+   
+
+    const [updateUser] = await user.updatePicture(files.filename, email);
+
+    console.log(updateUser)
+    res.status(200).json({
+      message: 'Successful update' 
+    });
+
+  } catch (error) {
+    console.log(error)
+   res.status(400).json({
+     message: 'Something went wrong'
+   })
+  }
+}

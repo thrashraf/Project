@@ -34,8 +34,8 @@ export const SideCard = (props: Props) => {
               {console.log(event)}
               <img
                 src={
-                  event.img_url.lenth > 0
-                    ? event.img_url
+                  JSON.parse(event.img_url).length > 0
+                    ? `/assets/${JSON.parse(event.img_url)}`
                     : '/assets/default-placeholder.jpg'
                 }
                 alt={event.title}

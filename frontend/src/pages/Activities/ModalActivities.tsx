@@ -5,13 +5,16 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   activitiesSelector,
   editModeHandler,
-  editActivitiesHandler,
-  updateActivities,
+  getActivities,
+  getMonthActivities,
+  //resetFile,
 } from '../../features/activities/Activities';
 import Spinner from '../../components/Spinner/Spinner';
 import useInput from '../../hooks/useInput';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import Dropzone from '../../components/Dropzone';
+import axios from 'axios';
 
 type Props = {
   showActivity: boolean;
@@ -21,19 +24,19 @@ type Props = {
 export const ModalActivities = (props: Props) => {
   //for nav drop
   const { isShowing, toggle } = useModal();
+  const { isShowing: showDropzone, toggle: toggleDropzone } = useModal();
 
   const dispatch = useDispatch();
 
-  const { detailActivities, isFetching, editMode, isSuccess } =
-    useAppSelector(activitiesSelector);
+  const { detailActivities, editMode } = useAppSelector(activitiesSelector);
 
   const title = useInput('');
   const start = useInput('');
   const venue = useInput('');
   const organizer = useInput('');
-
-  const [images, setImages] = useState<any>([]);
   const [id, setId] = useState<string>('');
+
+  let isFetching = false;
 
   //for show and hide components
   const showEditComp = editMode ? 'visible' : 'hidden';
@@ -48,29 +51,104 @@ export const ModalActivities = (props: Props) => {
     start.setInput(detailActivities.start);
     venue.setInput(detailActivities.venue);
     organizer.setInput(detailActivities.organizer);
-    setImages(JSON.parse(detailActivities.img_url).map((item: any) => item));
     setId(detailActivities.id);
   }, [detailActivities, editMode]);
 
-  const updateCurrentActivities = () => {
-    const newActivities = {
-      title: title.value,
-      start: start.value,
-      organizer: organizer.value,
-      venue: venue.value,
-      images: JSON.stringify(images),
-      id,
-    };
+  const [file, setFile] = useState<any>([]);
+  const [validFiles, setValidFiles] = useState<any>([]);
 
-    dispatch(updateActivities(newActivities));
-    isSuccess &&
-      dispatch(editActivitiesHandler(newActivities)) &&
-      dispatch(editModeHandler());
+  const addFile = (e: any) => {
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+    for (let i = 0; i < files.length; i++) {
+      if (validateFile(files[i])) {
+        setFile((prevArray: any) => [...prevArray, ...files]);
+      } else {
+        // setStatus('error');
+        // setMessage('Not support file type');
+        // toastRef.current && toastRef.current.showToast();
+      }
+    }
+  };
+
+  //for validate file
+  const validateFile = (file: any) => {
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    console.log(validTypes.indexOf(file.type) === -1);
+    if (validTypes.indexOf(file.type) === -1) {
+      return false;
+    }
+    return true;
+  };
+
+  //to remove file
+  const deleteFile = (name: any) => {
+    // find the index of the item
+    // remove the item from array
+    const validFileIndex = validFiles.findIndex((e: any) => e.name === name);
+    validFiles.splice(validFileIndex, 1);
+    // update validFiles array
+    setValidFiles([...validFiles]);
+    const selectedFileIndex = file.findIndex((e: any) => e.name === name);
+    file.splice(selectedFileIndex, 1);
+    // update selectedFiles array
+    setFile([...file]);
+  };
+
+  //to remove duplicate name
+  useEffect(() => {
+    let filteredArray = file.reduce((file: any, current: any) => {
+      const x = file.find((item: any) => item.name === current.name);
+      if (!x) {
+        return file.concat([current]);
+      } else {
+        return file;
+      }
+    }, []);
+    setValidFiles([...filteredArray]);
+  }, [file]);
+
+  const resetFile = () => {
+    setFile([]);
+    setValidFiles([]);
+  };
+
+  const updateCurrentActivities = () => {
+    const formData = new FormData();
+
+    formData.append('title', title.value);
+    formData.append('start', start.value);
+    formData.append('venue', venue.value);
+    formData.append('organizer', organizer.value);
+
+    validFiles.forEach((image: any) => formData.append('upload', image));
+
+    isFetching = true;
+
+    axios
+      .post(`/api/activities/updateActivities?q=${id}`, formData)
+      .then((res: any) => {
+        if (res.status === 200) {
+          console.log('ok');
+          isFetching = true;
+          dispatch(getMonthActivities());
+          dispatch(getActivities(''));
+
+          //toggle modal
+          props.setShowActivity(!props.showActivity);
+          //toggle more button
+          toggle();
+          //to clear files
+          //dispatch(resetFile());
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
   };
 
   return (
     <ModalUser modal={props.showActivity} setModal={props.setShowActivity}>
-      {console.log(detailActivities)}
       {detailActivities && (
         <div className='relative mx-auto bg-white max-w-md rounded-lg shadow z-50 '>
           {/* show when delete and update events */}
@@ -82,7 +160,7 @@ export const ModalActivities = (props: Props) => {
               <More
                 isShowing={isShowing}
                 toggle={toggle}
-                title={detailActivities.title}
+                id={detailActivities.id}
                 modal={props.showActivity}
                 toggleModal={props.setShowActivity}
               />
@@ -96,15 +174,32 @@ export const ModalActivities = (props: Props) => {
               </button>
             </section>
             <>
-              <img
-                src={
-                  JSON.parse(detailActivities.img_url).length > 0
-                    ? detailActivities.img_url
-                    : '/assets/default-placeholder.jpg'
-                }
-                alt={detailActivities.title}
-                className='rounded-t-lg h-[200px] w-full object-cover'
-              />
+              <section className='relative'>
+                <img
+                  src={
+                    JSON.parse(detailActivities.img_url).length > 0
+                      ? `/assets/${JSON.parse(detailActivities.img_url)}`
+                      : '/assets/default-placeholder.jpg'
+                  }
+                  alt={detailActivities.title}
+                  className='rounded-t-lg h-[200px] w-full object-cover'
+                />
+
+                <i
+                  onClick={toggleDropzone}
+                  className={`fa-solid fa-camera cursor-pointer text-6xl fa-2xl absolute top-[30%] left-[45%] text-gray-300 ${
+                    editMode ? 'visible' : 'hidden'
+                  }`}
+                ></i>
+
+                <Dropzone
+                  isShowing={showDropzone}
+                  hide={toggleDropzone}
+                  fileDrop={addFile}
+                  files={validFiles}
+                  removeFile={deleteFile}
+                />
+              </section>
 
               <section className='p-4'>
                 <section className='flex justify-between items-center text-gray-400 text-sm'>

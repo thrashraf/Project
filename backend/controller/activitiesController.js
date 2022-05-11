@@ -30,7 +30,7 @@ export const createActivities = async (req, res) => {
   try {
     const {title, start, end, venue, organizer, username, email}= req.body;
     const files = req.files;
-
+    console.log(files)
     const id = crypto.randomBytes(16).toString("hex");
 
     const images =
@@ -71,11 +71,17 @@ export const updateActivities = async (req, res) => {
   try {
     const { q }= req.query;
 
-    const { title, start, organizer, venue, images } = req.body.newActivities
-    console.log(req.body)
+    const files = req.files;
+
+    const images =
+      files.length >= 0 ?
+      files.map((images) => images.filename) :
+      null;
+    console.log(files)
+    const { title, start, organizer, venue } = req.body
 
     console.log(q);
-    const [updatedActivities] = await activities.updateActivitiesById(q, title, start, organizer, venue, JSON.parse(images));
+    const [updatedActivities] = await activities.updateActivitiesById(q, title, start, organizer, venue, images);
     console.log(updatedActivities.affectedRows);
 
     res.status(200).json("successful");

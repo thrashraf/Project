@@ -5,6 +5,7 @@ import CardPublication from '../../components/cardPublication';
 import Footer from '../../components/Footer';
 import { useState } from 'react';
 import ModalUser from '../../components/ModalUser';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 export const Publications = () => {
   const background = {
@@ -21,21 +22,7 @@ export const Publications = () => {
     setShow(!show);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch('/api/publication/getAllPublication', {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
-      let data = await response.json();
-      console.log(data);
-      setAllPublication(data.allPublication);
-    };
-    fetchData();
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <>

@@ -7,6 +7,7 @@ import Draw from './Draw';
 import Notify from '../../components/Notify';
 import useModal from '../../hooks/useModal';
 import Dropzone from '../../components/Dropzone';
+import ProfileModal from './ProfileModal';
 
 type Props = {};
 
@@ -21,13 +22,12 @@ export const Information = (props: Props) => {
   const email = useInput('');
   const phoneNumber = useInput('');
 
-  const [signature, setSignature] = useState<null>();
-  const [profileImage, setProfileImage] = useState<null>();
+  //const [signature, setSignature] = useState<any>([]);
+  const [profileImage, setProfileImage] = useState<any>([]);
 
-  const { isShowing: showUploadSignature, toggle: toggleUploadSignature } =
-    useModal();
-  const { isShowing: showUploadProfile, toggle: toggleUploadProfile } =
-    useModal();
+  // const { isShowing: showUploadSignature, toggle: toggleUploadSignature } =
+  //   useModal();
+  const { isShowing, toggle } = useModal();
 
   const [show, setShow] = useState<boolean>(false);
 
@@ -68,14 +68,23 @@ export const Information = (props: Props) => {
                 alt=''
                 className='h-[170px] w-full object-cover rounded-t-xl'
               />
-              <i className='fa-solid fa-camera bg-blue-500 rounded-full w-7 h-7 p-1.5 absolute -bottom-7 z-10 left-24 cursor-pointer'></i>
+              <i
+                className='fa-solid fa-camera bg-blue-500 rounded-full w-7 h-7 p-1.5 absolute -bottom-14 z-10 left-24 cursor-pointer'
+                onClick={toggle}
+              ></i>
             </section>
           </div>
-
+          <ProfileModal isShowing={isShowing} toggle={toggle} />
           <div className=''>
-            <span className='bg-gray-300  px-[30px] py-[25px] rounded-full text-white absolute top-32 left-5'>
-              <i className='fas fa-user fa-2x'></i>
-            </span>
+            <img
+              className='w-[100px] h-[100px] rounded-full  absolute top-32 left-5 object-cover'
+              src={`${
+                user && user.profile_picture
+                  ? `/assets/${user.profile_picture}`
+                  : '/assets/dummy_profile.png'
+              }`}
+              alt=''
+            />
 
             <button
               className='bg-blue-500 px-4 py-1 text-sm float-right text-white rounded-md  my-4'

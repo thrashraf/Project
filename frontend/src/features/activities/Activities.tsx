@@ -40,6 +40,12 @@ const initialState: interfaceState = {
   isError: false,
   errorMessage: '',
   //*
+
+  //? for upload state
+  files: [],
+  validFiles: [],
+  isUploadError: false,
+  uploadErrorMessage: '',
 };
 
 export const activitiesSlice = createSlice({
@@ -65,7 +71,7 @@ export const activitiesSlice = createSlice({
     deleteActivitiesHandler: (state, action) => {
       console.log(action.payload);
       const index = state.activities.findIndex(
-        (event: any) => event.title === action.payload
+        (event: any) => event.id === action.payload
       );
       console.log(index);
       state.activities.splice(index, 1);
@@ -127,6 +133,59 @@ export const activitiesSlice = createSlice({
     setViewHandler: (state, action) => {
       state.view = action.payload;
     },
+
+    //? for files functionality
+
+    // //for upload images or (file)
+    // uploadFile: (state, action) => {
+    //   action.payload.preventDefault();
+    //   const files = action.payload.dataTransfer.files;
+
+    //   //validate files
+
+    //   for (let i = 0; i < files.length; i++) {
+    //     if (activitiesSlice.actions.validateFile(files[i])) {
+    //       console.log(files);
+    //       state.files = [...state.files, ...files];
+    //     } else {
+    //       state.isUploadError = true;
+    //       state.uploadErrorMessage = 'Images must be jpg/jpeg/png';
+    //     }
+    //   }
+    // },
+
+    // //filter images for duplicate images
+    // filterFile: (state) => {
+    //   const filteredImages = state.files.reduce((file: any, current: any) => {
+    //     const x = file.find((item: any) => item.name === current.name);
+    //     if (!x) {
+    //       return file.concat([current]);
+    //     } else {
+    //       return file;
+    //     }
+    //   }, []);
+
+    //   state.validFiles = [...filteredImages];
+    // },
+
+    // removeFile: (state, action) => {
+    //   // find the index of the item
+    //   // remove the item from array
+    //   const validFileIndex = state.validFiles.findIndex(
+    //     (e: any) => e.name === action.payload
+    //   );
+    //   state.validFiles.splice(validFileIndex, 1);
+
+    //   const selectedFileIndex = state.files.findIndex(
+    //     (e: any) => e.name === action.payload
+    //   );
+    //   state.files.splice(selectedFileIndex, 1);
+    // },
+
+    // resetFile: (state) => {
+    //   state.files = [];
+    //   state.validFiles = [];
+    // },
   },
   extraReducers: (builder) => {
     // ? get activities based on query
@@ -176,20 +235,6 @@ export const activitiesSlice = createSlice({
       state.isFetching = true;
     });
     builder.addCase(deleteActivities.rejected, (state, { payload }: any) => {
-      state.isFetching = false;
-      state.isError = true;
-      state.errorMessage = payload.message;
-    });
-
-    // ? update activities
-    builder.addCase(updateActivities.fulfilled, (state) => {
-      state.isFetching = false;
-      state.isSuccess = true;
-    });
-    builder.addCase(updateActivities.pending, (state) => {
-      state.isFetching = true;
-    });
-    builder.addCase(updateActivities.rejected, (state, { payload }: any) => {
       state.isFetching = false;
       state.isError = true;
       state.errorMessage = payload.message;
@@ -271,38 +316,6 @@ export const deleteActivities = createAsyncThunk(
       let data = await response.data;
 
       if (response.status === 200) {
-        console.log(data);
-        return data;
-      } else {
-        return thunkAPI.rejectWithValue(data);
-      }
-    } catch (e: any) {
-      console.log(e);
-      console.log('Error', e.response.data);
-      return thunkAPI.rejectWithValue(e.response.data);
-    }
-  }
-);
-
-export const updateActivities = createAsyncThunk(
-  '/api/admin/updateActivities',
-  async (newActivities: any, thunkAPI) => {
-    try {
-      const response = await api.post(
-        `/api/activities/updateActivities?q=${newActivities.id}`,
-        { newActivities },
-        {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      let data = await response.data;
-
-      if (response.status === 200) {
-        console.log(data);
         return data;
       } else {
         return thunkAPI.rejectWithValue(data);
@@ -325,6 +338,10 @@ export const {
   deleteActivitiesHandler,
   editModeHandler,
   editActivitiesHandler,
+  // uploadFile,
+  // removeFile,
+  // filterFile,
+  // resetFile,
 } = activitiesSlice.actions;
 export const activitiesSelector = (state: RootState) => state.activities;
 export default activitiesSlice.reducer;

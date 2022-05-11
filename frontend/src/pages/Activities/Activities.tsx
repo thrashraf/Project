@@ -11,6 +11,7 @@ import { List } from './List';
 import { ModalActivities } from './ModalActivities';
 import useModal from '../../hooks/useModal';
 import AddEvent from './AddEvent';
+import { month } from '../../constant/month';
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
@@ -85,6 +86,18 @@ const Activities = () => {
       );
       dispatch(dropdownActivities(filterActivity));
     }
+    //! need to fix this
+    month.map((item: string) => {
+      if (filterBy === item) {
+        const filterActivity = activitiesMonth.filter(
+          (item: any) =>
+            month[new Date(item.end).getMonth() as any] === filterBy
+        );
+
+        console.log(filterActivity);
+        dispatch(dropdownActivities(filterActivity));
+      }
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterBy]);
 

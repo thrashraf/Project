@@ -35,8 +35,8 @@ class activities {
     return db.execute(sql);
   }
 
-  static async deleteActivitiesById(title) {
-    const sql = `DELETE FROM activities where title = '${title}'`;
+  static async deleteActivitiesById(id) {
+    const sql = `DELETE FROM activities where id = '${id}'`;
     return db.execute(sql);
   }
 
