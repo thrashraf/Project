@@ -224,7 +224,16 @@ export const authUser = async(req, res) => {
 
 export const uploadImage = async(req, res) => {
    try {
-     console.log(req.files)
+    const { email } = req.body;
+    const files = req.file;
+    console.log(files)
+   
+    const [updateUser] = await user.updateSignature(files.filename, email);
+
+    res.status(200).json({
+      message: 'Successful update' 
+    });
+
    } catch (error) {
      console.log(error)
    }

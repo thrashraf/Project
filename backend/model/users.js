@@ -74,6 +74,13 @@ class user {
                 where email = '${email}'`;
     return db.execute(sql); 
   }
+
+  static async updateSignature(image, email) {
+    const sql = `UPDATE users 
+                SET signature = '${image}'
+                where email = '${email}'`;
+    return db.execute(sql); 
+  }
 }
 
 export default user;
