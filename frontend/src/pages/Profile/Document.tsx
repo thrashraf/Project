@@ -1,5 +1,8 @@
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../../utils/api';
+import { Template } from '../Report/Template';
 
 export const Document = () => {
   const [tabs, setTabs] = useState<number>(0);
@@ -8,11 +11,11 @@ export const Document = () => {
 
   useEffect(() => {
     api
-      .get('/api/report/getAllReport')
+      .get(`/api/activities/getAllActivities?q=${''}`)
       .then((res) => {
-        setAllDocuments(res.data.reports);
+        setAllDocuments(res.data);
 
-        const pendingData = res.data.reports.filter(
+        const pendingData = res.data.filter(
           (item: any) => item.status === 'pending'
         );
         setDocument(pendingData);
@@ -101,11 +104,11 @@ export const Document = () => {
                     <tr key={index}>
                       <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
                         <span className='font-bold uppercase text-blue-500 hover:underline cursor-pointer'>
-                          {item.program_name}
+                          {item.title}
                         </span>
                       </td>
                       <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                        {item.date.split('-').reverse().join('/')}
+                        {item.start.split('-').reverse().join('/')}
                       </td>
                       <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
                         <i
@@ -121,6 +124,44 @@ export const Document = () => {
                       </td>
                       <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
                         10/05/2022
+                      </td>
+                      <td
+                        className={`border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ${
+                          tabs === 1 ? 'visible' : 'hidden'
+                        }`}
+                      >
+                        <button>
+                          <PDFDownloadLink
+                            document={
+                              <Template
+                                title={item.title}
+                                content={item.content}
+                                name={item.title}
+                                organizer={item.organizer}
+                                date={item.start}
+                                venue={item.venue}
+                                photo={item.images}
+                                tentative={item.tentative}
+                                ajk={item.ajk}
+                                staffName={item.owner}
+                              />
+                            }
+                            fileName={item.title}
+                          >
+                            {({ blob, url, loading, error }) =>
+                              loading ? 'Loading' : 'Download'
+                            }
+                          </PDFDownloadLink>
+                        </button>
+                      </td>
+                      <td
+                        className={`border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ${
+                          tabs === 2 ? 'visible' : 'hidden'
+                        }`}
+                      >
+                        <Link to={`/create-report/${item.id}`}>
+                          <button>Resubmit</button>
+                        </Link>
                       </td>
                     </tr>
                   ))

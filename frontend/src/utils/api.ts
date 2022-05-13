@@ -39,7 +39,7 @@ api.interceptors.request.use(async (config) => {
         //console.log("user", user)
 
         store.dispatch(instance(response.data.accessToken));
-        //console.log(user);
+        console.log(user);
         
       } else {
         api.defaults.headers.common = {'authorization': `bearer ${state.user.token}`}

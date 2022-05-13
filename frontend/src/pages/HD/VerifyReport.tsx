@@ -1,48 +1,47 @@
-import { PDFViewer } from "@react-pdf/renderer";
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { Template } from "../Report/Template";
-
-
+import { PDFViewer } from '@react-pdf/renderer';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Template } from '../Report/Template';
 
 const VerifyReport = () => {
-    
-    const [report, setReport] = useState<any>(null);
+  const [report, setReport] = useState<any>(null);
 
-    const { state }: any = useLocation();
+  const { state }: any = useLocation();
 
-    useEffect(() => {
-        setReport(state)
-    }, [state])
+  useEffect(() => {
+    setReport(state);
+  }, [state]);
 
-    console.log(state)
+  console.log(state);
 
   return (
     <>
-        {report !== null ? (
-            <div className="w-full h-full bg-black">
-            <PDFViewer
-                showToolbar={true}
-                style={{
-                width: "100%",
-                height: "100%",
-                }}
-            >
-                <Template
-                    title={report.program_name}
-                    content={report.content}
-                    name={report.program_name}
-                    organizer={report.organizer}
-                    date={report.date}
-                    venue={report.venue}
-                    photo={report.images}
-                    tentative={report.tentative}
-                    ajk={report.ajk}
-                    staffName={report.owner}
-                />
-            </PDFViewer>
-            </div>
-        ) : 'loading...'}
+      {report !== null ? (
+        <div className='w-full h-full bg-black'>
+          <PDFViewer
+            showToolbar={true}
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            <Template
+              title={report.title}
+              content={report.content}
+              name={report.title}
+              organizer={report.organizer}
+              date={report.start}
+              venue={report.venue}
+              photo={report.images}
+              tentative={report.tentative}
+              ajk={report.ajk}
+              staffName={report.owner}
+            />
+          </PDFViewer>
+        </div>
+      ) : (
+        'loading...'
+      )}
     </>
   );
 };

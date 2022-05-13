@@ -3,17 +3,21 @@ import DropDown from '../../components/Dropdown';
 import useModal from '../../hooks/useModal';
 import generateYears from '../../utils/generateYears';
 import filterActivities from '../../constant/filterActivities';
+import { month } from '../../constant/month';
 import ReactToPrint from 'react-to-print';
 
 type Props = {
   activities: any;
   setFilterData: any;
   setFilterItem: any;
+  setMonth: any;
+  // setYear: any;
 };
 
 export const List = (props: Props) => {
   const { isShowing: openFilter, toggle: toggleFilter } = useModal();
   const { isShowing: openYear, toggle: toggleYear } = useModal();
+  const { isShowing: openMonth, toggle: toggleMonth } = useModal();
 
   const years = generateYears();
 
@@ -22,7 +26,7 @@ export const List = (props: Props) => {
   return (
     <>
       <div className='flex justify-between my-5 '>
-        <section className='flex w-[220px] justify-between '>
+        <section className='flex w-[400px] justify-between '>
           <DropDown
             isOpen={openFilter}
             setIsOpen={toggleFilter}
@@ -37,6 +41,15 @@ export const List = (props: Props) => {
             setFilterBy={props.setFilterItem}
             navdropArr={years}
             title='year'
+            icon='fa-solid fa-calendar mr-3'
+          />
+
+          <DropDown
+            isOpen={openMonth}
+            setIsOpen={toggleMonth}
+            setFilterBy={props.setMonth}
+            navdropArr={month}
+            title='Month'
             icon='fa-solid fa-calendar mr-3'
           />
         </section>

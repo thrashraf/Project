@@ -7,11 +7,11 @@ import Toast from '../../components/Toast';
 import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
-  addNewActivities,
   getActivities,
   getMonthActivities,
 } from '../../features/activities/Activities';
 import { userSelector } from '../../features/user/User';
+import { unitArray } from '../../constant/unitArray';
 
 type Props = {
   isShowing: boolean;
@@ -29,9 +29,6 @@ const AddEvent = (props: Props) => {
   const organizer = useInput('');
   const venue = useInput('');
 
-  const [file, setFile] = useState<any>([]);
-  const [validFiles, setValidFiles] = useState<any>([]);
-
   //for toast
   const [status, setStatus] = useState<string>('');
   const [message, setMessage] = useState<string>('');
@@ -41,17 +38,19 @@ const AddEvent = (props: Props) => {
   //dropzone State
   const { isShowing, toggle } = useModal();
 
-  //for drop file
-  const fileDrop = (e: any) => {
+  const [file, setFile] = useState<any>([]);
+  const [validFiles, setValidFiles] = useState<any>([]);
+
+  const addFile = (e: any) => {
     e.preventDefault();
     const files = e.dataTransfer.files;
     for (let i = 0; i < files.length; i++) {
       if (validateFile(files[i])) {
         setFile((prevArray: any) => [...prevArray, ...files]);
       } else {
-        setStatus('error');
-        setMessage('Not support file type');
-        toastRef.current && toastRef.current.showToast();
+        // setStatus('error');
+        // setMessage('Not support file type');
+        // toastRef.current && toastRef.current.showToast();
       }
     }
   };
@@ -66,17 +65,8 @@ const AddEvent = (props: Props) => {
     return true;
   };
 
-  //to show file size
-  const fileSize = (size: any) => {
-    if (size === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    const i = Math.floor(Math.log(size) / Math.log(k));
-    return parseFloat((size / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
-
   //to remove file
-  const removeFile = (name: any) => {
+  const deleteFile = (name: any) => {
     // find the index of the item
     // remove the item from array
     const validFileIndex = validFiles.findIndex((e: any) => e.name === name);
@@ -102,7 +92,19 @@ const AddEvent = (props: Props) => {
     setValidFiles([...filteredArray]);
   }, [file]);
 
+  const resetFile = () => {
+    setFile([]);
+    setValidFiles([]);
+  };
+
   const formHandler = (e: any) => {
+    if (organizer.value === 'select' || organizer.value === '') {
+      toastRef.current.showToast();
+      setMessage('Please select organizer!');
+      e.preventDefault();
+      return;
+    }
+
     e.preventDefault();
 
     const formData = new FormData();
@@ -129,7 +131,8 @@ const AddEvent = (props: Props) => {
             img_url: JSON.stringify(validFiles),
           };
 
-          dispatch(addNewActivities(newActivities));
+          console.log(newActivities);
+
           props.toggle();
           dispatch(getActivities(''));
           dispatch(getMonthActivities());
@@ -146,6 +149,7 @@ const AddEvent = (props: Props) => {
       toggle={props.toggle}
       hide={props.toggle}
     >
+      <Toast status='error' message={message} ref={toastRef} />
       <div className='relative mx-auto bg-white max-w-lg rounded-lg shadow z-50 '>
         <form
           className='flex flex-col px-5 py-3'
@@ -179,7 +183,7 @@ const AddEvent = (props: Props) => {
               />
             </section>
             <section className=''>
-              <p className='my-1 text-sm text-gray-400 ml-1'>
+              <p className='my-1 text-smactivitiesSlice text-gray-400 ml-1'>
                 End Date
                 <span className='text-red-500'>*</span>
               </p>
@@ -196,13 +200,22 @@ const AddEvent = (props: Props) => {
                 Organizer
                 <span className='text-red-500'>*</span>
               </p>
-              <input
+              {/* <input
                 type='text'
                 value={organizer.value}
                 required
                 onChange={organizer.onChange}
                 className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
-              />
+              /> */}
+              <select
+                className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
+                onChange={organizer.onChange}
+                value={organizer.value}
+              >
+                {unitArray?.map((item: any) => (
+                  <option>{item}</option>
+                ))}
+              </select>
             </section>
             <section className=''>
               <p className='my-1 text-sm text-gray-400 ml-1'>
@@ -245,10 +258,9 @@ const AddEvent = (props: Props) => {
           <Dropzone
             isShowing={isShowing}
             hide={toggle}
-            fileDrop={fileDrop}
-            fileSize={fileSize}
+            fileDrop={addFile}
             files={validFiles}
-            removeFile={removeFile}
+            removeFile={deleteFile}
           />
         </form>
         <Toast ref={toastRef} status={status} message={message} />

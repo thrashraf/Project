@@ -1,13 +1,12 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../../app/Store";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../../app/Store';
 import jwt_decode from 'jwt-decode';
-import axios from "axios";
-import api from "../../utils/api";
+import axios from 'axios';
+import api from '../../utils/api';
 
-interface loginInterface{
+interface loginInterface {
   email: string;
   password: string;
-
 }
 
 const initialState = () => ({
@@ -16,30 +15,30 @@ const initialState = () => ({
   isFetching: false,
   isSuccess: false,
   isError: false,
-  errorMessage: "",
+  errorMessage: '',
   redirect: '',
   expired: null,
-
-  
 });
 
 export const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState: initialState(),
   reducers: {
-    login: (state, action) => {
+    login: (state: { user: any }, action: { payload: any }) => {
       state.user = action.payload;
     },
-    logout: (state) => {
+    logout: (state: { user: null }) => {
       state.user = null;
     },
     clearState: () => initialState(),
-    instance: (state, action) => {
-
+    instance: (state: { token: any }, action: { payload: { token: any } }) => {
       console.log(action.payload);
       state.token = action.payload.token;
-    }
-    
+    },
+
+    updateProfile: (state: any, action: { payload: any }) => {
+      state.user = { ...state.user, profile_picture: action.payload };
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(signupUser.fulfilled, (state, { payload }: any) => {
@@ -55,14 +54,12 @@ export const userSlice = createSlice({
       state.errorMessage = payload.message;
     });
     builder.addCase(loginUser.fulfilled, (state, { payload }: any) => {
-
       state.isFetching = false;
       state.isSuccess = true;
       state.redirect = payload.route;
       state.user = jwt_decode(payload.accessToken);
       state.token = payload.accessToken;
-      localStorage.setItem('isAuth', 'true')
-      
+      localStorage.setItem('isAuth', 'true');
     });
     builder.addCase(loginUser.pending, (state) => {
       state.isFetching = true;
@@ -73,29 +70,28 @@ export const userSlice = createSlice({
       state.errorMessage = payload.message;
     });
     builder.addCase(refreshUser.fulfilled, (state, { payload }: any) => {
-
       const user: any = jwt_decode(payload.accessToken);
 
       state.isFetching = false;
       state.isSuccess = false;
-      state.isError = false
+      state.isError = false;
       state.user = jwt_decode(payload.accessToken);
       state.token = payload.accessToken;
-      state.expired = user.exp
-      localStorage.setItem('isAuth', 'true')
-      axios.defaults.headers.common = {authorization: `Bearer ${payload.accessToken}`}
-      
-
+      state.expired = user.exp;
+      localStorage.setItem('isAuth', 'true');
+      axios.defaults.headers.common = {
+        authorization: `Bearer ${payload.accessToken}`,
+      };
     });
     builder.addCase(refreshUser.pending, (state) => {
       state.isFetching = false;
       state.isSuccess = false;
-      state.isError = false
+      state.isError = false;
     });
     builder.addCase(refreshUser.rejected, (state, { payload }: any) => {
       state.isFetching = false;
       state.isSuccess = false;
-      state.isError = false
+      state.isError = false;
     });
     // builder.addCase(updateUserInformation.fulfilled, (state, { payload }: any) => {
     //   state.isFetching = false;
@@ -110,20 +106,19 @@ export const userSlice = createSlice({
     //   state.isError = true;
     //   state.errorMessage = payload.message;
     // });
-
   },
 });
 
 export const signupUser = createAsyncThunk(
-  "users/signupUser",
+  'users/signupUser',
   async ({ userName, userEmail, userPassword }: any, thunkAPI) => {
     try {
       console.log(userName, userEmail, userPassword);
-      const response = await fetch("/api/user/register", {
-        method: "POST",
+      const response = await fetch('/api/user/register', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           userName,
@@ -134,106 +129,99 @@ export const signupUser = createAsyncThunk(
       let data = await response.json();
 
       if (response.status === 200) {
-        console.log("data", data);
+        console.log('data', data);
       } else {
         return thunkAPI.rejectWithValue(data);
       }
     } catch (e: any) {
-      console.log("Error", e.response.data);
+      console.log('Error', e.response.data);
       return thunkAPI.rejectWithValue(e.response.data);
     }
   }
 );
 
-
 export const loginUser = createAsyncThunk(
-  "users/login",
+  'users/login',
   async ({ email, password }: loginInterface, thunkAPI) => {
     try {
-      const response = await fetch(
-        "/api/user/login",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        }
-      )
-      let data = await response.json()
-      console.log("response", data)
+      const response = await fetch('/api/user/login', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+      let data = await response.json();
+      console.log('response', data);
       if (response.status === 200) {
-        return data
+        return data;
       } else {
-        return thunkAPI.rejectWithValue(data)
+        return thunkAPI.rejectWithValue(data);
       }
     } catch (e: any) {
-      console.log("Error", e.response.data)
-      thunkAPI.rejectWithValue(e.response.data)
+      console.log('Error', e.response.data);
+      thunkAPI.rejectWithValue(e.response.data);
     }
   }
-)
+);
 
 export const refreshUser = createAsyncThunk(
-  "users/token",
+  'users/token',
   async (_, thunkAPI: any) => {
     try {
-      const response = await fetch(
-        "/api/user/token",
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      let data = await response.json()
-      console.log("response", data)
+      const response = await fetch('/api/user/token', {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      let data = await response.json();
+      console.log('response', data);
       if (response.status === 200) {
-        return data
+        console.log(data);
+        return data;
       } else {
-        return thunkAPI.rejectWithValue(data)
+        return thunkAPI.rejectWithValue(data);
       }
     } catch (e: any) {
-      console.log("Error", e.response.data)
-      thunkAPI.rejectWithValue(e.response.data)
+      console.log('Error', e.response.data);
+      thunkAPI.rejectWithValue(e.response.data);
     }
   }
 );
 
 export const updateUserInformation = createAsyncThunk(
-  "users/update",
-  async ({id, name, email, position, phoneNumber}: any, thunkAPI: any) => {
+  'users/update',
+  async ({ id, name, email, position, phoneNumber }: any, thunkAPI: any) => {
     try {
       const response = await api.post('/api/user/updateInformation', {
         id,
         name,
         email,
         position,
-        phoneNumber
+        phoneNumber,
       });
 
-      let data = await response.data
-      console.log("response", data)
+      let data = await response.data;
+      console.log('response', data);
       if (response.status === 200) {
-        return data
+        return data;
       } else {
-        return thunkAPI.rejectWithValue(data)
+        return thunkAPI.rejectWithValue(data);
       }
     } catch (e: any) {
-      console.log("Error", e.response.data)
-      thunkAPI.rejectWithValue(e.response.data)
+      console.log('Error', e.response.data);
+      thunkAPI.rejectWithValue(e.response.data);
     }
   }
-)
+);
 
-
-
-export const { login, logout, clearState, instance } = userSlice.actions;
+export const { login, logout, clearState, instance, updateProfile } =
+  userSlice.actions;
 export const userSelector = (state: RootState) => state.user;
 export default userSlice.reducer;

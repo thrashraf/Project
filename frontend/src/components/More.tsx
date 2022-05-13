@@ -1,19 +1,23 @@
 import React from 'react';
-import { useAppDispatch } from '../app/hooks';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import {
   deleteActivitiesHandler,
   deleteActivities,
   editModeHandler,
 } from '../features/activities/Activities';
+import { activitiesSelector } from '../features/activities/Activities';
 
-const More = ({ isShowing, toggle, toggleModal, modal, title }: any) => {
+const More = ({ isShowing, toggle, toggleModal, modal, id }: any) => {
   const dispatch = useAppDispatch();
 
+  const { isSuccess } = useAppSelector(activitiesSelector);
+
   const deleteEvents = () => {
-    dispatch(deleteActivitiesHandler(title));
-    dispatch(deleteActivities(title));
+    dispatch(deleteActivities(id));
     toggle();
     toggleModal(!modal);
+
+    isSuccess && dispatch(deleteActivitiesHandler(id));
   };
 
   const edit = () => {
