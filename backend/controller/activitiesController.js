@@ -1,5 +1,6 @@
 import activities from "../model/activities.js";
 import crypto from "crypto";
+import transporter from '../config/nodemail.js';
 
 export const allActivities = async (req, res) => {
   try {
@@ -30,7 +31,7 @@ export const createActivities = async (req, res) => {
   try {
     const {title, start, end, venue, organizer, username, email}= req.body;
     const files = req.files;
-
+    console.log(files)
     const id = crypto.randomBytes(16).toString("hex");
 
     const images =
@@ -71,11 +72,17 @@ export const updateActivities = async (req, res) => {
   try {
     const { q }= req.query;
 
-    const { title, start, organizer, venue, images } = req.body.newActivities
-    console.log(req.body)
+    const files = req.files;
+
+    const images =
+      files.length >= 0 ?
+      files.map((images) => images.filename) :
+      null;
+    console.log(files)
+    const { title, start, organizer, venue } = req.body
 
     console.log(q);
-    const [updatedActivities] = await activities.updateActivitiesById(q, title, start, organizer, venue, JSON.parse(images));
+    const [updatedActivities] = await activities.updateActivitiesById(q, title, start, organizer, venue, images);
     console.log(updatedActivities.affectedRows);
 
     res.status(200).json("successful");
@@ -104,4 +111,110 @@ export const getActivitiesById = async (req, res) => {
     });
   }
 };
+
+export const createReport = async (req, res, next) => {
+  try {
+    const files = req.files;           
+
+    const {
+      submitOn,
+      id,
+      userId,
+      owner,
+      content,
+      signature,
+      tentative,
+      ajk
+    } =
+    req.body;
+
+
+    const images =
+      files.length >= 0 ?
+      files.map((images) => images.filename) :
+      null;
+    
+    const ten = tentative === undefined ? '' : tentative
+    const committee = ajk === undefined ? '' : ajk
+
+    const [insertReport] = await activities.createReport(
+      submitOn,
+      userId,
+      owner,
+      id,
+      images,
+      content,
+      ten,
+      committee,
+      signature
+    );
+
+      res.status(200).json({
+        message: "successful"
+      });
+
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      message: "something went wrong"
+    });
+  }
+};
+
+export const verifyReport = async (req, res) => {
+  try {
+
+    const {
+      status,
+      report,
+      message
+    } = req.body
+
+    const subject = status === 'declined' ? 'Fix your report' : 'Successful verified!';
+    // get user's report
+
+    const [updateStatus] = await activities.updateStatus(report.id, status);
+    console.log(updateStatus)
+
+    if (updateStatus.affectedRows !== 1) {
+      res.status(400).json({
+        message: 'something went wrong'
+      })
+    }
+    
+    const emailOptions = {
+      from: 'samsjtmkpsmza@gmail.com',
+      to: report.email,
+      subject: subject,
+      html: `
+            <p>Assalamualaikum dan Salam Sejahtera</p>
+            <p>Kepada ${report.owner}</p>
+            ${status === 'declined' 
+            ? `<p>Sila perbaiki report ${report.title}</p>` 
+            : `<p>Report ${report.title} sudah diluluskan</p>`}
+            <p>${message}</p>
+            <p>Sekian, terima kasih.</p>
+      `
+    }
+
+    transporter.sendMail(emailOptions, (err, info) => {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log(info)
+        res.status(200).json({
+          message: 'successful update!'
+        })
+    
+      }
+    })
+
+  } catch (error) {
+    console.log(error)
+
+    res.status(400).json({
+      message: 'something went wrong'
+    })
+  }
+}
 

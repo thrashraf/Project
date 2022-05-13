@@ -25,10 +25,10 @@ export const getReport = async (req, res) => {
 
 export const createReport = async (req, res, next) => {
   try {
-    const id = crypto.randomBytes(16).toString("hex");
-    const files = req.files;
+    const files = req.files;           
 
     const {
+      id,
       userId,
       owner,
       profile_picture,
@@ -42,7 +42,7 @@ export const createReport = async (req, res, next) => {
     } =
     req.body;
 
-    console.log(title, date, organizer, venue, content, tentative, ajk);
+    //console.log(title, date, organizer, venue, content, tentative, ajk);
 
     const images =
       files.length >= 0 ?

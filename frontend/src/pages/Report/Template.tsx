@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Page,
   Text,
@@ -7,9 +6,9 @@ import {
   View,
   Image,
   Font,
-} from "@react-pdf/renderer";
-import regular from "../../assets/Arimo-Regular.ttf";
-import bold from "../../assets/Arimo-Bold.ttf";
+} from '@react-pdf/renderer';
+import regular from '../../assets/Arimo-Regular.ttf';
+import bold from '../../assets/Arimo-Bold.ttf';
 
 type Props = {
   title: string;
@@ -21,12 +20,12 @@ type Props = {
   photo: any;
   tentative: any;
   ajk: any;
-  staffName: string
+  staffName: string;
 };
 
 export const Template = (props: Props) => {
   Font.register({
-    family: "Arimo",
+    family: 'Arimo',
     fonts: [
       { src: regular, fontWeight: 400 },
       { src: bold, fontWeight: 700 },
@@ -38,42 +37,42 @@ export const Template = (props: Props) => {
       paddingTop: 40,
       paddingBottom: 40,
       paddingHorizontal: 40,
-      backgroundColor: "white",
+      backgroundColor: 'white',
       fontSize: 12,
-      fontFamily: "Arimo",
+      fontFamily: 'Arimo',
     },
 
     logo: {
       width: 200,
-      margin: "0 auto",
+      margin: '0 auto',
     },
 
     title: {
       fontSize: 12,
-      textAlign: "center",
-      fontFamily: "Arimo",
+      textAlign: 'center',
+      fontFamily: 'Arimo',
       marginTop: 20,
-      textTransform: "uppercase",
+      textTransform: 'uppercase',
       fontWeight: 700,
     },
     titleDetail: {
       fontSize: 12,
       fontWeight: 700,
-      textAlign: "center",
-      fontFamily: "Arimo",
+      textAlign: 'center',
+      fontFamily: 'Arimo',
     },
 
     aboutProgram: {
       marginTop: 40,
       fontWeight: 700,
       fontSize: 12,
-      textAlign: "left",
-      fontFamily: "Arimo",
+      textAlign: 'left',
+      fontFamily: 'Arimo',
     },
     aboutContent: {
       marginTop: 10,
       fontWeight: 400,
-      textAlign: "left",
+      textAlign: 'left',
       marginLeft: 20,
     },
 
@@ -81,8 +80,8 @@ export const Template = (props: Props) => {
       marginTop: 10,
       fontSize: 12,
       textIndent: 36,
-      textAlign: "justify",
-      fontFamily: "Arimo",
+      textAlign: 'justify',
+      fontFamily: 'Arimo',
     },
 
     signatureContainer: {
@@ -105,14 +104,14 @@ export const Template = (props: Props) => {
 
     photoContainer: {
       marginTop: 40,
-      textAlign: "center",
+      textAlign: 'center',
     },
 
     image: {
       width: 400,
       height: 250,
-      objectFit: "cover",
-      margin: "0 auto",
+      objectFit: 'cover',
+      margin: '0 auto',
     },
 
     figure: {
@@ -120,38 +119,38 @@ export const Template = (props: Props) => {
       marginTop: 5,
     },
     pageNumber: {
-      position: "absolute",
+      position: 'absolute',
       fontSize: 12,
       bottom: 30,
       left: 0,
       right: 0,
-      textAlign: "center",
-      color: "grey",
+      textAlign: 'center',
+      color: 'grey',
     },
 
     table: {
       marginTop: 40,
-      width: "100%",
+      width: '100%',
       marginLeft: 40,
     },
 
     row: {
-      display: "flex",
-      flexDirection: "row",
+      display: 'flex',
+      flexDirection: 'row',
       paddingTop: 8,
       paddingBottom: 8,
       marginLeft: 40,
     },
 
     bold: {
-      fontWeight: "bold",
+      fontWeight: 'bold',
     },
     row1: {
-      width: "30%",
+      width: '30%',
     },
     row2: {
-      width: "70%",
-      flexWrap: "wrap",
+      width: '70%',
+      flexWrap: 'wrap',
     },
     activities: {
       lineHeight: 2,
@@ -166,22 +165,25 @@ export const Template = (props: Props) => {
   const timeConvertor = (time: any) => {
     console.log(time);
     // first checks the correct time format and then split it into components
-    time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
-  
-    if (time.length > 1) { // If the time format is correct
-      time = time.slice (1);  // Remove full string match value
+    time = time
+      .toString()
+      .match(/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+    if (time.length > 1) {
+      // If the time format is correct
+      time = time.slice(1); // Remove full string match value
       time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM based on given hour
       time[0] = +time[0] % 12 || 12; // change the hour based on AM/PM
     }
-    return time.join (''); // return new time format as a String
-  }
+    return time.join(''); // return new time format as a String
+  };
 
   return (
     <>
       <Document>
-        <Page size="A4" style={styles.body}>
+        <Page size='A4' style={styles.body}>
           <View>
-            <Image style={styles.logo} src="/assets/logoPoli.png" />
+            <Image style={styles.logo} src='/assets/logoPoli.png' />
             <Text style={styles.title}>LAPORAN {props.title}</Text>
             <Text style={styles.titleDetail}>
               JABATAN TEKNOLOGI MAKLUMAT DAN KOMUNIKASI
@@ -197,13 +199,15 @@ export const Template = (props: Props) => {
             <Text style={styles.aboutContent}>
               b) Penganjur : {props.organizer}
             </Text>
-            <Text style={styles.aboutContent}>c) Tarikh : {props.date.split('-').reverse().join('/')}</Text>
+            <Text style={styles.aboutContent}>
+              c) Tarikh : {props.date.split('-').reverse().join('/')}
+            </Text>
             <Text style={styles.aboutContent}>d) Tempat : {props.venue}</Text>
 
             <Text style={styles.aboutProgram}>
               2.0 PENGISIAN/PERLAKSANAAN PROGRAM
             </Text>
-            {props.content.split("\n").map((text, index) => {
+            {props.content.split('\n').map((text, index) => {
               return (
                 <Text key={index} style={styles.content}>
                   {text}
@@ -214,7 +218,7 @@ export const Template = (props: Props) => {
             <View style={styles.signatureContainer}>
               <Text style={styles.signatureHeader}>Disediakan oleh:</Text>
               <Image
-                src="/assets/signature.png"
+                src='/assets/signature.png'
                 style={styles.signatureImage}
               />
               <Text style={styles.name}>({props.staffName})</Text>
@@ -222,7 +226,7 @@ export const Template = (props: Props) => {
             </View>
           </View>
 
-          {props.photo !== 'undefined'&& props.photo.length >= 0 ? (
+          {props.photo !== 'undefined' && props.photo.length >= 0 ? (
             <View break>
               <Text style={styles.aboutProgram}>
                 GAMBAR-GAMBAR SEPANJANG AKTIVITI
@@ -242,74 +246,77 @@ export const Template = (props: Props) => {
               })}
             </View>
           ) : null}
-          {props.tentative !== undefined ? (props.tentative.length > 0 ? (
-            <View break>
-              <Text style={styles.aboutProgram}>TENTATIF PROGRAM</Text>
+          {props.tentative !== undefined ? (
+            props.tentative.length > 0 ? (
+              <View break>
+                <Text style={styles.aboutProgram}>TENTATIF PROGRAM</Text>
 
-              <View
-                style={[
-                  styles.row,
-                  styles.bold,
-                  styles.table,
-                  styles.tableHeading,
-                ]}
-              >
-                <Text style={styles.row1}>MASA</Text>
-                <Text style={styles.row2}>AKTIVITI</Text>
+                <View
+                  style={[
+                    styles.row,
+                    styles.bold,
+                    styles.table,
+                    styles.tableHeading,
+                  ]}
+                >
+                  <Text style={styles.row1}>MASA</Text>
+                  <Text style={styles.row2}>AKTIVITI</Text>
+                </View>
+
+                {props.tentative.map((row: any, index: number) => {
+                  return (
+                    <View key={index} style={styles.row}>
+                      <Text style={styles.row1}>{timeConvertor(row.time)}</Text>
+                      {row.activities
+                        .split('\n\n')
+                        .map((act: string, num: number) => {
+                          return (
+                            <Text key={num} style={styles.activities}>
+                              {act}
+                            </Text>
+                          );
+                        })}
+                    </View>
+                  );
+                })}
               </View>
+            ) : null
+          ) : null}
 
-              {props.tentative.map((row: any, index: number) => {
-                return (
-                  <View key={index} style={styles.row}>
-                    <Text style={styles.row1}>{timeConvertor(row.time)}</Text>
-                    {row.activities
-                      .split("\n\n")
-                      .map((act: string, num: number) => {
+          {props.ajk !== undefined ? (
+            props.ajk.length > 0 ? (
+              <View break>
+                <Text style={styles.aboutProgram}>JAWATANKUASA</Text>
+
+                <View
+                  style={[
+                    styles.row,
+                    styles.bold,
+                    styles.table,
+                    styles.tableHeading,
+                  ]}
+                >
+                  <Text style={styles.row1}>JAWATAN</Text>
+                  <Text style={styles.row2}>NAMA</Text>
+                </View>
+
+                {props.ajk.map((row: any, index: number) => {
+                  return (
+                    <View key={index} style={styles.row}>
+                      <Text style={styles.row1}>{row.role}</Text>
+                      {row.names.split('\n\n').map((act: any, num: any) => {
                         return (
                           <Text key={num} style={styles.activities}>
                             {act}
                           </Text>
                         );
                       })}
-                  </View>
-                );
-              })}
-            </View>
-          ) : null ) : null}
-          
-          {props.ajk !== undefined ? (props.ajk.length > 0  ? (
-            <View break>
-              <Text style={styles.aboutProgram}>JAWATANKUASA</Text>
-
-              <View
-                style={[
-                  styles.row,
-                  styles.bold,
-                  styles.table,
-                  styles.tableHeading,
-                ]}
-              >
-                <Text style={styles.row1}>JAWATAN</Text>
-                <Text style={styles.row2}>NAMA</Text>
+                    </View>
+                  );
+                })}
               </View>
-
-              {props.ajk.map((row: any, index: number) => {
-                return (
-                  <View key={index} style={styles.row}>
-                    <Text style={styles.row1}>{row.role}</Text>
-                    {row.names.split("\n\n").map((act: any, num: any) => {
-                      return (
-                        <Text key={num} style={styles.activities}>
-                          {act}
-                        </Text>
-                      );
-                    })}
-                  </View>
-                );
-              })}
-            </View>
-          ) : null) : null}
-          
+            ) : null
+          ) : null}
         </Page>
       </Document>
     </>

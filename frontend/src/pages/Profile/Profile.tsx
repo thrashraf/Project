@@ -14,11 +14,11 @@ export const Profile = (props: Props) => {
     <div>
       <Navbar />
       <div className='max-w-7xl mt-24 lg:grid grid-cols-6 gap-10 px-10 m-auto'>
-        <section className='col-span-2 hidden lg:block relative'>
+        <section className='col-span-2 hidden lg:block lg:fixed'>
           <PersonalSideBar />
         </section>
 
-        <section className='col-span-4 w-full'>
+        <section className='col-span-4 w-full lg:relative lg:left-80'>
           <Routes>
             <Route element={<Middleware />}>
               <Route index element={<Information />} />

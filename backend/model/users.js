@@ -67,6 +67,20 @@ class user {
                 where id = '${id}'`;
     return db.execute(sql); 
   }
+
+  static async updatePicture(image, email) {
+    const sql = `UPDATE users 
+                SET profile_picture = '${image}'
+                where email = '${email}'`;
+    return db.execute(sql); 
+  }
+
+  static async updateSignature(image, email) {
+    const sql = `UPDATE users 
+                SET signature = '${image}'
+                where email = '${email}'`;
+    return db.execute(sql); 
+  }
 }
 
 export default user;

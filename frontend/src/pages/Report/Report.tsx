@@ -11,6 +11,7 @@ import Toast from '../../components/Toast';
 import useModal from '../../hooks/useModal';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import SignatureModal from './SignatureModal';
 
 const Report = () => {
   const { user }: any = useAppSelector(userSelector);
@@ -30,8 +31,11 @@ const Report = () => {
   const [tentative, setTentative] = useState<any>([]);
   const [ajk, setAjk] = useState<any>([]);
 
+  const [documentStatus, setDocumentStatus] = useState<string>('');
+
+  const [images, setImages] = useState<any>([]);
+
   //? utils
-  const [showModal, setShowModal] = useState<boolean>(false);
   const { isShowing, toggle } = useModal();
 
   //ref
@@ -45,22 +49,41 @@ const Report = () => {
   const [status, setStatus] = useState('');
   const navigate = useNavigate();
 
+  //for signatureModal
+  const { isShowing: showSignatureModal, toggle: toggleSignature } = useModal();
+  const [signature, setSignature] = useState<string>('');
+
   //get specific activities and put in state
   useEffect(() => {
     axios
       .get(`/api/activities/getActivitiesById?q=${id}`)
       .then((res) => {
-        console.log(res.data.title);
+        console.log(res);
 
         setTitle(res.data.title);
         setDate(res.data.start);
         setOrganizer(res.data.organizer);
         setVenue(res.data.venue);
+        setPhoto([...res.data.images]);
+        setDocumentStatus(res.data.status);
+
+        setContent(res.data.content);
+        setAjk([...res.data.committee]);
+        setTentative([...res.data.tentative]);
+
+        //for images template
+        setImages([...res.data.images]);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
+  useEffect(() => {
+    //check if signature exist
+    user && !user.signature && toggleSignature();
+    user && user.signature && setSignature(user.signature);
+  }, [user]);
 
   const contentHandler = (e: any) => {
     if (e.key === 'Enter') {
@@ -153,6 +176,12 @@ const Report = () => {
 
     const formData: any = new FormData(); // Currently empty
 
+    //to generate today date in dd/mm/yy
+    formData.append(
+      'submitOn',
+      new Date().toISOString().split('T')[0].split('-').reverse().join('/')
+    );
+    formData.append('id', id);
     formData.append('userId', user.id);
     formData.append('owner', user.name);
     formData.append('profile_picture', user.profile_picture);
@@ -161,6 +190,7 @@ const Report = () => {
     formData.append('organizer', organizer);
     formData.append('venue', venue);
     formData.append('content', content);
+    formData.append('signature', signature);
     photo.forEach((tag) => formData.append('upload', tag));
     tentative.forEach((tentative: any) =>
       formData.append('tentative', JSON.stringify(tentative))
@@ -168,7 +198,7 @@ const Report = () => {
     ajk.forEach((ajk: any) => formData.append('ajk', JSON.stringify(ajk)));
 
     await api
-      .post('/api/report/createReport', formData)
+      .post('/api/activities/createReport', formData)
       .then((res) => {
         setMessage('Successful submit report! 🎉');
         setStatus('success');
@@ -219,6 +249,8 @@ const Report = () => {
         formHandler={formHandler}
       />
 
+      <SignatureModal isShowing={showSignatureModal} toggle={toggleSignature} />
+
       <section className='hidden lg:flex flex-col col-start-3 col-end-[-1] bg-[#525659] '>
         <div className='h-[800px] overflow-y-auto overflow-x-hidden w-[500px] m-auto mt-10 fixed left-[50%]'>
           {/* <PDFViewer 
@@ -240,6 +272,7 @@ const Report = () => {
             photo={photo}
             tentative={tentative}
             ajk={ajk}
+            signature={signature}
           />
           {content.length > 2186 ? (
             <div className='my-2.5 h-[800px] w-[500px] font-Arimo font-normal m-auto bg-white rounded-sm p-10 flex flex-col text-[12px] relative'>
@@ -279,7 +312,12 @@ const Report = () => {
             </div>
           ) : null}
 
-          <ImageTemplate isPhoto={isPhoto} photo={photo} />
+          <ImageTemplate
+            isPhoto={isPhoto}
+            photo={photo}
+            status={documentStatus}
+            images={images}
+          />
 
           {tentative.length >= 1 ? (
             <div className='my-2.5 h-[800px] w-[500px] font-Arimo font-normal m-auto bg-white rounded-sm p-10 flex flex-col text-[12px] relative'>
