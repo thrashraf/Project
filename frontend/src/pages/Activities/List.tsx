@@ -10,6 +10,8 @@ type Props = {
   activities: any;
   setFilterData: any;
   setFilterItem: any;
+  setMonth: any;
+  // setYear: any;
 };
 
 export const List = (props: Props) => {
@@ -45,7 +47,7 @@ export const List = (props: Props) => {
           <DropDown
             isOpen={openMonth}
             setIsOpen={toggleMonth}
-            setFilterBy={props.setFilterItem}
+            setFilterBy={props.setMonth}
             navdropArr={month}
             title='Month'
             icon='fa-solid fa-calendar mr-3'

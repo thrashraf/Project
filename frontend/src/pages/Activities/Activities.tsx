@@ -46,6 +46,7 @@ const Activities = () => {
 
   //for filter activity by draft or done;
   const [filterBy, setFilterBy] = useState<string>('all');
+  const [monthFil, setMonth] = useState<string>('');
 
   //for add event modal
   const { isShowing: isAddEvent, toggle: toggleAdd } = useModal();
@@ -70,6 +71,7 @@ const Activities = () => {
 
     if (filterBy === 'All') {
       dispatch(dropdownActivities(activitiesMonth));
+      setMonth('');
     } else if (filterBy === 'Draft activities') {
       const filterActivity = activitiesMonth.filter(
         (item: any) => (new Date(item.end) as any) > new Date()
@@ -88,18 +90,20 @@ const Activities = () => {
     }
     //! need to fix this
     month.map((item: string) => {
-      if (filterBy === item) {
+      if (monthFil === item) {
         const filterActivity = activitiesMonth.filter(
           (item: any) =>
-            month[new Date(item.end).getMonth() as any] === filterBy
+            month[new Date(item.end).getMonth() as any] === monthFil &&
+            (new Date(item.end).getFullYear() as any) === filterBy
         );
 
         console.log(filterActivity);
         dispatch(dropdownActivities(filterActivity));
       }
     });
+    console.log(filterBy);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterBy]);
+  }, [filterBy, monthFil]);
 
   return (
     <div className='h-full bg-slate-50'>
@@ -114,7 +118,7 @@ const Activities = () => {
 
       <AddEvent isShowing={isAddEvent} toggle={toggleAdd} />
 
-      <div className='mt-28 px-5 lg:grid grid-cols-3 gap-16 max-w-[1500px] m-auto relative'>
+      <div className='mt-28 px-5 lg:grid grid-cols-3 gap-16 max-w-[1500px] m-auto relative '>
         <SideCard activities={activitiesMonth} />
 
         <section className=' col-span-2'>
@@ -151,6 +155,7 @@ const Activities = () => {
                   activities={activities}
                   setFilterData={setFilterData}
                   setFilterItem={setFilterBy}
+                  setMonth={setMonth}
                 />
               )}
             </div>

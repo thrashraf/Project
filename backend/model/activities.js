@@ -18,7 +18,7 @@ class activities {
     email
   ) {
     const sql = `INSERT INTO
-                activities (id, title, start, end, organizer, venue, img_url, username, email)
+                activities (id, title, start, end, organizer, venue, banner, username, email)
             VALUES 
             (
                 '${id}',
@@ -52,7 +52,7 @@ class activities {
         start = '${start}',
         organizer = '${organizer}',
         venue = '${venue}',
-        img_url = '${JSON.stringify(images)}'
+        banner = '${JSON.stringify(images)}'
         where id = '${id}'`;
     return db.execute(sql);
   }
@@ -61,6 +61,39 @@ class activities {
     id
   ) {
     const sql = `SELECT * FROM activities where id = '${id}'`;
+    return db.execute(sql);
+  }
+
+  static async createReport(
+    submitOn,
+    userId,
+    owner,
+    id,
+    images,
+    content,
+    tentative,
+    ajk,
+    signature
+  ) {
+    const sql = `update activities SET 
+                submitOn = '${submitOn}',
+                userId = '${userId}',
+                owner = '${owner}', 
+                images = '${JSON.stringify(images)}',
+                content = '${content}',
+                tentative = '[${tentative}]',
+                committee = '[${ajk}]',
+                status = 'pending',
+                signature = '${signature}' where id = '${id}'`;
+    console.log(sql)
+    return db.execute(sql);
+  }
+
+  static async updateStatus(
+    id,
+    status
+  ) {
+    const sql = `UPDATE activities SET status = '${status}' where id = '${id}'`;
     return db.execute(sql);
   }
 }

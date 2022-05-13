@@ -7,12 +7,11 @@ import Toast from '../../components/Toast';
 import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
-  addNewActivities,
   getActivities,
   getMonthActivities,
 } from '../../features/activities/Activities';
 import { userSelector } from '../../features/user/User';
-import { activitiesSelector } from '../../features/activities/Activities';
+import { unitArray } from '../../constant/unitArray';
 
 type Props = {
   isShowing: boolean;
@@ -99,6 +98,13 @@ const AddEvent = (props: Props) => {
   };
 
   const formHandler = (e: any) => {
+    if (organizer.value === 'select' || organizer.value === '') {
+      toastRef.current.showToast();
+      setMessage('Please select organizer!');
+      e.preventDefault();
+      return;
+    }
+
     e.preventDefault();
 
     const formData = new FormData();
@@ -127,7 +133,6 @@ const AddEvent = (props: Props) => {
 
           console.log(newActivities);
 
-          dispatch(addNewActivities(newActivities));
           props.toggle();
           dispatch(getActivities(''));
           dispatch(getMonthActivities());
@@ -144,6 +149,7 @@ const AddEvent = (props: Props) => {
       toggle={props.toggle}
       hide={props.toggle}
     >
+      <Toast status='error' message={message} ref={toastRef} />
       <div className='relative mx-auto bg-white max-w-lg rounded-lg shadow z-50 '>
         <form
           className='flex flex-col px-5 py-3'
@@ -194,13 +200,22 @@ const AddEvent = (props: Props) => {
                 Organizer
                 <span className='text-red-500'>*</span>
               </p>
-              <input
+              {/* <input
                 type='text'
                 value={organizer.value}
                 required
                 onChange={organizer.onChange}
                 className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
-              />
+              /> */}
+              <select
+                className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
+                onChange={organizer.onChange}
+                value={organizer.value}
+              >
+                {unitArray?.map((item: any) => (
+                  <option>{item}</option>
+                ))}
+              </select>
             </section>
             <section className=''>
               <p className='my-1 text-sm text-gray-400 ml-1'>

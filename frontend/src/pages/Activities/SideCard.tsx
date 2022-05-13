@@ -31,11 +31,10 @@ export const SideCard = (props: Props) => {
               className='shadow-md mt-10 rounded-lg bg-white'
               key={index}
             >
-              {console.log(event)}
               <img
                 src={
-                  JSON.parse(event.img_url).length > 0
-                    ? `/assets/${JSON.parse(event.img_url)}`
+                  JSON.parse(event.banner).length > 0
+                    ? `/assets/${JSON.parse(event.banner)}`
                     : '/assets/default-placeholder.jpg'
                 }
                 alt={event.title}

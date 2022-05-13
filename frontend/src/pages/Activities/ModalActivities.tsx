@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Dropzone from '../../components/Dropzone';
 import axios from 'axios';
+import { unitArray } from '../../constant/unitArray';
 
 type Props = {
   showActivity: boolean;
@@ -177,8 +178,8 @@ export const ModalActivities = (props: Props) => {
               <section className='relative'>
                 <img
                   src={
-                    JSON.parse(detailActivities.img_url).length > 0
-                      ? `/assets/${JSON.parse(detailActivities.img_url)}`
+                    JSON.parse(detailActivities.banner).length > 0
+                      ? `/assets/${JSON.parse(detailActivities.banner)}`
                       : '/assets/default-placeholder.jpg'
                   }
                   alt={detailActivities.title}
@@ -241,12 +242,16 @@ export const ModalActivities = (props: Props) => {
                     >
                       {detailActivities.organizer}
                     </span>
-                    <input
-                      type='text'
-                      value={organizer.value}
-                      onChange={(e) => organizer.setInput(e.target.value)}
+
+                    <select
                       className={`bg-blue-50 px-3 py-2 rounded-md outline-none w-[150px] text-black ${showEditComp}`}
-                    />
+                      onChange={organizer.onChange}
+                      value={organizer.value}
+                    >
+                      {unitArray?.map((item: any) => (
+                        <option>{item}</option>
+                      ))}
+                    </select>
                     <section>
                       <button
                         className={`hover:bg-black mr-5 text-black px-4 py-2 rounded-lg hover:text-white ${showEditComp}`}
