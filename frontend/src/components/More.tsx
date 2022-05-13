@@ -21,6 +21,8 @@ const More = ({ isShowing, toggle, toggleModal, modal, title }: any) => {
     dispatch(editModeHandler());
   };
 
+  console.log(isShowing)
+
   return (
     <>
       <button
@@ -32,7 +34,7 @@ const More = ({ isShowing, toggle, toggleModal, modal, title }: any) => {
 
       {/* navdrop */}
       {isShowing && (
-        <section className='bg-white absolute -left-32 w-[120px]'>
+        <section className='bg-white absolute -left-32 w-[120px] z-50'>
           <ul>
             <li
               className='cursor-pointer hover:bg-slate-200 py-1 px-5'
