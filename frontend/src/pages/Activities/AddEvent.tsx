@@ -6,10 +6,7 @@ import useModal from '../../hooks/useModal';
 import Toast from '../../components/Toast';
 import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import {
-  getActivities,
-  getMonthActivities,
-} from '../../features/activities/Activities';
+import { addNewActivities } from '../../features/activities/Activities';
 import { userSelector } from '../../features/user/User';
 import { unitArray } from '../../constant/unitArray';
 
@@ -39,14 +36,13 @@ const AddEvent = (props: Props) => {
   const { isShowing, toggle } = useModal();
 
   const [file, setFile] = useState<any>([]);
-  const [validFiles, setValidFiles] = useState<any>([]);
 
   const addFile = (e: any) => {
     e.preventDefault();
     const files = e.dataTransfer.files;
     for (let i = 0; i < files.length; i++) {
       if (validateFile(files[i])) {
-        setFile((prevArray: any) => [...prevArray, ...files]);
+        setFile([...files]);
       } else {
         // setStatus('error');
         // setMessage('Not support file type');
@@ -69,32 +65,14 @@ const AddEvent = (props: Props) => {
   const deleteFile = (name: any) => {
     // find the index of the item
     // remove the item from array
-    const validFileIndex = validFiles.findIndex((e: any) => e.name === name);
-    validFiles.splice(validFileIndex, 1);
-    // update validFiles array
-    setValidFiles([...validFiles]);
     const selectedFileIndex = file.findIndex((e: any) => e.name === name);
     file.splice(selectedFileIndex, 1);
     // update selectedFiles array
     setFile([...file]);
   };
 
-  //to remove duplicate name
-  useEffect(() => {
-    let filteredArray = file.reduce((file: any, current: any) => {
-      const x = file.find((item: any) => item.name === current.name);
-      if (!x) {
-        return file.concat([current]);
-      } else {
-        return file;
-      }
-    }, []);
-    setValidFiles([...filteredArray]);
-  }, [file]);
-
   const resetFile = () => {
     setFile([]);
-    setValidFiles([]);
   };
 
   const formHandler = (e: any) => {
@@ -116,7 +94,8 @@ const AddEvent = (props: Props) => {
     formData.append('organizer', organizer.value);
     formData.append('username', user?.name);
     formData.append('email', user?.email);
-    validFiles.forEach((image: any) => formData.append('upload', image));
+    file.forEach((image: any) => formData.append('upload', image));
+    e.preventDefault();
 
     axios
       .post('/api/activities/createActivities', formData)
@@ -128,14 +107,11 @@ const AddEvent = (props: Props) => {
             end: endEvent.value,
             organizer: organizer.value,
             venue: venue.value,
-            img_url: JSON.stringify(validFiles),
+            banner: res.data.image_url,
           };
 
-          console.log(newActivities);
-
+          dispatch(addNewActivities(newActivities));
           props.toggle();
-          dispatch(getActivities(''));
-          dispatch(getMonthActivities());
         }
       })
       .catch((err: any) => {
@@ -259,7 +235,7 @@ const AddEvent = (props: Props) => {
             isShowing={isShowing}
             hide={toggle}
             fileDrop={addFile}
-            files={validFiles}
+            files={file}
             removeFile={deleteFile}
           />
         </form>

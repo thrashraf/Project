@@ -27,7 +27,7 @@ class activities {
                 '${end}',
                 '${organizer}',
                 '${venue}',
-                '${JSON.stringify(image)}',
+                '${image}',
                 '${username}',
                 '${email}'
 
@@ -52,7 +52,7 @@ class activities {
         start = '${start}',
         organizer = '${organizer}',
         venue = '${venue}',
-        banner = '${JSON.stringify(images)}'
+        banner = '${images}'
         where id = '${id}'`;
     return db.execute(sql);
   }

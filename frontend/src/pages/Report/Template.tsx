@@ -21,6 +21,7 @@ type Props = {
   tentative: any;
   ajk: any;
   staffName: string;
+  signature: string;
 };
 
 export const Template = (props: Props) => {
@@ -218,7 +219,7 @@ export const Template = (props: Props) => {
             <View style={styles.signatureContainer}>
               <Text style={styles.signatureHeader}>Disediakan oleh:</Text>
               <Image
-                src='/assets/signature.png'
+                src={props.signature && `/assets/${props.signature}`}
                 style={styles.signatureImage}
               />
               <Text style={styles.name}>({props.staffName})</Text>

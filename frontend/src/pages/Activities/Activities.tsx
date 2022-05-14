@@ -46,6 +46,7 @@ const Activities = () => {
 
   //for filter activity by draft or done;
   const [filterBy, setFilterBy] = useState<string>('all');
+  const [year, setYear] = useState<string>('');
   const [monthFil, setMonth] = useState<string>('');
 
   //for add event modal
@@ -71,39 +72,70 @@ const Activities = () => {
 
     if (filterBy === 'All') {
       dispatch(dropdownActivities(activitiesMonth));
-      setMonth('');
     } else if (filterBy === 'Draft activities') {
       const filterActivity = activitiesMonth.filter(
         (item: any) => (new Date(item.end) as any) > new Date()
       );
+      console.log(filterActivity);
       dispatch(dropdownActivities(filterActivity));
     } else if (filterBy === 'Report activities') {
       const filterActivity = activitiesMonth.filter(
         (item: any) => (new Date(item.end) as any) < new Date()
       );
+      console.log(filterActivity);
       dispatch(dropdownActivities(filterActivity));
-    } else {
+    }
+
+    if (year) {
       const filterActivity = activitiesMonth.filter(
-        (item: any) => (new Date(item.end).getFullYear() as any) === filterBy
+        (item: any) => (new Date(item.end).getFullYear() as any) === year
       );
       dispatch(dropdownActivities(filterActivity));
     }
-    //! need to fix this
+
+    if (year === 'Year') {
+      setYear('');
+    }
+
+    if (monthFil === 'Month') {
+      setMonth('');
+    }
+
+    //? for year and month
     month.map((item: string) => {
-      if (monthFil === item) {
+      if (monthFil === item && year) {
         const filterActivity = activitiesMonth.filter(
           (item: any) =>
-            month[new Date(item.end).getMonth() as any] === monthFil &&
-            (new Date(item.end).getFullYear() as any) === filterBy
+            month[(new Date(item.end).getMonth() as any) + 1] === monthFil &&
+            (new Date(item.end).getFullYear() as any) === year
         );
 
         console.log(filterActivity);
         dispatch(dropdownActivities(filterActivity));
       }
+
+      //? for draft & report
+      if (year && filterBy === 'Draft activities') {
+        const filterActivity = activitiesMonth.filter(
+          (item: any) =>
+            (new Date(item.end).getFullYear() as any) === year &&
+            (new Date(item.end) as any) > new Date()
+        );
+        dispatch(dropdownActivities(filterActivity));
+      }
+
+      if (year && filterBy === 'Report activities') {
+        const filterActivity = activitiesMonth.filter(
+          (item: any) =>
+            (new Date(item.end).getFullYear() as any) === year &&
+            (new Date(item.end) as any) < new Date()
+        );
+        dispatch(dropdownActivities(filterActivity));
+      }
     });
     console.log(filterBy);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterBy, monthFil]);
+  }, [filterBy, monthFil, year]);
 
   return (
     <div className='h-full bg-slate-50'>
@@ -156,6 +188,10 @@ const Activities = () => {
                   setFilterData={setFilterData}
                   setFilterItem={setFilterBy}
                   setMonth={setMonth}
+                  filterBy={filterBy}
+                  monthFil={monthFil}
+                  setYear={setYear}
+                  year={year}
                 />
               )}
             </div>

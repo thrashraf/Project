@@ -4,6 +4,7 @@ import useModal from '../../hooks/useModal';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   activitiesSelector,
+  editActivitiesHandler,
   editModeHandler,
   getActivities,
   getMonthActivities,
@@ -56,14 +57,13 @@ export const ModalActivities = (props: Props) => {
   }, [detailActivities, editMode]);
 
   const [file, setFile] = useState<any>([]);
-  const [validFiles, setValidFiles] = useState<any>([]);
 
   const addFile = (e: any) => {
     e.preventDefault();
     const files = e.dataTransfer.files;
     for (let i = 0; i < files.length; i++) {
       if (validateFile(files[i])) {
-        setFile((prevArray: any) => [...prevArray, ...files]);
+        setFile([...files]);
       } else {
         // setStatus('error');
         // setMessage('Not support file type');
@@ -85,33 +85,11 @@ export const ModalActivities = (props: Props) => {
   //to remove file
   const deleteFile = (name: any) => {
     // find the index of the item
-    // remove the item from array
-    const validFileIndex = validFiles.findIndex((e: any) => e.name === name);
-    validFiles.splice(validFileIndex, 1);
     // update validFiles array
-    setValidFiles([...validFiles]);
     const selectedFileIndex = file.findIndex((e: any) => e.name === name);
     file.splice(selectedFileIndex, 1);
     // update selectedFiles array
     setFile([...file]);
-  };
-
-  //to remove duplicate name
-  useEffect(() => {
-    let filteredArray = file.reduce((file: any, current: any) => {
-      const x = file.find((item: any) => item.name === current.name);
-      if (!x) {
-        return file.concat([current]);
-      } else {
-        return file;
-      }
-    }, []);
-    setValidFiles([...filteredArray]);
-  }, [file]);
-
-  const resetFile = () => {
-    setFile([]);
-    setValidFiles([]);
   };
 
   const updateCurrentActivities = () => {
@@ -122,7 +100,7 @@ export const ModalActivities = (props: Props) => {
     formData.append('venue', venue.value);
     formData.append('organizer', organizer.value);
 
-    validFiles.forEach((image: any) => formData.append('upload', image));
+    file.forEach((image: any) => formData.append('upload', image));
 
     isFetching = true;
 
@@ -132,9 +110,17 @@ export const ModalActivities = (props: Props) => {
         if (res.status === 200) {
           console.log('ok');
           isFetching = true;
-          dispatch(getMonthActivities());
-          dispatch(getActivities(''));
 
+          const newActivities = {
+            id: detailActivities.id,
+            title: title.value,
+            start: start.value,
+            organizer: organizer.value,
+            venue: venue.value,
+            banner: res.data.image_url,
+          };
+
+          dispatch(editActivitiesHandler(newActivities));
           //toggle modal
           props.setShowActivity(!props.showActivity);
           //toggle more button
@@ -178,8 +164,8 @@ export const ModalActivities = (props: Props) => {
               <section className='relative'>
                 <img
                   src={
-                    JSON.parse(detailActivities.banner).length > 0
-                      ? `/assets/${JSON.parse(detailActivities.banner)}`
+                    detailActivities.banner
+                      ? `/assets/${detailActivities.banner}`
                       : '/assets/default-placeholder.jpg'
                   }
                   alt={detailActivities.title}
@@ -197,7 +183,7 @@ export const ModalActivities = (props: Props) => {
                   isShowing={showDropzone}
                   hide={toggleDropzone}
                   fileDrop={addFile}
-                  files={validFiles}
+                  files={file}
                   removeFile={deleteFile}
                 />
               </section>

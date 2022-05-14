@@ -144,6 +144,7 @@ export const Document = () => {
                                 tentative={item.tentative}
                                 ajk={item.ajk}
                                 staffName={item.owner}
+                                signature={item.signature}
                               />
                             }
                             fileName={item.title}

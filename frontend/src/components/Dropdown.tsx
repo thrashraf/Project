@@ -1,13 +1,4 @@
-type Props = {
-  isOpen: boolean;
-  setIsOpen: any;
-  setFilterBy: any;
-  navdropArr: any;
-  title: string;
-  icon: string;
-};
-
-const Dropdown = (props: Props) => {
+const Dropdown = ({ ...props }: any) => {
   return (
     <section className='relative'>
       <button
@@ -15,7 +6,7 @@ const Dropdown = (props: Props) => {
         onClick={() => props.setIsOpen(!props.isOpen)}
       >
         <i className={props.icon} />
-        {props.title}
+        {props.filterBy ? props.filterBy : props.title}
       </button>
 
       <div
