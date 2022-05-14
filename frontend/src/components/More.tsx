@@ -7,13 +7,14 @@ import {
 } from '../features/activities/Activities';
 import { activitiesSelector } from '../features/activities/Activities';
 
-const More = ({ isShowing, toggle, toggleModal, modal, id }: any) => {
+const More = ({ isShowing, toggle, toggleModal, modal, id, deleteItem }: any) => {
   const dispatch = useAppDispatch();
 
   const { isSuccess } = useAppSelector(activitiesSelector);
 
   const deleteEvents = () => {
-    dispatch(deleteActivities(id));
+    // dispatch(deleteActivities(id));
+    deleteItem()
     toggle();
     toggleModal(!modal);
 
@@ -24,6 +25,8 @@ const More = ({ isShowing, toggle, toggleModal, modal, id }: any) => {
     console.log('lol');
     dispatch(editModeHandler());
   };
+
+  console.log(isShowing)
 
   return (
     <>
@@ -36,7 +39,7 @@ const More = ({ isShowing, toggle, toggleModal, modal, id }: any) => {
 
       {/* navdrop */}
       {isShowing && (
-        <section className='bg-white absolute -left-32 w-[120px]'>
+        <section className='bg-white absolute -left-32 w-[120px] z-50'>
           <ul>
             <li
               className='cursor-pointer hover:bg-slate-200 py-1 px-5'
@@ -46,7 +49,7 @@ const More = ({ isShowing, toggle, toggleModal, modal, id }: any) => {
             </li>
             <li
               className='cursor-pointer hover:bg-slate-200 py-1 px-5'
-              onClick={deleteEvents}
+              onClick={() => deleteEvents()}
             >
               Delete
             </li>

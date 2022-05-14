@@ -1,17 +1,20 @@
 import { useState } from "react";
+import { useAppSelector } from "../app/hooks"
+import { publicationSelector } from "../features/Publication/Publication"
 
 type Props = {
   viewPublicationHandler: any;
-  allPublication: any;
+
 };
 
 export const CardPublication = (props: Props) => {
+  const { allPublication, isFetching }:any = useAppSelector(publicationSelector)
+  console.log(isFetching)
   const [show, setShow] = useState(false);
-console.log(props.allPublication)
   return (
     <div className="grid lg:w-full w-full lg:grid-cols-4  gap-10">
-    {props.allPublication?.map((publication: any) => {
-
+    {allPublication ? allPublication.map((publication: any) => {
+        console.log(publication)
         return (
             <div
             key={publication.key}
@@ -23,7 +26,7 @@ console.log(props.allPublication)
           </div>
         )
        
-    })}
+    }) : null}
       
     </div>
   );
