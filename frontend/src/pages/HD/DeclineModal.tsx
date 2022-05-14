@@ -3,10 +3,10 @@ import ModalUser from '../../components/ModalUser';
 type Props = {
   modal: boolean;
   setModal: any;
-  report: any;
   verifyReport: any;
   message: string;
   setMessage: any;
+  setReportDetail: any;
 };
 
 const DeclineModal = (props: Props) => {
@@ -65,7 +65,7 @@ const DeclineModal = (props: Props) => {
               type='button'
               className='text-white bg-green-400 hover:bg-green-300 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-400 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110'
               onClick={() => {
-                props.verifyReport('declined', props.report);
+                props.verifyReport();
                 props.setModal(!props.modal);
               }}
             >

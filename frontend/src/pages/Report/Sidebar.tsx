@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { Input } from '../../components/Input';
 import { Image } from '../../icons/Image';
 import Toast from '../../components/Toast';
+import { unitArray } from '../../constant/unitArray';
 
 type Props = {
   title: string;
@@ -96,13 +97,15 @@ export const Sidebar = (props: Props) => {
             <p className='my-1 text-sm text-gray-400 ml-1'>
               Organizer <span className='text-red-500'>*</span>
             </p>
-            <input
-              type='string'
-              required
-              className='bg-blue-50 px-3 py-3 rounded-lg outline-none w-full'
-              value={props.organizer}
+            <select
+              className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
               onChange={(e) => props.setOrganizer(e.target.value)}
-            />
+              value={props.organizer}
+            >
+              {unitArray?.map((item: any) => (
+                <option>{item}</option>
+              ))}
+            </select>
           </div>
         </section>
 

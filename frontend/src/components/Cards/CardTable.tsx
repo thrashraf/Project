@@ -11,6 +11,7 @@ type Props = {
   setModal: any;
   verifyReport: any;
   selectedReport: any;
+  setReportDetail: any;
 };
 export default function CardTable(props: Props, { color }: any) {
   const navigate = useNavigate();
@@ -103,72 +104,85 @@ export default function CardTable(props: Props, { color }: any) {
               </tr>
             </thead>
             <tbody>
-              {props.reports?.map((report: any, index: number) => {
-                return (
-                  <tr key={index} className='text-center'>
-                    <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                      <span
-                        className='font-bold uppercase text-blue-500 hover:underline cursor-pointer'
-                        onClick={() =>
-                          navigate(`/verify-report/${report.id}`, {
-                            state: report,
-                          })
-                        }
-                      >
-                        {report.title}
-                      </span>
-                    </td>
-                    <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                      {report.start.split('-').reverse().join('/')}
-                    </td>
-                    <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                      <i
-                        className={`fas fa-circle ${
-                          report.status === 'verified'
-                            ? 'text-green-500'
-                            : report.status === 'pending'
-                            ? 'text-orange-500'
-                            : 'text-red-500'
-                        }  mr-2 `}
-                      ></i>{' '}
-                      {report.status}
-                    </td>
-                    <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                      <div className='flex items-center justify-around'>
-                        {/* <img
+              {props.reports && props.reports.length > 0 ? (
+                props.reports?.map((report: any, index: number) => {
+                  return (
+                    <tr key={index} className='text-center'>
+                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                        <span
+                          className='font-bold uppercase text-blue-500 hover:underline cursor-pointer'
+                          onClick={() =>
+                            navigate(`/verify-report/${report.id}`, {
+                              state: report,
+                            })
+                          }
+                        >
+                          {report.title}
+                        </span>
+                      </td>
+                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                        {report.start.split('-').reverse().join('/')}
+                      </td>
+                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                        <i
+                          className={`fas fa-circle ${
+                            report.status === 'verified'
+                              ? 'text-green-500'
+                              : report.status === 'pending'
+                              ? 'text-orange-500'
+                              : 'text-red-500'
+                          }  mr-2 `}
+                        ></i>{' '}
+                        {report.status}
+                      </td>
+                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                        <div className='flex items-center justify-around'>
+                          {/* <img
                           src={report.profile_picture !== 'null' ? report.profile_picture : '/assets/dummy_profile.png'}
                           alt="..."
                           className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow"
                         ></img> */}
-                        <p>{report.owner}</p>
-                      </div>
-                    </td>
-                    <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                      <div className='flex items-center justify-around max-w-[300px]'>
-                        <button
-                          type='submit'
-                          className=' bg-green-400 text-white p-2 rounded-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-green-300 cursor-pointer w-[70px]  '
-                          onClick={() =>
-                            props.verifyReport('verified', report.id)
-                          }
-                        >
-                          Verify
-                        </button>
-                        <button
-                          type='submit'
-                          className=' bg-red-400 text-white p-2 rounded-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-red-300 cursor-pointer w-[70px] '
-                          onClick={() => {
-                            props.setModal!(!props.modal);
-                            props.selectedReport(report);
-                          }}
-                        >
-                          Decline
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+                          <p>{report.owner}</p>
+                        </div>
+                      </td>
+                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                        <div className='flex items-center justify-around max-w-[300px]'>
+                          <button
+                            type='submit'
+                            className=' bg-green-400 text-white p-2 rounded-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-green-300 cursor-pointer w-[70px]  '
+                            onClick={() => {
+                              props.verifyReport();
+                              props.setReportDetail('verified');
+                              props.selectedReport(report);
+                            }}
+                          >
+                            Verify
+                          </button>
+                          <button
+                            type='submit'
+                            className=' bg-red-400 text-white p-2 rounded-md transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-red-300 cursor-pointer w-[70px] '
+                            onClick={() => {
+                              props.setModal!(!props.modal);
+                              props.setReportDetail('declined', report.id);
+                              props.selectedReport(report);
+                            }}
+                          >
+                            Decline
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <tr className='text-center flex w-full'>
+                  <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                    <span className='font-bold uppercase text-blue-500 hover:underline flex text-center'>
+                      No item
+                    </span>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

@@ -2,20 +2,45 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import DeclineModal from './DeclineModal';
 import Toast from '../../components/Toast';
-
+import { PasswordModal } from '../Report/PasswordModal';
+import { useAppSelector } from '../../app/hooks';
 // components
 
 import CardTable from '../../components/Cards/CardTable';
+import useModal from '../../hooks/useModal';
+import { userSelector } from '../../features/user/User';
+import api from '../../utils/api';
+import useInput from '../../hooks/useInput';
+import SignatureModal from '../Report/SignatureModal';
 
 export default function Tables() {
+  const { user }: any = useAppSelector(userSelector);
+
   const [allReport, setAllReport] = useState<any>([]);
   const [modal, setModal] = useState<boolean>(false);
   const [report, setReport] = useState<any>();
 
+  const [password, setPassword] = useState<any>('');
+
+  const { isShowing, toggle } = useModal();
+  const { isShowing: showSignatureModal, toggle: toggleSignature } = useModal();
+
   //declined message
   const [message, setMessage] = useState<string>('');
 
+  const toastStatus = useInput('');
   const toastRef = useRef<any>(null);
+
+  const status = useInput('');
+
+  const setReportDetail = (reportStatus: string) => {
+    status.setInput(reportStatus);
+  };
+
+  useEffect(() => {
+    //check if signature exist
+    user && !user.signature && toggleSignature();
+  }, [user]);
 
   const verifyReport = (status: string, id: any) => {
     axios
@@ -28,39 +53,70 @@ export default function Tables() {
         tempArr[index].status = status;
 
         //clear message
-        setMessage('');
+        toastStatus.setInput('success');
         setAllReport(tempArr);
-        toastHandler(status);
+        toastHandler();
+        toggle();
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const toastHandler = (status: any) => {
+  const toastHandler = () => {
     if (toastRef.current !== null) {
-      if (status !== 'verified') {
-        toastRef.current.showToast();
-      }
+      toastRef.current.showToast();
     }
   };
 
   useEffect(() => {
     const fetch = async () => {
       const data = await axios.get(`/api/activities/getAllActivities?q=${''}`);
-      setAllReport([...data.data]);
+      const verifyReportActivities = data.data.filter(
+        (report: any) => report.status === 'pending'
+      );
+      setAllReport([...verifyReportActivities]);
     };
     fetch();
-  }, []);
+  }, [allReport]);
+
+  const authHandler = async (e: any) => {
+    e.preventDefault();
+    const email = user?.email;
+    const reqPassword = password;
+
+    await api
+      .post('/api/user/auth', { email, reqPassword })
+      .then((res) => {
+        //console.log(res);
+        verifyReport(status.value, report);
+      })
+      .catch((err) => {
+        setMessage('Invalid Password');
+        toastStatus.setInput('error');
+        toastHandler();
+      });
+  };
 
   console.log(allReport);
   return (
     <>
       <Toast
-        status={'success'}
+        status={toastStatus.value}
         message={'Successful send notification to user!'}
         ref={toastRef}
       />
+
+      <PasswordModal
+        showModal={isShowing}
+        setShowModal={toggle}
+        password={password}
+        setPassword={setPassword}
+        authHandler={authHandler}
+      />
+
+      <SignatureModal isShowing={showSignatureModal} toggle={toggleSignature} />
+
       <div className='flex flex-wrap mt-4'>
         <div className='w-full mb-12 px-4'>
           <CardTable
@@ -69,16 +125,17 @@ export default function Tables() {
             setReport={setAllReport}
             modal={modal}
             setModal={setModal}
-            verifyReport={verifyReport}
+            verifyReport={toggle}
             selectedReport={setReport}
+            setReportDetail={setReportDetail}
           />
           <DeclineModal
             modal={modal}
             setModal={setModal}
-            verifyReport={verifyReport}
-            report={report}
+            verifyReport={toggle}
             message={message}
             setMessage={setMessage}
+            setReportDetail={setReportDetail}
           />
         </div>
       </div>

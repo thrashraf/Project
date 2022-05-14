@@ -198,18 +198,20 @@ export const authUser = async(req, res) => {
 
     console.log(userInfo)
 
-    const password = userInfo[0].password;
+    const password = userInfo[0].password; 
     const isValid = bcrypt.compareSync(reqPassword, password);
 
     if (!isValid) {
       res.status(400).json({
         message: 'Incorrect password'
       })
+      return;
     }
 
     res.status(200).json({
       message: 'successful confirmation!'
     })
+    
 
   } catch (error) {
 
@@ -219,7 +221,7 @@ export const authUser = async(req, res) => {
       message: 'Something went wrong'
     })
   }
-}
+} 
 
 
 export const uploadImage = async(req, res) => {
@@ -269,7 +271,7 @@ export const uploadImage = async(req, res) => {
 
     console.log(updateUser)
     res.status(200).json({
-      message: 'Successful update' 
+      message: 'Successful update'  
     });
 
   } catch (error) {

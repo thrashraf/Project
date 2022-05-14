@@ -52,15 +52,15 @@ export const activitiesSlice = createSlice({
   name: 'activity',
   initialState,
   reducers: {
-    viewDetailActivities: (state, action) => {
+    viewDetailActivities: (state: any, action: any) => {
       state.detailActivities = action.payload;
     },
 
-    dropdownActivities: (state, action) => {
+    dropdownActivities: (state: any, action: any) => {
       state.activities = action.payload;
     },
 
-    addNewActivities: (state, action) => {
+    addNewActivities: (state: any, action: any) => {
       state.activities = [...state.activities, action.payload];
       state.activitiesMonth = [...state.activitiesMonth, action.payload].sort(
         (start: any, end: any) =>
@@ -68,7 +68,7 @@ export const activitiesSlice = createSlice({
       );
     },
 
-    deleteActivitiesHandler: (state, action) => {
+    deleteActivitiesHandler: (state: any, action: any) => {
       console.log(action.payload);
       const index = state.activities.findIndex(
         (event: any) => event.id === action.payload
@@ -78,36 +78,30 @@ export const activitiesSlice = createSlice({
       state.activitiesMonth.splice(index, 1);
     },
 
-    editActivitiesHandler: (state, action) => {
+    editActivitiesHandler: (state: any, action: any) => {
+      let activities = [...state.activities];
+      let activitiesMonth = [...state.activitiesMonth];
+
+      console.log(action.payload);
       const index = state.activities.findIndex(
         (event: any) => event.id === action.payload.id
       );
 
-      console.log(action.payload.images);
+      console.log(index);
 
-      state.activities[index].title = action.payload.title;
-      state.activities[index].start = action.payload.start;
-      state.activities[index].venue = action.payload.venue;
-      state.activities[index].organizer = action.payload.organizer;
-      state.activities[index].img_url = action.payload.images;
+      state.activities[index] = action.payload;
+      state.activitiesMonth[index] = action.payload;
 
-      state.activitiesMonth[index].title = action.payload.title;
-      state.activitiesMonth[index].start = action.payload.start;
-      state.activitiesMonth[index].venue = action.payload.venue;
-      state.activitiesMonth[index].organizer = action.payload.organizer;
-      state.activitiesMonth[index].img_url = action.payload.images;
-      console.log(action.payload);
-
-      //! state.detailActivities = action.payload;
+      console.log(state.activities);
     },
 
     //for toggle edit mode
-    editModeHandler: (state) => {
+    editModeHandler: (state: any) => {
       state.editMode = !state.editMode;
     },
 
     // filter reducers //
-    handleFilter: (state, action) => {
+    handleFilter: (state: any, action: any) => {
       console.log(action.payload);
 
       const searchWord = action.payload;
@@ -125,74 +119,23 @@ export const activitiesSlice = createSlice({
       }
     },
 
-    setFilterHandler: (state, action) => {
+    setFilterHandler: (state: any, action: any) => {
       state.query = action.payload;
       state.showFilter = !state.showFilter;
     },
 
-    setViewHandler: (state, action) => {
+    setViewHandler: (state: any, action: any) => {
       state.view = action.payload;
     },
 
     //? for files functionality
-
-    // //for upload images or (file)
-    // uploadFile: (state, action) => {
-    //   action.payload.preventDefault();
-    //   const files = action.payload.dataTransfer.files;
-
-    //   //validate files
-
-    //   for (let i = 0; i < files.length; i++) {
-    //     if (activitiesSlice.actions.validateFile(files[i])) {
-    //       console.log(files);
-    //       state.files = [...state.files, ...files];
-    //     } else {
-    //       state.isUploadError = true;
-    //       state.uploadErrorMessage = 'Images must be jpg/jpeg/png';
-    //     }
-    //   }
-    // },
-
-    // //filter images for duplicate images
-    // filterFile: (state) => {
-    //   const filteredImages = state.files.reduce((file: any, current: any) => {
-    //     const x = file.find((item: any) => item.name === current.name);
-    //     if (!x) {
-    //       return file.concat([current]);
-    //     } else {
-    //       return file;
-    //     }
-    //   }, []);
-
-    //   state.validFiles = [...filteredImages];
-    // },
-
-    // removeFile: (state, action) => {
-    //   // find the index of the item
-    //   // remove the item from array
-    //   const validFileIndex = state.validFiles.findIndex(
-    //     (e: any) => e.name === action.payload
-    //   );
-    //   state.validFiles.splice(validFileIndex, 1);
-
-    //   const selectedFileIndex = state.files.findIndex(
-    //     (e: any) => e.name === action.payload
-    //   );
-    //   state.files.splice(selectedFileIndex, 1);
-    // },
-
-    // resetFile: (state) => {
-    //   state.files = [];
-    //   state.validFiles = [];
-    // },
   },
   extraReducers: (builder) => {
     // ? get activities based on query
     builder.addCase(getActivities.fulfilled, (state, { payload }: any) => {
       state.isFetching = false;
       state.isSuccess = true;
-      //sort activities
+      //sort activities: any
       state.activities = payload.sort(
         (start: any, end: any) =>
           (new Date(start.end) as any) - (new Date(end.end) as any)

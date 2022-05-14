@@ -12,6 +12,7 @@ import Middleware from '../../middleware/Middleware';
 
 import Dashboard from './Dashboard';
 import Tables from './Tables';
+import Events from './Events';
 
 export default function KJ() {
   return (
@@ -27,6 +28,7 @@ export default function KJ() {
               <Route index element={<Dashboard />} />
               <Route path='dashboard' element={<Dashboard />} />
               <Route path='tables' element={<Tables />} />
+              <Route path='events' element={<Events />} />
             </Route>
           </Routes>
           <FooterAdmin />

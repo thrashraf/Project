@@ -249,7 +249,11 @@ const Report = () => {
         formHandler={formHandler}
       />
 
-      <SignatureModal isShowing={showSignatureModal} toggle={toggleSignature} />
+      <SignatureModal
+        isShowing={showSignatureModal}
+        toggle={toggleSignature}
+        show={true}
+      />
 
       <section className='hidden lg:flex flex-col col-start-3 col-end-[-1] bg-[#525659] '>
         <div className='h-[800px] overflow-y-auto overflow-x-hidden w-[500px] m-auto mt-10 fixed left-[50%]'>

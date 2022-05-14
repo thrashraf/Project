@@ -1,6 +1,6 @@
 const generateYears = () => {
 
-    let years = [];
+    let years: any = ['Year'];
     const maxYear = 2024;
     const minYear = maxYear - 5;
 

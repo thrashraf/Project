@@ -36,7 +36,7 @@ api.interceptors.request.use(async (config) => {
         config.headers["authorization"] = `Bearer ${response.data.accessToken}`;
   
         const user: any = jwt_decode(response.data.accessToken);
-        //console.log("user", user)
+        console.log("user", user)
 
         store.dispatch(instance(response.data.accessToken));
         console.log(user);
