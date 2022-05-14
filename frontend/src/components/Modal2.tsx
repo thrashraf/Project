@@ -4,7 +4,12 @@ import useModal from "../hooks/useModal";
 import More from "../components/More";
 import ModalUser from "./ModalUser";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { activitiesSelector, editModeHandler } from "../features/activities/Activities";
+import {
+  activitiesSelector,
+  editModeHandler,
+} from "../features/activities/Activities";
+import Dropzone from "./Dropzone";
+import axios from "axios";
 
 type Props = {
   show: boolean;
@@ -18,6 +23,7 @@ const Modal2 = (props: Props) => {
   const { editMode } = useAppSelector(activitiesSelector);
   const dispatch = useAppDispatch();
   const { isShowing, toggle } = useModal();
+  const { isShowing: showDropzone, toggle: toggleDropzone } = useModal();
 
   //? for edit mode
   const showEditComp = editMode ? "visible" : "hidden";
@@ -44,9 +50,101 @@ const Modal2 = (props: Props) => {
   }, [props.publication]);
 
   const closeModal = () => {
-    props.setShow(!props.show)
-    toggleEditMode()
-    toggle()
+    props.setShow(!props.show);
+    toggleEditMode();
+    toggle();
+  };
+
+  const [file, setFile] = useState<any>([]);
+
+  const addFile = (e: any) => {
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+    for (let i = 0; i < files.length; i++) {
+      if (validateFile(files[i])) {
+        setFile([...files]);
+      } else {
+        // setStatus('error');
+        // setMessage('Not support file type');
+        // toastRef.current && toastRef.current.showToast();
+      }
+    }
+  };
+
+  //for validate file
+  const validateFile = (file: any) => {
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    console.log(validTypes.indexOf(file.type) === -1);
+    if (validTypes.indexOf(file.type) === -1) {
+      return false;
+    }
+    return true;
+  };
+
+  //to remove file
+  const deleteFile = (name: any) => {
+    // find the index of the item
+    // remove the item from array
+  
+    const selectedFileIndex = file.findIndex((e: any) => e.name === name);
+    file.splice(selectedFileIndex, 1);
+    // update selectedFiles array
+    setFile([...file]);
+  };
+
+  const updateCurrentPublication = () => {
+    const formData = new FormData();
+
+    formData.append("title", title.value);
+    formData.append("description", description.value);
+    formData.append("isbn", isbn.value);
+    formData.append("staff", staff.value);
+    formData.append("year", year.value);
+    file.forEach((image: any) => formData.append("upload", image));
+
+    const id = publication.id;
+
+    axios
+      .post(`/api/publication/updatePublication?q=${id}`, formData)
+      .then((res: any) => {
+        if (res.status === 200) {
+          console.log('ok');
+          
+
+          //toggle modal
+          props.setShow(!props.show);
+          //toggle more button
+          toggle();
+          //to clear files
+          //dispatch(resetFile());
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  };
+
+  const deletePublication = () => {
+
+    const id = publication.id;
+
+    axios
+      .post(`/api/publication/deletePublication?q=${id}`)
+      .then((res: any) => {
+        if (res.status === 200) {
+          console.log('ok');
+          
+          //toggle modal
+          props.setShow(!props.show);
+          //toggle more button
+          toggle();
+          //to clear files
+          //dispatch(resetFile());
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
   }
 
   return (
@@ -67,10 +165,27 @@ const Modal2 = (props: Props) => {
             >
               <div className="  mt-10 left-0 right-0 mx-6 lg:mx-auto lg:max-w-lg max-h-[600px]  overflow-y-auto  break-words py-8 px-8 lg:md:px-16 bg-white fixed z-20  shadow-md rounded-lg border border-gray-400">
                 <div className="w-full flex justify-center text-green-400 mb-4"></div>
-                <img
-                  src={`/assets/${publication?.img_url}`}
-                  className=" rounded-lg mb-10 w-[400px] h-[200px] object-contain"
-                ></img>
+                <div>
+                  <img
+                    src={`/assets/${publication?.img_url}`}
+                    className=" rounded-lg mb-10 w-[400px] h-[200px] object-contain"
+                  ></img>
+                  <i
+                    onClick={toggleDropzone}
+                    className={`fa-solid fa-camera cursor-pointer text-6xl fa-2xl absolute top-[20%] left-[45%] text-gray-300 ${
+                      editMode ? "visible" : "hidden"
+                    }`}
+                  ></i>
+
+                  <Dropzone
+                    isShowing={showDropzone}
+                    hide={toggleDropzone}
+                    fileDrop={addFile}
+                    files={file}
+                    removeFile={deleteFile}
+                    
+                  />
+                </div>
                 <h1
                   className={`${hideEditComp} text-center text-black  font-extrabold tracking-normal leading-tight mb-4`}
                 >
@@ -83,7 +198,9 @@ const Modal2 = (props: Props) => {
                   className={`bg-blue-50 px-3 py-2 rounded-md outline-none  text-black mb-4 w-full ${showEditComp}`}
                 />
 
-                <p className={`mb-5 text-sm text-gray-900 dark:text-gray-400 text-center font-normal ${hideEditComp}`}>
+                <p
+                  className={`mb-5 text-sm text-gray-900 dark:text-gray-400 text-center font-normal ${hideEditComp}`}
+                >
                   {publication?.Description}
                 </p>
                 <input
@@ -93,7 +210,9 @@ const Modal2 = (props: Props) => {
                   className={`bg-blue-50 px-3 py-2 rounded-md outline-none  text-black mb-4 w-full ${showEditComp}`}
                 />
 
-                <p className={`mb-5 text-sm text-gray-900 dark:text-gray-400 text-center font-normal ${hideEditComp}`}>
+                <p
+                  className={`mb-5 text-sm text-gray-900 dark:text-gray-400 text-center font-normal ${hideEditComp}`}
+                >
                   ISBN:{publication?.isbn}
                 </p>
                 <input
@@ -115,7 +234,9 @@ const Modal2 = (props: Props) => {
                   className={`bg-blue-50 px-3 py-2 rounded-md outline-none  text-black mb-4 w-full ${showEditComp}`}
                 />
 
-                <p className={`mb-5 text-sm text-gray-900 dark:text-gray-400 text-center font-normal ${hideEditComp}`}>
+                <p
+                  className={`mb-5 text-sm text-gray-900 dark:text-gray-400 text-center font-normal ${hideEditComp}`}
+                >
                   {publication?.year}
                 </p>
                 <input
@@ -124,7 +245,9 @@ const Modal2 = (props: Props) => {
                   className={`bg-blue-50 px-3 py-2 rounded-md outline-none  text-black mb-4 w-full ${showEditComp}`}
                 />
 
-                <div className={`flex items-center mr-3 justify-center w-full ${hideEditComp}`}>
+                <div
+                  className={`flex items-center mr-3 justify-center w-full ${hideEditComp}`}
+                >
                   <button className="focus:outline-none transition duration-150 ease-in-out hover:bg-indigo-600 bg-blue-500 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm">
                     <a href={`/assets/${publication?.pdf_url}`} target="_blank">
                       View Publication
@@ -133,19 +256,19 @@ const Modal2 = (props: Props) => {
                 </div>
 
                 <section>
-                      <button
-                        className={`hover:bg-black mr-5 text-black px-4 py-2 rounded-lg hover:text-white ${showEditComp}`}
-                        onClick={toggleEditMode}
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        className={`bg-blue-500 px-4 py-2 rounded-lg text-white ${showEditComp}`}
-                        //onClick={updateCurrentActivities}
-                      >
-                        Save
-                      </button>
-                    </section>
+                  <button
+                    className={`hover:bg-black mr-5 text-black px-4 py-2 rounded-lg hover:text-white ${showEditComp}`}
+                    onClick={toggleEditMode}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className={`bg-blue-500 px-4 py-2 rounded-lg text-white ${showEditComp}`}
+                    onClick={updateCurrentPublication}
+                  >
+                    Save
+                  </button>
+                </section>
 
                 <div
                   className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-500 transition duration-150 ease-in-out"
@@ -171,7 +294,7 @@ const Modal2 = (props: Props) => {
                 </div>
                 <div className="cursor-pointer absolute top-0 left-3 mt-4 mr-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-500 transition duration-150 ease-in-out">
                   <section className="fixed w-10">
-                    <More isShowing={isShowing} toggle={toggle} />
+                    <More isShowing={isShowing} toggle={toggle} deleteItem={deletePublication} />
                   </section>
                 </div>
               </div>

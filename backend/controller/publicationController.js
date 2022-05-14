@@ -44,3 +44,47 @@ export const createPublication = async (req, res) => {
     });
   }
 };
+
+export const updateActivities = async (req, res) => {
+  try {
+    const { q }= req.query;
+
+    const files = req.files;
+
+    const images =
+      files.length >= 0 ?
+      files.map((images) => images.filename) :
+      null;
+
+    const { title, description, isbn, staff, year } = req.body
+
+    console.log(q);
+    const [updatedPublication] = await publication.updatePublicationById(q, title, description, isbn, staff, year, images);
+    console.log(updatedPublication.affectedRows);
+
+    res.status(200).json("successful");
+
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      message: "can't load data",
+    });
+  }
+};
+
+export const deletePublication = async (req, res) => {
+  try {
+    const { q }= req.query;
+    console.log(q);
+    const [deletePublication] = await publication.deletePublicationById(q);
+    console.log(deletePublication.affectedRows);
+
+    res.status(200).json("successful");
+
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      message: "can't load data",
+    });
+  }
+};

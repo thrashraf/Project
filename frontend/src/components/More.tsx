@@ -7,13 +7,14 @@ import {
 } from '../features/activities/Activities';
 import { activitiesSelector } from '../features/activities/Activities';
 
-const More = ({ isShowing, toggle, toggleModal, modal, id }: any) => {
+const More = ({ isShowing, toggle, toggleModal, modal, id, deleteItem }: any) => {
   const dispatch = useAppDispatch();
 
   const { isSuccess } = useAppSelector(activitiesSelector);
 
   const deleteEvents = () => {
-    dispatch(deleteActivities(id));
+    // dispatch(deleteActivities(id));
+    deleteItem()
     toggle();
     toggleModal(!modal);
 
@@ -48,7 +49,7 @@ const More = ({ isShowing, toggle, toggleModal, modal, id }: any) => {
             </li>
             <li
               className='cursor-pointer hover:bg-slate-200 py-1 px-5'
-              onClick={deleteEvents}
+              onClick={() => deleteEvents()}
             >
               Delete
             </li>

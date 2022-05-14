@@ -7,6 +7,8 @@ const publicationRoute = express.Router();
 
 publicationRoute.get('/publication/getAllPublication', publication.showPublication);
 publicationRoute.post('/publication/createPublication', upload.array('upload', 3), publication.createPublication);
+publicationRoute.post('/publication/updatePublication', upload.array('upload', 3), publication.updateActivities);
+publicationRoute.post('/publication/deletePublication',  publication.deletePublication);
 
 
 
