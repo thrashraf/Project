@@ -3,13 +3,16 @@ import Middleware from '../../middleware/Middleware';
 import { Information } from './Information';
 import { PersonalSideBar } from './PersonalSideBar';
 import { Privacy } from './Privacy';
-import { Settings } from './Settings';
 import { Document } from './Document';
 import Navbar from '../../components/Navbar';
+import { useAppSelector } from '../../app/hooks';
+import { userSelector } from '../../features/user/User';
 
 type Props = {};
 
 export const Profile = (props: Props) => {
+  const { user }: any = useAppSelector(userSelector);
+
   return (
     <div>
       <Navbar />
@@ -21,11 +24,20 @@ export const Profile = (props: Props) => {
         <section className='col-span-4 w-full lg:relative lg:left-80'>
           <Routes>
             <Route element={<Middleware />}>
-              <Route index element={<Information />} />
-              <Route path='documents' element={<Document />} />
-              <Route path='account' element={<Information />} />
-              <Route path='privacy' element={<Privacy />} />
-              <Route path='setting' element={<Settings />} />
+              {user?.role !== 'staff' ? (
+                <>
+                  <Route index element={<Information />} />
+                  <Route path='account' element={<Information />} />
+                  <Route path='privacy' element={<Privacy />} />
+                </>
+              ) : (
+                <>
+                  <Route index element={<Information />} />
+                  <Route path='account' element={<Information />} />
+                  <Route path='privacy' element={<Privacy />} />
+                  <Route path='documents' element={<Document />} />
+                </>
+              )}
             </Route>
           </Routes>
         </section>

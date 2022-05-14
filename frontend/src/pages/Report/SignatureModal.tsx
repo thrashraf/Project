@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import ModalContainer from '../../components/ModalContainer';
 
-const SignatureModal = ({ isShowing, toggle }: any) => {
+const SignatureModal = ({ isShowing, toggle, show }: any) => {
   const navigate = useNavigate();
 
   return (
@@ -31,7 +31,9 @@ const SignatureModal = ({ isShowing, toggle }: any) => {
             <button
               onClick={() => navigate('/activities')}
               type='button'
-              className='text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 '
+              className={` text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 ${
+                show ? 'visible' : 'hidden'
+              } `}
             >
               No, cancel
             </button>

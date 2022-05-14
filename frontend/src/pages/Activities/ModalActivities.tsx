@@ -6,9 +6,7 @@ import {
   activitiesSelector,
   editActivitiesHandler,
   editModeHandler,
-  getActivities,
-  getMonthActivities,
-  //resetFile,
+  deleteActivities,
 } from '../../features/activities/Activities';
 import Spinner from '../../components/Spinner/Spinner';
 import useInput from '../../hooks/useInput';
@@ -150,6 +148,9 @@ export const ModalActivities = (props: Props) => {
                 id={detailActivities.id}
                 modal={props.showActivity}
                 toggleModal={props.setShowActivity}
+                deleteItem={() =>
+                  dispatch(deleteActivities(detailActivities.id))
+                }
               />
               <button
                 type='button'

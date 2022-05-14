@@ -11,6 +11,7 @@ import useModal from '../../hooks/useModal';
 import { userSelector } from '../../features/user/User';
 import api from '../../utils/api';
 import useInput from '../../hooks/useInput';
+import SignatureModal from '../Report/SignatureModal';
 
 export default function Tables() {
   const { user }: any = useAppSelector(userSelector);
@@ -22,6 +23,7 @@ export default function Tables() {
   const [password, setPassword] = useState<any>('');
 
   const { isShowing, toggle } = useModal();
+  const { isShowing: showSignatureModal, toggle: toggleSignature } = useModal();
 
   //declined message
   const [message, setMessage] = useState<string>('');
@@ -34,6 +36,11 @@ export default function Tables() {
   const setReportDetail = (reportStatus: string) => {
     status.setInput(reportStatus);
   };
+
+  useEffect(() => {
+    //check if signature exist
+    user && !user.signature && toggleSignature();
+  }, [user]);
 
   const verifyReport = (status: string, id: any) => {
     axios
@@ -107,6 +114,8 @@ export default function Tables() {
         setPassword={setPassword}
         authHandler={authHandler}
       />
+
+      <SignatureModal isShowing={showSignatureModal} toggle={toggleSignature} />
 
       <div className='flex flex-wrap mt-4'>
         <div className='w-full mb-12 px-4'>
