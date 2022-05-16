@@ -29,14 +29,30 @@ export const createPublication = async (req, res) => {
     console.log(images);
 
     //filter pdf
-    const pdf = 
+    const pdf =
       files.length >= 0
         ? files.filter((images) => images.mimetype.slice(0, 5) !== "image")
         : null;
     console.log(pdf);
 
-    const [activitiesCreated] = await publication.createPublication(id, title, description, isbn, staff, year, images[0].filename, pdf[0].filename);
-    res.status(200).json("successful");
+    const [activitiesCreated] = await publication.createPublication(
+      id,
+      title,
+      description,
+      isbn,
+      staff,
+      year,
+      images[0]?.filename,
+      pdf[0]?.filename
+    );
+
+    res
+      .status(200)
+      .json({
+        message: "successful",
+        image_url: files.length > 0 ? files[0].filename : null,
+        pdf_url:  pdf[0]?.filename,
+      });
   } catch (error) {
     console.log(error);
     res.status(400).json({
@@ -47,23 +63,50 @@ export const createPublication = async (req, res) => {
 
 export const updateActivities = async (req, res) => {
   try {
-    const { q }= req.query;
+    const { q } = req.query;
 
     const files = req.files;
 
-    const images =
-      files.length >= 0 ?
-      files.map((images) => images.filename) :
-      null;
+    const { title, description, isbn, staff, year } = req.body;
 
-    const { title, description, isbn, staff, year } = req.body
+    if (files.length > 0) {
+      const [updatedPublication] = await publication.updatePublicationWithImage(
+        q,
+        title,
+        description,
+        isbn,
+        staff,
+        year,
+        files[0].filename
+      );
 
-    console.log(q);
-    const [updatedPublication] = await publication.updatePublicationById(q, title, description, isbn, staff, year, images);
-    console.log(updatedPublication.affectedRows);
+      if (updatedPublication.affectedRows !== 1) {
+        res.status(400).json({
+          message: "something went wrong",
+        });
+      }
+    }
 
-    res.status(200).json("successful");
+    const [updatedPublication] = await publication.updatePublication(
+      q,
+      title,
+      description,
+      isbn,
+      staff,
+      year
+    );
 
+    if (updatedPublication.affectedRows !== 1) {
+      res.status(400).json({
+        message: "something went wrong",
+      });
+    }
+
+    res.status(200).json({
+      message: "successful",
+      image_url: files.length > 0 ? files[0].filename : null,
+      
+    });
   } catch (error) {
     console.log(error);
     res.status(400).json({
@@ -74,13 +117,12 @@ export const updateActivities = async (req, res) => {
 
 export const deletePublication = async (req, res) => {
   try {
-    const { q }= req.query;
+    const { q } = req.query;
     console.log(q);
     const [deletePublication] = await publication.deletePublicationById(q);
     console.log(deletePublication.affectedRows);
 
     res.status(200).json("successful");
-
   } catch (error) {
     console.log(error);
     res.status(400).json({

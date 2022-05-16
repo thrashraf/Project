@@ -48,12 +48,14 @@ export const Publications = () => {
 
             <AddPublication isShowing={eShow} toggle={setEShow} />
 
-              <button
-                className="inline-flex items-center fixed right-10 bottom-10 justify-center w-16 h-16 mr-2 text-pink-100 transition-colors duration-150 bg-blue-700 rounded-full focus:shadow-outline hover:bg-blue-900"
-                onClick={() => setEShow(!eShow)}
-              >
-                <p className=" text-2xl">+</p>
-              </button>
+              
+          <button
+            className=" bg-blue-500 absolute top-20 right-10 transition duration-150 ease-in-out hover:bg-indigo-600 rounded text-white px-6 py-1 mx-10 text-xl"
+            onClick={() => setEShow(!eShow)}
+          >
+            +
+          </button>
+              
             <Modal2 publication={publication} show={show} setShow={setShow} />
           </div>
         </div>

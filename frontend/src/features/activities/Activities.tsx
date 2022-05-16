@@ -100,6 +100,10 @@ export const activitiesSlice = createSlice({
       state.editMode = !state.editMode;
     },
 
+    closeEditMode: (state: any) => {
+      state.editMode = false;
+    },
+
     // filter reducers //
     handleFilter: (state: any, action: any) => {
       console.log(action.payload);
@@ -281,7 +285,7 @@ export const {
   deleteActivitiesHandler,
   editModeHandler,
   editActivitiesHandler,
-  // uploadFile,
+  closeEditMode
   // removeFile,
   // filterFile,
   // resetFile,

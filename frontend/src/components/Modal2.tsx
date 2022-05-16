@@ -7,7 +7,9 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
   activitiesSelector,
   editModeHandler,
+  closeEditMode
 } from "../features/activities/Activities";
+import { editPublicationHandler, deletePublicationHandler } from "../features/Publication/Publication";
 import Dropzone from "./Dropzone";
 import axios from "axios";
 
@@ -34,6 +36,7 @@ const Modal2 = (props: Props) => {
   const isbn = useInput("");
   const staff = useInput("");
   const year = useInput("");
+  const [file, setFile] = useState<any>([]);
 
   const toggleEditMode = () => dispatch(editModeHandler());
 
@@ -51,11 +54,11 @@ const Modal2 = (props: Props) => {
 
   const closeModal = () => {
     props.setShow(!props.show);
-    toggleEditMode();
-    toggle();
+    dispatch(closeEditMode())
   };
 
-  const [file, setFile] = useState<any>([]);
+  console.log(file)
+
 
   const addFile = (e: any) => {
     e.preventDefault();
@@ -109,14 +112,24 @@ const Modal2 = (props: Props) => {
       .then((res: any) => {
         if (res.status === 200) {
           console.log('ok');
-          
+
+          const newActivities = {
+            id: publication.id,
+            Title: title.value,
+            Description: description.value,
+            isbn: isbn.value,
+            staff: staff.value,
+            year: year.value,
+            img_url: res.data.image_url ? res.data.image_url : publication.img_url,
+          };
+
+          dispatch(editPublicationHandler(newActivities))
 
           //toggle modal
           props.setShow(!props.show);
           //toggle more button
           toggle();
-          //to clear files
-          //dispatch(resetFile());
+          dispatch(closeEditMode())
         }
       })
       .catch((err: any) => {
@@ -134,10 +147,12 @@ const Modal2 = (props: Props) => {
         if (res.status === 200) {
           console.log('ok');
           
+          dispatch(deletePublicationHandler(id));
           //toggle modal
           props.setShow(!props.show);
           //toggle more button
           toggle();
+          props.setShow(!props.show);
           //to clear files
           //dispatch(resetFile());
         }
@@ -222,7 +237,7 @@ const Modal2 = (props: Props) => {
                 />
 
                 <ol className={`my-5 ${hideEditComp}`}>
-                  {publication?.staff.split("\r\n").map((staffName: string) => (
+                  {publication?.staff.split("\n").map((staffName: string) => (
                     <li className=" text-sm text-gray-900 dark:text-gray-400 text-center font-normal my-0">
                       {staffName}
                     </li>

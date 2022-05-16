@@ -125,8 +125,18 @@ const AddPublication = ({ isShowing, toggle }: any) => {
       .post("/api/publication/createPublication", formData)
       .then((res: any) => {
         if (res.status === 200) {
+
+          const newPublication = {
+            Title: title.value,
+            Description: description.value,
+            isbn: isbn.value,
+            staff: staff.value,
+            year: year.value,
+            img_url: res.data.image_url ? res.data.image_url : null,
+            pdf_url: res.data.pdf_url
+          }
          
-          dispatch(getAllPublication());
+          dispatch(addPublication(newPublication));
           toggle();
         }
       })
@@ -190,7 +200,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
             <section className="mt-1">
               <p className="m-1">Year</p>
               <input
-                type="text"
+                type="number"
                 value={year.value}
                 onChange={year.onChange}
                 className="bg-blue-100 py-1 rounded-lg w-full"
