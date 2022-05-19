@@ -34,7 +34,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
     const files = e.dataTransfer.files;
     for (let i = 0; i < files.length; i++) {
       if (validateFile(files[i])) {
-        setFile([ ...files]);
+        setFile((previousFile: any) => ([...previousFile, ...files]));
       }
     }
   };
@@ -125,8 +125,18 @@ const AddPublication = ({ isShowing, toggle }: any) => {
       .post("/api/publication/createPublication", formData)
       .then((res: any) => {
         if (res.status === 200) {
+
+          const newPublication = {
+            Title: title.value,
+            Description: description.value,
+            isbn: isbn.value,
+            staff: staff.value,
+            year: year.value,
+            img_url: res.data.image_url ? res.data.image_url : null,
+            pdf_url: res.data.pdf_url
+          }
          
-          dispatch(getAllPublication());
+          dispatch(addPublication(newPublication));
           toggle();
         }
       })
@@ -161,8 +171,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
 
             <section className="">
               <p className="m-1">Description</p>
-              <input
-                type="text"
+              <textarea
                 value={description.value}
                 onChange={description.onChange}
                 className="bg-blue-100 py-1 rounded-lg w-full"
@@ -190,7 +199,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
             <section className="mt-1">
               <p className="m-1">Year</p>
               <input
-                type="text"
+                type="number"
                 value={year.value}
                 onChange={year.onChange}
                 className="bg-blue-100 py-1 rounded-lg w-full"
@@ -223,6 +232,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
             </section>
 
             <Dropzone
+              content={"Drop Front and Backpage"}
               isShowing={showDropzone}
               hide={toggleDropzone}
               fileDrop={fileDrop}

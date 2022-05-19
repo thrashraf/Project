@@ -33,7 +33,24 @@ class publication{
         return db.execute(sql);
       }
 
-      static async updatePublicationById(
+      static async updatePublication(
+        id,
+        title, 
+        description,
+        isbn, 
+        staff, 
+        year, 
+      ) {
+        const sql = `UPDATE publication SET Title = '${title}',
+            Description = '${description}',
+            isbn = '${isbn}',
+            year = '${year}',
+            staff = '${staff}'
+            where id = '${id}'`;
+        return db.execute(sql);
+      }
+
+      static async updatePublicationWithImage(
         id,
         title, 
         description,

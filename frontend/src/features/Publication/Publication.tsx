@@ -21,7 +21,24 @@ export const publicationSlice = createSlice({
   reducers: {
     addPublication: (state, action) => {
       state.allPublication = [...state.allPublication, action.payload]
-    }
+    },
+
+    editPublicationHandler: (state: any, action: any) => {
+
+      const index = state.allPublication.findIndex(
+        (publication: any) => publication.id === action.payload.id
+      );
+
+      state.allPublication[index] = action.payload;
+
+    },
+
+    deletePublicationHandler: (state: any, action: any) => {
+      const index = state.allPublication.findIndex(
+        (publication: any) => publication.id === action.payload
+      );
+      state.allPublication.splice(index, 1);
+    },
   },
 
   extraReducers: (builder) => {
@@ -73,7 +90,8 @@ export const getAllPublication = createAsyncThunk(
 
 export const {
   addPublication,
-
+  editPublicationHandler,
+  deletePublicationHandler
 } = publicationSlice.actions
 export const publicationSelector = (state: RootState) => state.publication;
 export default publicationSlice.reducer;
