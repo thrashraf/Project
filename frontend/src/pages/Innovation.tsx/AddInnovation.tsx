@@ -11,6 +11,7 @@ type Props = {};
 
 const AddInnovation = ({ isShowing, toggle }: any) => {
   const Title = useInput("");
+  const Description = useInput("");
   const Name = useInput("");
   const Program = useInput("");
   const Level = useInput("");
@@ -68,6 +69,7 @@ const AddInnovation = ({ isShowing, toggle }: any) => {
     const formData = new FormData();
 
     formData.append("Title", Title.value);
+    formData.append("Description", Description.value);
     formData.append("Name", Name.value);
     formData.append("Program", Program.value);
     formData.append("Level", Level.value);
@@ -82,14 +84,15 @@ const AddInnovation = ({ isShowing, toggle }: any) => {
 
           const newInnovation = {
             Title: Title.value,
+            Description: Description.value,
             Name: Name.value,
             Program: Program.value,
             Level: Level.value,
             Medal: Medal.value,
             Year: Year.value,
-            img_url: res.data.image_url ,
+            img_url: res.data.img_url ,
           }
-
+            console.log(newInnovation)
           dispatch(addInnovationHandler(newInnovation));
           toggle();
         }
@@ -112,11 +115,20 @@ const AddInnovation = ({ isShowing, toggle }: any) => {
             <i className="fa-solid fa-xmark fa-lg" />
           </button>
           <section className="">
-            <p className="m-1">Innovasion Title</p>
+            <p className="m-1">Innovation Title</p>
             <input
               type="text"
               value={Title.value}
               onChange={Title.onChange}
+              className="bg-blue-100 py-1 rounded-lg w-full"
+            />
+          </section>
+          <section className="mt-1">
+            <p className="m-1">Description</p>
+            <textarea
+              value={Description.value}
+              onChange={Description.onChange}
+              //onChange={(e) => contentHandler(e)}
               className="bg-blue-100 py-1 rounded-lg w-full"
             />
           </section>

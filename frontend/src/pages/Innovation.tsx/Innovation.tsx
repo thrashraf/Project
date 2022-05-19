@@ -6,6 +6,7 @@ import { Table } from "../../components/Table";
 import useModal from "../../hooks/useModal";
 import AddInnovation from "./AddInnovation";
 
+
 export const Innovation = (props: any) => {
   const { isShowing, toggle } = useModal();
 

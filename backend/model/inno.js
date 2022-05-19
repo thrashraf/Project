@@ -8,6 +8,7 @@ class inno{
     static async createInnovation(
         id,
         Title,
+        Description,
         Name,
         Program,
         Level,
@@ -16,11 +17,12 @@ class inno{
         image
       ) {
         const sql = `INSERT INTO
-                    innovasion (id, Title, Name, Program, Level, Medal, Year, img_url)
+                    innovasion (id, Title,Description, Name, Program, Level, Medal, Year, img_url)
                 VALUES 
                 (
                     '${id}',
                     '${Title}',
+                    '${Description}',
                     '${Name}',
                     '${Program}',
                     '${Level}',

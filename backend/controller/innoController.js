@@ -26,7 +26,7 @@ export const showInno = async (req, res) => {
 
 export const createInnovation = async (req, res) => {
   try {
-    const { Title, Name, Program, Level, Medal, Year } = req.body;
+    const { Title,Description, Name, Program, Level, Medal, Year } = req.body;
     const files = req.files;
 
     const id = crypto.randomBytes(16).toString("hex");
@@ -38,11 +38,12 @@ export const createInnovation = async (req, res) => {
         : null;
     console.log(images);
 
-    console.log(Title, Name, Program, Level, Medal, Year);
+    console.log(Title, Description, Name, Program, Level, Medal, Year);
     
     const [activitiesCreated] = await inno.createInnovation(
       id,
       Title,
+      Description,
       Name,
       Program,
       Level,
@@ -50,6 +51,8 @@ export const createInnovation = async (req, res) => {
       Year,
       images[0]?.filename
     );
+    console.log(images[0]?.filename)
+
 
     res.status(200).json({message: 'successful', img_url: images[0]?.filename});
   } catch (error) {

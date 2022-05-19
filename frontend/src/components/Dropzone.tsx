@@ -34,7 +34,7 @@ const Dropzone = ({ isShowing, hide, ...props }: any) => {
           onDrop={(e) => props.fileDrop(e)}
         >
           <i className='fa-solid fa-images fa-5x mb-5' />
-          Drop image
+          {props.content}
         </div>
 
         <div className='my-5'>

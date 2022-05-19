@@ -15,6 +15,7 @@ import {
 import useInput from "../hooks/useInput";
 import generateYears from "../utils/generateYears";
 import { medal } from "../utils/medal";
+import ModalInnovation from "../pages/Innovation.tsx/ModalInnovation"
 
 export const Table = ({ isShowing, toggle }: any) => {
   const dispatch = useAppDispatch();
@@ -27,6 +28,10 @@ export const Table = ({ isShowing, toggle }: any) => {
   const { isShowing: openFilter, toggle: toggleFilter } = useModal();
   const { isShowing: openYear, toggle: toggleYear } = useModal();
   const { isShowing: openMonth, toggle: toggleMonth } = useModal();
+  const { isShowing: openModal, toggle: toggleModal } = useModal();
+
+  const [detailInnovation, setDetailInnovation] = useState(null)
+
 
   const years = generateYears();
 
@@ -47,7 +52,10 @@ export const Table = ({ isShowing, toggle }: any) => {
       dispatch(setFilterInnovation(tempInnovation));
     }
   }, [medalFilter]);
-
+  const showModal = (innovation: any) => {
+    setDetailInnovation(innovation)
+    toggleModal()
+  }
   return (
     <div className="mt-20  pb-10" id="Inno">
       <h1 className=" font-extrabold lg:text-5xl mb-8 text-center rounded-2xl border-gray-800 border-2 w-[50%] mx-auto p-2">
@@ -135,11 +143,11 @@ export const Table = ({ isShowing, toggle }: any) => {
           <table className="w-full bg-white ">
             <thead>
               <tr className="w-full h-16 border-gray-300 dark:border-gray-200 border-b py-8">
-                <th className="text-gray-600 pr-5 dark:text-gray-400 font-normal  text-center text-sm tracking-normal ">
+                <th className="text-gray-600 pr-4 dark:text-gray-400 font-normal  text-center text-sm tracking-normal ">
                   No.
                 </th>
 
-                <th className="text-gray-600 dark:text-gray-400 font-normal  text-left  text-sm tracking-normal ">
+                <th className="text-gray-600 dark:text-gray-400 font-normal pl-10  text-left  text-sm tracking-normal ">
                   Innovasion Title
                 </th>
                 <th className="text-gray-600 dark:text-gray-400 font-normal  text-center text-sm  tracking-normal leading-4">
@@ -163,56 +171,47 @@ export const Table = ({ isShowing, toggle }: any) => {
             <tbody className="">
               {allInnovation?.map((inno: any, index: number) => {
                 return (
+                  <>
+                  
+                  <ModalInnovation show={openModal} setShow={toggleModal} innovation={detailInnovation}/>
                   <tr
                     className="h-24   border-gray-300 dark:border-gray-200 border-b"
                     key={index}
                   >
-                    <td className="text-xs pr-5 text-center whitespace-no-wrap text-gray-800  tracking-normal leading-4">
+                    
+                    
+
+                    <td className="text-md pr-5 text-center whitespace-no-wrap text-gray-800  tracking-normal leading-4">
                       {index + 1}
                     </td>
                     <td className=" whitespace-pre-line max-w-[100px]">
                       <div className="flex items-center">
-                        <p className=" text-gray-800 ] text-left tracking-normal leading-4 text-xs">
+                        <p className=" text-gray-800 text-left hover:underline hover:cursor-pointer hover:text-blue-500 tracking-normal leading-4 text-md"
+                        onClick={() => showModal(inno)}
+                        >
                           {inno.Title}
+                          
                         </p>
                       </div>
                     </td>
-                    <td className="text-xs whitespace-pre-line max-w-[200px] text-center text-gray-800  tracking-normal leading-4">
+                    <td className="text-md whitespace-pre-line max-w-[200px] text-center text-gray-800  tracking-normal leading-4">
                       {inno.Name}
                     </td>
-                    <td className="text-xs whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
+                    <td className="text-md whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
                       {inno.Program}
                     </td>
-                    <td className="text-xs whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
+                    <td className="text-md whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
                       {inno.Level}
                     </td>{" "}
-                    <td className="text-xs whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
+                    <td className="text-md whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
                       {inno.Medal}
                     </td>
-                    <td className="text-xs whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
+                    <td className="text-md whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
                       {inno.Year}
                     </td>
-                    <td>
-                      <button
-                        className=" bg-blue-500  transition duration-150 ease-in-out hover:bg-indigo-600 rounded text-white px-3 py-0 mx-2 text-md"
-                        onClick={() => toggle()}
-                      >
-                        Edit
-                      </button>
-                      
-                    </td>
-                    <td>
-                      <button
-                        className=" bg-blue-500  transition duration-150 ease-in-out hover:bg-indigo-600 rounded text-white px-6 py-0 mx-2 text-md"
-                        onClick={() => toggle()}
-                      >
-                        Delete
-                      </button>
-                      
-                    </td>
-
                     <div className={`z-[10px] inset-0 `} />
                   </tr>
+                  </>
                 );
               })}
             </tbody>

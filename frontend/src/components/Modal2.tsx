@@ -236,10 +236,10 @@ const Modal2 = (props: Props) => {
                   className={`bg-blue-50 px-3 py-2 rounded-md outline-none  text-black mb-4 w-full ${showEditComp}`}
                 />
 
-                <ol className={`my-5 ${hideEditComp}`}>
+                <ol className={`my-5 ${hideEditComp}`}>Author:
                   {publication?.staff.split("\n").map((staffName: string) => (
                     <li className=" text-sm text-gray-900 dark:text-gray-400 text-center font-normal my-0">
-                      {staffName}
+                    {staffName}
                     </li>
                   ))}
                 </ol>
@@ -265,7 +265,7 @@ const Modal2 = (props: Props) => {
                 >
                   <button className="focus:outline-none transition duration-150 ease-in-out hover:bg-indigo-600 bg-blue-500 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm">
                     <a href={`/assets/${publication?.pdf_url}`} target="_blank">
-                      View Publication
+                      View Details
                     </a>
                   </button>
                 </div>

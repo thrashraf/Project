@@ -34,7 +34,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
     const files = e.dataTransfer.files;
     for (let i = 0; i < files.length; i++) {
       if (validateFile(files[i])) {
-        setFile([ ...files]);
+        setFile((previousFile: any) => ([...previousFile, ...files]));
       }
     }
   };
@@ -171,8 +171,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
 
             <section className="">
               <p className="m-1">Description</p>
-              <input
-                type="text"
+              <textarea
                 value={description.value}
                 onChange={description.onChange}
                 className="bg-blue-100 py-1 rounded-lg w-full"
@@ -233,6 +232,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
             </section>
 
             <Dropzone
+              content={"Drop Front and Backpage"}
               isShowing={showDropzone}
               hide={toggleDropzone}
               fileDrop={fileDrop}
