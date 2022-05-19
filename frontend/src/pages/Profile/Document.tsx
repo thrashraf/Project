@@ -123,13 +123,14 @@ export const Document = () => {
                         {item.status}
                       </td>
                       <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                        10/05/2022
+                        {item.submitOn}
                       </td>
                       <td
                         className={`border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ${
                           tabs === 1 ? 'visible' : 'hidden'
                         }`}
                       >
+                        {console.log(item.images)}
                         <button>
                           <PDFDownloadLink
                             document={
@@ -144,6 +145,9 @@ export const Document = () => {
                                 tentative={item.tentative}
                                 ajk={item.ajk}
                                 staffName={item.owner}
+                                signature={item.signature}
+                                kjSignature={item.kjSignature}
+                                kjName={item.kjName}
                               />
                             }
                             fileName={item.title}

@@ -13,22 +13,25 @@ const api = axios.create();
 api.interceptors.request.use(async (config) => {
   
   const state = store.getState();
-  const expired = state.user.expired
+  const expired = state.user?.expired
 
   
   const currentDate = new Date();
-  // console.log(expired * 1000 < currentDate.getTime());
+  console.log(expired * 1000 < currentDate.getTime());
 
   
-  // console.log(state.user)
+  console.log(state.user)
+  console.log(expired)
 
-    if (expired) {
-
+    if (expired && state.user) {
+      console.log('expired')
+      console.log(expired * 1000 < currentDate.getTime())
       if (expired * 1000 < currentDate.getTime()) {
         
+        console.log('new token')
         const response = await axios.get('/api/user/token');
   
-        //console.log('set New token');
+        console.log('set New token');
   
         if (!config?.headers) {
           throw new Error(`Expected 'config' and 'config.headers' not to be undefined`);
@@ -36,13 +39,17 @@ api.interceptors.request.use(async (config) => {
         config.headers["authorization"] = `Bearer ${response.data.accessToken}`;
   
         const user: any = jwt_decode(response.data.accessToken);
-        //console.log("user", user)
+        console.log("user", user)
 
         store.dispatch(instance(response.data.accessToken));
         console.log(user);
         
       } else {
-        api.defaults.headers.common = {'authorization': `bearer ${state.user.token}`}
+        console.log(state.user.token)
+        if (state.user.token) {
+
+          api.defaults.headers.common = {'authorization': `bearer ${state.user.token}`}
+        }
 
       }
     }

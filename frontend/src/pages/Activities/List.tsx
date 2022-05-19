@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import DropDown from '../../components/Dropdown';
 import useModal from '../../hooks/useModal';
 import generateYears from '../../utils/generateYears';
@@ -11,7 +11,10 @@ type Props = {
   setFilterData: any;
   setFilterItem: any;
   setMonth: any;
-  // setYear: any;
+  filterBy: string;
+  monthFil: any;
+  year: string;
+  setYear: any;
 };
 
 export const List = (props: Props) => {
@@ -32,15 +35,17 @@ export const List = (props: Props) => {
             setIsOpen={toggleFilter}
             setFilterBy={props.setFilterItem}
             navdropArr={filterActivities}
+            filterBy={props.filterBy}
             title='Filter By'
             icon='fa-solid fa-filter mr-3'
           />
           <DropDown
             isOpen={openYear}
             setIsOpen={toggleYear}
-            setFilterBy={props.setFilterItem}
+            setFilterBy={props.setYear}
             navdropArr={years}
-            title='year'
+            filterBy={props.year}
+            title='Year'
             icon='fa-solid fa-calendar mr-3'
           />
 
@@ -49,6 +54,7 @@ export const List = (props: Props) => {
             setIsOpen={toggleMonth}
             setFilterBy={props.setMonth}
             navdropArr={month}
+            filterBy={props.monthFil}
             title='Month'
             icon='fa-solid fa-calendar mr-3'
           />
@@ -76,7 +82,6 @@ export const List = (props: Props) => {
             </div>
           </div>
         </div>
-
         <table
           className='items-center w-full bg-transparent border-collapse text-center '
           ref={tableRef}

@@ -4,10 +4,10 @@ import useModal from '../../hooks/useModal';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   activitiesSelector,
+  editActivitiesHandler,
   editModeHandler,
-  getActivities,
-  getMonthActivities,
-  //resetFile,
+  deleteActivities,
+  deleteActivitiesHandler,
 } from '../../features/activities/Activities';
 import Spinner from '../../components/Spinner/Spinner';
 import useInput from '../../hooks/useInput';
@@ -16,6 +16,8 @@ import { useDispatch } from 'react-redux';
 import Dropzone from '../../components/Dropzone';
 import axios from 'axios';
 import { unitArray } from '../../constant/unitArray';
+import { userSelector } from '../../features/user/User';
+import { Link } from 'react-router-dom';
 
 type Props = {
   showActivity: boolean;
@@ -29,7 +31,10 @@ export const ModalActivities = (props: Props) => {
 
   const dispatch = useDispatch();
 
-  const { detailActivities, editMode } = useAppSelector(activitiesSelector);
+  const { detailActivities, editMode, isSuccess } =
+    useAppSelector(activitiesSelector);
+
+  const { user }: any = useAppSelector(userSelector);
 
   const title = useInput('');
   const start = useInput('');
@@ -56,14 +61,13 @@ export const ModalActivities = (props: Props) => {
   }, [detailActivities, editMode]);
 
   const [file, setFile] = useState<any>([]);
-  const [validFiles, setValidFiles] = useState<any>([]);
 
   const addFile = (e: any) => {
     e.preventDefault();
     const files = e.dataTransfer.files;
     for (let i = 0; i < files.length; i++) {
       if (validateFile(files[i])) {
-        setFile((prevArray: any) => [...prevArray, ...files]);
+        setFile([...files]);
       } else {
         // setStatus('error');
         // setMessage('Not support file type');
@@ -85,33 +89,11 @@ export const ModalActivities = (props: Props) => {
   //to remove file
   const deleteFile = (name: any) => {
     // find the index of the item
-    // remove the item from array
-    const validFileIndex = validFiles.findIndex((e: any) => e.name === name);
-    validFiles.splice(validFileIndex, 1);
     // update validFiles array
-    setValidFiles([...validFiles]);
     const selectedFileIndex = file.findIndex((e: any) => e.name === name);
     file.splice(selectedFileIndex, 1);
     // update selectedFiles array
     setFile([...file]);
-  };
-
-  //to remove duplicate name
-  useEffect(() => {
-    let filteredArray = file.reduce((file: any, current: any) => {
-      const x = file.find((item: any) => item.name === current.name);
-      if (!x) {
-        return file.concat([current]);
-      } else {
-        return file;
-      }
-    }, []);
-    setValidFiles([...filteredArray]);
-  }, [file]);
-
-  const resetFile = () => {
-    setFile([]);
-    setValidFiles([]);
   };
 
   const updateCurrentActivities = () => {
@@ -122,7 +104,7 @@ export const ModalActivities = (props: Props) => {
     formData.append('venue', venue.value);
     formData.append('organizer', organizer.value);
 
-    validFiles.forEach((image: any) => formData.append('upload', image));
+    file.forEach((image: any) => formData.append('upload', image));
 
     isFetching = true;
 
@@ -132,9 +114,19 @@ export const ModalActivities = (props: Props) => {
         if (res.status === 200) {
           console.log('ok');
           isFetching = true;
-          dispatch(getMonthActivities());
-          dispatch(getActivities(''));
 
+          const newActivities = {
+            id: detailActivities.id,
+            title: title.value,
+            start: start.value,
+            organizer: organizer.value,
+            venue: venue.value,
+            banner: res.data.image_url
+              ? res.data.image_url
+              : detailActivities.banner,
+          };
+
+          dispatch(editActivitiesHandler(newActivities));
           //toggle modal
           props.setShowActivity(!props.showActivity);
           //toggle more button
@@ -148,6 +140,13 @@ export const ModalActivities = (props: Props) => {
       });
   };
 
+  const deleteCurrentActivities = () => {
+    if (!detailActivities) return;
+    dispatch(deleteActivities(detailActivities.id));
+    isSuccess && dispatch(deleteActivitiesHandler(detailActivities.id));
+    props.setShowActivity(!props.showActivity);
+  };
+
   return (
     <ModalUser modal={props.showActivity} setModal={props.setShowActivity}>
       {detailActivities && (
@@ -155,16 +154,19 @@ export const ModalActivities = (props: Props) => {
           {/* show when delete and update events */}
           {isFetching && <Spinner />}
           {/* show when delete and update events */}
-
+          {console.log(detailActivities.userId, user.id)}
           <div className='flex flex-col'>
             <section className='relative'>
-              <More
-                isShowing={isShowing}
-                toggle={toggle}
-                id={detailActivities.id}
-                modal={props.showActivity}
-                toggleModal={props.setShowActivity}
-              />
+              {detailActivities.userId === user?.id && (
+                <More
+                  isShowing={isShowing}
+                  toggle={toggle}
+                  id={detailActivities.id}
+                  modal={props.showActivity}
+                  toggleModal={props.setShowActivity}
+                  deleteItem={() => deleteCurrentActivities()}
+                />
+              )}
               <button
                 type='button'
                 onClick={() => props.setShowActivity(!props.showActivity)}
@@ -178,8 +180,8 @@ export const ModalActivities = (props: Props) => {
               <section className='relative'>
                 <img
                   src={
-                    JSON.parse(detailActivities.banner).length > 0
-                      ? `/assets/${JSON.parse(detailActivities.banner)}`
+                    detailActivities.banner
+                      ? `/assets/${detailActivities.banner}`
                       : '/assets/default-placeholder.jpg'
                   }
                   alt={detailActivities.title}
@@ -197,7 +199,7 @@ export const ModalActivities = (props: Props) => {
                   isShowing={showDropzone}
                   hide={toggleDropzone}
                   fileDrop={addFile}
-                  files={validFiles}
+                  files={file}
                   removeFile={deleteFile}
                 />
               </section>
@@ -236,7 +238,7 @@ export const ModalActivities = (props: Props) => {
                     onChange={(e) => title.setInput(e.target.value)}
                     className={`bg-blue-50 px-3 py-2 rounded-md outline-none w-[full text-black ${showEditComp}`}
                   />
-                  <section className='flex justify-between items-center mt-3 h-10'>
+                  <section className='flex justify-between items-center mt-3 h-10 w-full'>
                     <span
                       className={`bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ${hideEditComp}`}
                     >
@@ -252,6 +254,7 @@ export const ModalActivities = (props: Props) => {
                         <option>{item}</option>
                       ))}
                     </select>
+
                     <section>
                       <button
                         className={`hover:bg-black mr-5 text-black px-4 py-2 rounded-lg hover:text-white ${showEditComp}`}
@@ -265,6 +268,19 @@ export const ModalActivities = (props: Props) => {
                       >
                         Save
                       </button>
+                      {new Date().toISOString().slice(0, 10) >=
+                        detailActivities.end && (
+                        <Link to={`/create-report/${detailActivities.id}`}>
+                          <button
+                            className={`items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-500 rounded-lg focus:outline-none focus:ring-blue-300 ${
+                              user ? 'visible' : 'hidden'
+                            } ${hideEditComp}`}
+                          >
+                            Create Report
+                            <i className='ml-2 fa-solid fa-arrow-right-long' />
+                          </button>
+                        </Link>
+                      )}
                     </section>
                   </section>
                 </section>

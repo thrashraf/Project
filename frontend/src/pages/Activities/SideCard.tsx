@@ -2,12 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { activitiesSelector } from '../../features/activities/Activities';
+import { userSelector } from '../../features/user/User';
 
 type Props = {
   activities: any;
 };
 
 export const SideCard = (props: Props) => {
+  const { user }: any = useAppSelector(userSelector);
   const { activitiesMonth }: any = useAppSelector(activitiesSelector);
 
   return (
@@ -33,8 +35,8 @@ export const SideCard = (props: Props) => {
             >
               <img
                 src={
-                  JSON.parse(event.banner).length > 0
-                    ? `/assets/${JSON.parse(event.banner)}`
+                  event.banner
+                    ? `/assets/${event.banner}`
                     : '/assets/default-placeholder.jpg'
                 }
                 alt={event.title}
@@ -57,7 +59,11 @@ export const SideCard = (props: Props) => {
                     </span>
                     {new Date().toISOString().slice(0, 10) >= event.end && (
                       <Link to={`/create-report/${event.id}`}>
-                        <button className=' items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-500 rounded-lg focus:outline-none focus:ring-blue-300  '>
+                        <button
+                          className={`items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-500 rounded-lg focus:outline-none focus:ring-blue-300 ${
+                            user ? 'visible' : 'hidden'
+                          } `}
+                        >
                           Create Report
                           <i className='ml-2 fa-solid fa-arrow-right-long' />
                         </button>

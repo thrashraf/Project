@@ -8,7 +8,7 @@ export const verifytoken = (req, res, next) => {
 
   const token = authHeader && authHeader.split(" ")[1];
 
-  console.log('token: hehe' + authHeader)
+  console.log('token: ' + authHeader)
 
   if (token === null) return res.sendStatus(401);
 

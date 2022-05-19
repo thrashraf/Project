@@ -9,6 +9,8 @@ import {
   userSelector,
   updateProfile,
   refreshUser,
+  updateSignature,
+  toggleEditSignature,
 } from '../../features/user/User';
 
 type Props = {
@@ -100,7 +102,8 @@ const SignatureModal = (props: Props) => {
       .post('/api/user/uploadSignature', formData)
       .then((res: any) => {
         if (res.status === 200) {
-          dispatch(refreshUser());
+          dispatch(updateSignature(res.data.signature));
+          dispatch(toggleEditSignature());
           props.toggle();
         }
       })

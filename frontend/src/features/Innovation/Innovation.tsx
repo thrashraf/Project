@@ -1,53 +1,124 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { RootState } from '../../app/Store';
-import api from '../../utils/api';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import { RootState } from "../../app/Store";
 
 interface interfaceState {
   [key: string]: any;
 }
 
 const initialState: interfaceState = {
-  allPublication: null,
+  allInnovation: null,
+  tempInnovation: null,
   isFetching: false,
   isSuccess: false,
   isError: false,
-  errorMessage: '',
+  errorMessage: "",
+
+  //for filter user's search
+  query: "",
+
+  //for user's search features
+  //? - this to show filer (by default it's false)
+  showFilter: false,
+  //? - this to filter the array data
+  filterData: [],
 };
 
 export const innovationSlice = createSlice({
-  name: 'Report',
+  name: "Report",
   initialState,
-  reducers: {},
+  reducers: {
+    addInnovationHandler: (state, action) => {
+      state.allInnovation = [...state.allInnovation, action.payload]
+    },
+    // filter reducers //
+    handleFilter: (state: any, action: any) => {
+      console.log(action.payload);
+
+      const searchWord = action.payload;
+      state.query = searchWord;
+
+      const newFilter = state.allInnovation.filter((value: any) =>
+        value.Title.toLowerCase().includes(searchWord.toLowerCase())
+      );
+
+      console.log(newFilter)
+
+      if (searchWord !== "") {
+        state.filterData = newFilter;
+        state.showFilter = true;
+      } else {
+        state.filterData = [];
+        state.showFilter = !state.showFilter;
+      }
+    },
+
+    setFilterInnovation: (state: any, action: any) => {
+      state.allInnovation = action.payload;
+    },
+
+    setFilterHandler: (state: any, action: any) => {
+      state.query = action.payload;
+      state.showFilter = !state.showFilter;
+    },
+
+    setViewHandler: (state: any, action: any) => {
+      state.view = action.payload;
+    },
+  },
+  extraReducers: (builder: any) => {
+    builder.addCase(getInnovation.fulfilled, (state: any, { payload }: any) => {
+      state.isFetching = false;
+      state.isSuccess = true;
+      state.allInnovation = payload;
+      state.tempInnovation = payload;
+    });
+    builder.addCase(getInnovation.pending, (state: any) => {
+      state.isFetching = true;
+    });
+    builder.addCase(getInnovation.rejected, (state: any, { payload }: any) => {
+      state.isFetching = false;
+      state.isError = true;
+      state.errorMessage = payload.message;
+    });
+  },
 });
 
-// export const getAllUser = createAsyncThunk(
-//     "/api/admin/getAllUser",
-//     async ( _, thunkAPI) => {
-//       try {
+export const getInnovation = createAsyncThunk(
+  "Innovation/getAllInnovation",
+  async (query: any, thunkAPI) => {
+    try {
+      const response = await axios.get(`/api/inno/getAllInno?q=${query}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      let data = await response.data;
 
-//           const response = await api.get("/api/user/getAllUser", {
-//           method: "GET",
-//           headers: {
-//             Accept: "application/json",
-//             "Content-Type": "application/json",
+      if (response.status === 200) {
+        console.log(data, response);
+        return data;
+      } else {
+        return thunkAPI.rejectWithValue(data);
+      }
+    } catch (e: any) {
+      console.log(e);
+      console.log("Error", e.response.data);
+      return thunkAPI.rejectWithValue(e.response.data);
+    }
+  }
+);
+export const {
 
-//           },
-//         });
-//         let data = await response.data;
-
-//         if (response.status === 200) {
-//           console.log(data, response);
-//           return data;
-//         } else {
-//           return thunkAPI.rejectWithValue(data);
-//         }
-//       } catch (e: any) {
-//         console.log(e);
-//         console.log("Error", e.response.data);
-//         return thunkAPI.rejectWithValue(e.response.data);
-//       }
-//     }
-//   );
-
-export const reportSelector = (state: RootState) => state.user;
+  addInnovationHandler,
+  handleFilter,
+  setFilterHandler,
+  setViewHandler,
+  setFilterInnovation
+  // filterFile,
+  // resetFile,
+} = innovationSlice.actions;
+export const innovationSelector = (state: RootState) => state.innovation;
 export default innovationSlice.reducer;

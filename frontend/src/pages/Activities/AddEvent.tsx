@@ -6,12 +6,10 @@ import useModal from '../../hooks/useModal';
 import Toast from '../../components/Toast';
 import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import {
-  getActivities,
-  getMonthActivities,
-} from '../../features/activities/Activities';
+import { addNewActivities } from '../../features/activities/Activities';
 import { userSelector } from '../../features/user/User';
 import { unitArray } from '../../constant/unitArray';
+import { organizerArray } from '../../constant/organizerArray';
 
 type Props = {
   isShowing: boolean;
@@ -28,6 +26,8 @@ const AddEvent = (props: Props) => {
   const endEvent = useInput('');
   const organizer = useInput('');
   const venue = useInput('');
+  const selectOrganizer = useInput('');
+  const selectVenue = useInput('');
 
   //for toast
   const [status, setStatus] = useState<string>('');
@@ -39,14 +39,13 @@ const AddEvent = (props: Props) => {
   const { isShowing, toggle } = useModal();
 
   const [file, setFile] = useState<any>([]);
-  const [validFiles, setValidFiles] = useState<any>([]);
 
   const addFile = (e: any) => {
     e.preventDefault();
     const files = e.dataTransfer.files;
     for (let i = 0; i < files.length; i++) {
       if (validateFile(files[i])) {
-        setFile((prevArray: any) => [...prevArray, ...files]);
+        setFile([...files]);
       } else {
         // setStatus('error');
         // setMessage('Not support file type');
@@ -69,38 +68,43 @@ const AddEvent = (props: Props) => {
   const deleteFile = (name: any) => {
     // find the index of the item
     // remove the item from array
-    const validFileIndex = validFiles.findIndex((e: any) => e.name === name);
-    validFiles.splice(validFileIndex, 1);
-    // update validFiles array
-    setValidFiles([...validFiles]);
     const selectedFileIndex = file.findIndex((e: any) => e.name === name);
     file.splice(selectedFileIndex, 1);
     // update selectedFiles array
     setFile([...file]);
   };
 
-  //to remove duplicate name
-  useEffect(() => {
-    let filteredArray = file.reduce((file: any, current: any) => {
-      const x = file.find((item: any) => item.name === current.name);
-      if (!x) {
-        return file.concat([current]);
-      } else {
-        return file;
-      }
-    }, []);
-    setValidFiles([...filteredArray]);
-  }, [file]);
-
   const resetFile = () => {
     setFile([]);
-    setValidFiles([]);
   };
 
   const formHandler = (e: any) => {
-    if (organizer.value === 'select' || organizer.value === '') {
+    if (
+      organizer.value === 'select' ||
+      (organizer.value === 'Others' && selectOrganizer.value.length <= 0)
+    ) {
       toastRef.current.showToast();
       setMessage('Please select organizer!');
+      e.preventDefault();
+      return;
+    }
+
+    if (
+      venue.value === 'select' ||
+      (venue.value === 'Others' && selectVenue.value.length <= 0)
+    ) {
+      toastRef.current.showToast();
+      setMessage('Please select venue!');
+      e.preventDefault();
+      return;
+    }
+
+    if (
+      new Date(startEvent.value) < new Date() ||
+      new Date(endEvent.value) < new Date()
+    ) {
+      toastRef.current.showToast();
+      setMessage('Cannot create past date event ');
       e.preventDefault();
       return;
     }
@@ -112,30 +116,40 @@ const AddEvent = (props: Props) => {
     formData.append('title', title.value);
     formData.append('start', startEvent.value);
     formData.append('end', endEvent.value);
-    formData.append('venue', venue.value);
-    formData.append('organizer', organizer.value);
+    formData.append(
+      'venue',
+      venue.value !== 'Others' ? venue.value : selectVenue.value
+    );
+    formData.append(
+      'organizer',
+      organizer.value !== 'Others' ? organizer.value : selectOrganizer.value
+    );
     formData.append('username', user?.name);
     formData.append('email', user?.email);
-    validFiles.forEach((image: any) => formData.append('upload', image));
+    formData.append('userId', user?.id);
+    file.forEach((image: any) => formData.append('upload', image));
+    e.preventDefault();
 
     axios
       .post('/api/activities/createActivities', formData)
       .then((res: any) => {
         if (res.status === 200) {
           const newActivities = {
+            id: res.data.id,
             title: title.value,
             start: startEvent.value,
             end: endEvent.value,
-            organizer: organizer.value,
-            venue: venue.value,
-            img_url: JSON.stringify(validFiles),
+            organizer:
+              organizer.value !== 'Others'
+                ? organizer.value
+                : selectOrganizer.value,
+            venue: venue.value !== 'Others' ? venue.value : selectVenue.value,
+            banner: res.data.image_url,
+            userId: user.id,
           };
 
-          console.log(newActivities);
-
+          dispatch(addNewActivities(newActivities));
           props.toggle();
-          dispatch(getActivities(''));
-          dispatch(getMonthActivities());
         }
       })
       .catch((err: any) => {
@@ -200,20 +214,14 @@ const AddEvent = (props: Props) => {
                 Organizer
                 <span className='text-red-500'>*</span>
               </p>
-              {/* <input
-                type='text'
-                value={organizer.value}
-                required
-                onChange={organizer.onChange}
-                className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
-              /> */}
+
               <select
                 className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
                 onChange={organizer.onChange}
                 value={organizer.value}
               >
-                {unitArray?.map((item: any) => (
-                  <option>{item}</option>
+                {unitArray?.map((item: any, index: number) => (
+                  <option key={index}>{item}</option>
                 ))}
               </select>
             </section>
@@ -222,15 +230,48 @@ const AddEvent = (props: Props) => {
                 Venue
                 <span className='text-red-500'>*</span>
               </p>
+              <select
+                className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
+                onChange={venue.onChange}
+                value={venue.value}
+              >
+                {organizerArray?.map((item: any, index: number) => (
+                  <option key={index}>{item}</option>
+                ))}
+              </select>
+            </section>
+            <section
+              className={`${
+                organizer.value === 'Others' ? 'visible' : 'hidden'
+              }`}
+            >
+              <p className='my-1 text-sm text-gray-400 ml-1'>
+                Others Organizer
+                <span className='text-red-500'>*</span>
+              </p>
               <input
                 type='text'
-                value={venue.value}
-                onChange={venue.onChange}
-                required
+                value={selectOrganizer.value}
+                onChange={selectOrganizer.onChange}
+                className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
+              />
+            </section>
+            <section
+              className={`${venue.value === 'Others' ? 'visible' : 'hidden'}`}
+            >
+              <p className='my-1 text-sm text-gray-400 ml-1'>
+                Others Venue
+                <span className='text-red-500'>*</span>
+              </p>
+              <input
+                type='text'
+                value={selectVenue.value}
+                onChange={selectVenue.onChange}
                 className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
               />
             </section>
           </div>
+
           <section className='my-5'>
             <section
               className='mt-5 flex  w-[200px] items-center cursor-pointer 
@@ -259,7 +300,7 @@ const AddEvent = (props: Props) => {
             isShowing={isShowing}
             hide={toggle}
             fileDrop={addFile}
-            files={validFiles}
+            files={file}
             removeFile={deleteFile}
           />
         </form>

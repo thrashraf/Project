@@ -1,0 +1,1 @@
+export const medal = ['Medal', 'Gold', 'Silver', 'Bronze']

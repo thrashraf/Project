@@ -2,28 +2,34 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import {
   deleteActivitiesHandler,
-  deleteActivities,
   editModeHandler,
 } from '../features/activities/Activities';
 import { activitiesSelector } from '../features/activities/Activities';
 
-const More = ({ isShowing, toggle, toggleModal, modal, id }: any) => {
+const More = ({
+  isShowing,
+  toggle,
+  toggleModal,
+  modal,
+  id,
+  editHandler,
+  deleteItem,
+}: any) => {
   const dispatch = useAppDispatch();
 
   const { isSuccess } = useAppSelector(activitiesSelector);
 
   const deleteEvents = () => {
-    dispatch(deleteActivities(id));
-    toggle();
-    toggleModal(!modal);
-
-    isSuccess && dispatch(deleteActivitiesHandler(id));
+    // dispatch(deleteActivities(id));
+    deleteItem();
   };
 
   const edit = () => {
     console.log('lol');
     dispatch(editModeHandler());
   };
+
+  console.log(isShowing);
 
   return (
     <>
@@ -36,7 +42,7 @@ const More = ({ isShowing, toggle, toggleModal, modal, id }: any) => {
 
       {/* navdrop */}
       {isShowing && (
-        <section className='bg-white absolute -left-32 w-[120px]'>
+        <section className='bg-slate-50 absolute -left-32 w-[120px] z-50'>
           <ul>
             <li
               className='cursor-pointer hover:bg-slate-200 py-1 px-5'
@@ -46,7 +52,7 @@ const More = ({ isShowing, toggle, toggleModal, modal, id }: any) => {
             </li>
             <li
               className='cursor-pointer hover:bg-slate-200 py-1 px-5'
-              onClick={deleteEvents}
+              onClick={() => deleteEvents()}
             >
               Delete
             </li>
