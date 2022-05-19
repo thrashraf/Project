@@ -19,7 +19,7 @@ export default function Events() {
 
   useEffect(() => {
     const fetch = async () => {
-      const data = await axios.get(`/api/activities/getAllActivities?q=${''}`);
+      const data = await api.get(`/api/activities/getAllActivities?q=${''}`);
       setEvents([...data.data]);
     };
     fetch();

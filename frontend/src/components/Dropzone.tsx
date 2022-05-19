@@ -1,9 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from './ModalContainer';
 import fileSize from '../utils/calculateImageSize';
 
 const Dropzone = ({ isShowing, hide, ...props }: any) => {
   const [dropZoneActive, setDropZoneActive] = useState<boolean>(false);
+
+  const [validFiles, setValidFiles] = useState<any>([]);
+
+  useEffect(() => {
+    let filteredArray = props.files.reduce((file: any, current: any) => {
+      const x = file.find((item: any) => item.name === current.name);
+      if (!x) {
+        return file.concat([current]);
+      } else {
+        return file;
+      }
+    }, []);
+    setValidFiles([...filteredArray]);
+  }, [props.files]);
 
   return (
     <Modal isShowing={isShowing} hide={hide}>
@@ -31,19 +45,23 @@ const Dropzone = ({ isShowing, hide, ...props }: any) => {
             setDropZoneActive(false);
             e.preventDefault();
           }}
-          onDrop={(e) => props.fileDrop(e)}
+          onDrop={(e) => {
+            props.fileDrop(e);
+          }}
         >
           <i className='fa-solid fa-images fa-5x mb-5' />
           Drop image
+          <p>only accept PNG/JPG/JPEG</p>
         </div>
 
         <div className='my-5'>
-          {props.files.length >= 1 &&
-            props.files?.map((data: any, i: number) => (
+          {validFiles.length >= 1 &&
+            validFiles?.map((data: any, i: number) => (
               <div
                 className='flex justify-between py-2 px-5 mb-2 bg-slate-200 items-center text-sm rounded-md'
                 key={i}
               >
+                {console.log(props.files)}
                 <div className='flex '>
                   <span className={`mr-3 ${data.invalid ? 'file-error' : ''}`}>
                     {data.name}

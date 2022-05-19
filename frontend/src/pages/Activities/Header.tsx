@@ -38,7 +38,7 @@ export const Header = (props: Props) => {
             </span>
             <input
               type='text'
-              placeholder='search by title, date, venue or organizer'
+              placeholder='search by title and organizer'
               className='text-lg px-4 py-2 bg-white rounded-t-lg rounded-b-lg  w-[400px] focus:outline-none'
               onChange={(e) => dispatch(handleFilter(e.target.value))}
               value={query}

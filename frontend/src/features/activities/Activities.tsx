@@ -46,6 +46,8 @@ const initialState: interfaceState = {
   validFiles: [],
   isUploadError: false,
   uploadErrorMessage: '',
+
+  listActivities: null,
 };
 
 export const activitiesSlice = createSlice({
@@ -136,7 +138,7 @@ export const activitiesSlice = createSlice({
       state.isFetching = false;
       state.isSuccess = true;
       //sort activities: any
-      state.activities = payload.sort(
+      state.activities = payload?.sort(
         (start: any, end: any) =>
           (new Date(start.end) as any) - (new Date(end.end) as any)
       );
@@ -171,22 +173,22 @@ export const activitiesSlice = createSlice({
 
     // ? delete activities
     builder.addCase(deleteActivities.fulfilled, (state) => {
-      state.isFetching = false;
       state.isSuccess = true;
+      state.isFetching = false;
     });
     builder.addCase(deleteActivities.pending, (state) => {
       state.isFetching = true;
+      state.isSuccess = false;
     });
-    builder.addCase(deleteActivities.rejected, (state, { payload }: any) => {
+    builder.addCase(deleteActivities.rejected, (state) => {
       state.isFetching = false;
       state.isError = true;
-      state.errorMessage = payload.message;
     });
   },
 });
 
 export const getActivities = createAsyncThunk(
-  '/api/admin/getAllUser',
+  'activities/getAllUser',
   async (query: any, thunkAPI) => {
     try {
       const response = await api.get(
@@ -216,7 +218,7 @@ export const getActivities = createAsyncThunk(
 );
 
 export const getMonthActivities = createAsyncThunk(
-  '/api/admin/getMonthActivities',
+  'activities/getMonthActivities',
   async (_, thunkAPI) => {
     try {
       const response = await api.get(`/api/activities/getAllActivities?q=`, {
@@ -243,7 +245,7 @@ export const getMonthActivities = createAsyncThunk(
 );
 
 export const deleteActivities = createAsyncThunk(
-  '/api/admin/deleteActivities',
+  'activities/deleteActivities',
   async (id: string, thunkAPI) => {
     try {
       const response = await api.delete(

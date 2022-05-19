@@ -3,6 +3,8 @@ import { Input } from '../../components/Input';
 import { Image } from '../../icons/Image';
 import Toast from '../../components/Toast';
 import { unitArray } from '../../constant/unitArray';
+import Dropzone from '../../components/Dropzone';
+import useModal from '../../hooks/useModal';
 
 type Props = {
   title: string;
@@ -35,11 +37,17 @@ type Props = {
   contentHandler: (e: any) => void;
   uploadFile: () => void;
   uploadRef: any;
-  fileSelectorHandler: (e: any) => void;
+
+  files: any;
+  validFiles: any;
+  fileDrop: any;
+  removeFile: any;
 };
 
 export const Sidebar = (props: Props) => {
   const toastRef = useRef<any>(null);
+
+  const { isShowing, toggle } = useModal();
 
   const userAuthHandler = () => {
     if (
@@ -102,8 +110,8 @@ export const Sidebar = (props: Props) => {
               onChange={(e) => props.setOrganizer(e.target.value)}
               value={props.organizer}
             >
-              {unitArray?.map((item: any) => (
-                <option>{item}</option>
+              {unitArray?.map((item: any, index: number) => (
+                <option key={index}>{item}</option>
               ))}
             </select>
           </div>
@@ -124,37 +132,30 @@ export const Sidebar = (props: Props) => {
           </div>
 
           <section
-            className='mt-5 flex items-center text-blue-400 cursor-pointer 
-              
+            className='mt-5 flex  w-[200px] items-center cursor-pointer 
+              text-slate-400 hover:text-blue-500
             '
-            onClick={props.uploadFile}
+            onClick={toggle}
           >
-            <div className='px-3 py-2 rounded-md bg-blue-50'>
-              <Image />
+            <div className='p-5 rounded-md bg-blue-50 '>
+              <i className='fa-solid fa-images fa-2xl'></i>
             </div>
-            <p className='ml-5 '>Upload Images</p>
-            <input
-              type='file'
-              accept='image/*'
-              multiple={true}
-              name='upload'
-              id='upload'
-              className='hidden'
-              ref={props.uploadRef}
-              onChange={(e) => props.fileSelectorHandler(e)}
-            />
+            <p className='ml-5 text-sm'>Upload Images</p>
           </section>
         </section>
 
         <section className='w-full my-5'>
           <p className='my-1 text-sm text-gray-400 ml-1'>
-            Content <span className='text-red-500'>*</span>
+            Content{' '}
+            <span className='text-slate-400 text-xs'>(max 860 words) </span>
+            <span className='text-red-500'>*</span>
           </p>
           <textarea
             cols={30}
             rows={13}
             value={props.content}
             required
+            maxLength={6000}
             onChange={props.contentHandler}
             onKeyPress={props.contentHandler}
             className='bg-blue-50 px-3 py-3 rounded-lg outline-none w-full resize-none'
@@ -252,9 +253,16 @@ export const Sidebar = (props: Props) => {
             className='mt-10 w-full bg-blue-500 text-white px-3 py-2 rounded-lg transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 hover:bg-blue-400 cursor-pointer mx-5'
             onClick={userAuthHandler}
           >
-            Verify
+            Submit
           </button>
         </div>
+        <Dropzone
+          isShowing={isShowing}
+          hide={toggle}
+          fileDrop={props.fileDrop}
+          files={props.files}
+          removeFile={props.removeFile}
+        />
       </div>
     </section>
   );

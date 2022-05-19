@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import DropDown from '../../components/Dropdown';
 import useModal from '../../hooks/useModal';
 import generateYears from '../../utils/generateYears';
@@ -82,7 +82,6 @@ export const List = (props: Props) => {
             </div>
           </div>
         </div>
-
         <table
           className='items-center w-full bg-transparent border-collapse text-center '
           ref={tableRef}

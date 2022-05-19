@@ -1,0 +1,1 @@
+export const organizerArray = ['select','Dewan Kuliah', 'Bilik Mensyuarat Utama', 'Dewan Kuliah Utama', 'Others']

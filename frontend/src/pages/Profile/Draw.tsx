@@ -2,7 +2,12 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import ModalUser from '../../components/ModalUser';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { userSelector, refreshUser } from '../../features/user/User';
+import {
+  userSelector,
+  refreshUser,
+  updateSignature,
+  toggleEditSignature,
+} from '../../features/user/User';
 import { useDispatch } from 'react-redux';
 
 type Props = {
@@ -88,7 +93,9 @@ const Draw = (props: Props) => {
       axios
         .post('/api/user/uploadSignature', formData)
         .then((res) => {
-          dispatch(refreshUser());
+          props.setModal(!props.modal);
+          dispatch(updateSignature(res.data.signature));
+          dispatch(toggleEditSignature());
         })
         .catch((err) => {
           console.log(err);

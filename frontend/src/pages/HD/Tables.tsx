@@ -29,6 +29,7 @@ export default function Tables() {
   const [message, setMessage] = useState<string>('');
 
   const toastStatus = useInput('');
+  const toastMessage = useInput('');
   const toastRef = useRef<any>(null);
 
   const status = useInput('');
@@ -43,8 +44,16 @@ export default function Tables() {
   }, [user]);
 
   const verifyReport = (status: string, id: any) => {
-    axios
-      .post('/api/activities/verifyReport', { status, report, message })
+    const kjSignature = user.signature;
+    const kjName = user.name;
+    api
+      .post('/api/activities/verifyReport', {
+        status,
+        report,
+        message,
+        kjSignature,
+        kjName,
+      })
       .then((res) => {
         //console.log(res);
         const id = report.id;
@@ -53,6 +62,7 @@ export default function Tables() {
         tempArr[index].status = status;
 
         //clear message
+        toastMessage.setInput('Successful send notification to user!');
         toastStatus.setInput('success');
         setAllReport(tempArr);
         toastHandler();
@@ -71,14 +81,12 @@ export default function Tables() {
 
   useEffect(() => {
     const fetch = async () => {
-      const data = await axios.get(`/api/activities/getAllActivities?q=${''}`);
-      const verifyReportActivities = data.data.filter(
-        (report: any) => report.status === 'pending'
-      );
-      setAllReport([...verifyReportActivities]);
+      const data = await api.get(`/api/activities/getAllActivities?q=${''}`);
+      const report = data.data.filter((item: any) => item.content);
+      setAllReport([...report]);
     };
     fetch();
-  }, [allReport]);
+  }, []);
 
   const authHandler = async (e: any) => {
     e.preventDefault();
@@ -92,7 +100,7 @@ export default function Tables() {
         verifyReport(status.value, report);
       })
       .catch((err) => {
-        setMessage('Invalid Password');
+        toastMessage.setInput('Invalid Password');
         toastStatus.setInput('error');
         toastHandler();
       });
@@ -103,7 +111,7 @@ export default function Tables() {
     <>
       <Toast
         status={toastStatus.value}
-        message={'Successful send notification to user!'}
+        message={toastMessage.value}
         ref={toastRef}
       />
 

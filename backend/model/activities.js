@@ -15,10 +15,11 @@ class activities {
     venue,
     image,
     username,
-    email
+    email,
+    userId
   ) {
     const sql = `INSERT INTO
-                activities (id, title, start, end, organizer, venue, banner, username, email)
+                activities (id, title, start, end, organizer, venue, banner, username, email, userId)
             VALUES 
             (
                 '${id}',
@@ -29,8 +30,8 @@ class activities {
                 '${venue}',
                 '${image}',
                 '${username}',
-                '${email}'
-
+                '${email}',
+                '${userId}'
             )`;
     return db.execute(sql);
   }
@@ -40,7 +41,23 @@ class activities {
     return db.execute(sql);
   }
 
-  static async updateActivitiesById(
+  static async updateActivities(
+    id,
+    title,
+    start,
+    organizer,
+    venue,
+    prevImages
+  ) {
+    const sql = `UPDATE activities SET title = '${title}',
+        start = '${start}',
+        organizer = '${organizer}',
+        venue = '${venue}',
+        where id = '${id}'`;
+    return db.execute(sql);
+  }
+
+  static async updateActivitiesWithImage(
     id,
     title,
     start,
@@ -57,9 +74,7 @@ class activities {
     return db.execute(sql);
   }
 
-  static async getActivitiesById(
-    id
-  ) {
+  static async getActivitiesById(id) {
     const sql = `SELECT * FROM activities where id = '${id}'`;
     return db.execute(sql);
   }
@@ -85,15 +100,37 @@ class activities {
                 committee = '[${ajk}]',
                 status = 'pending',
                 signature = '${signature}' where id = '${id}'`;
-    console.log(sql)
+    console.log(sql);
     return db.execute(sql);
   }
 
-  static async updateStatus(
+  static async createReportWithoutImages(
+    submitOn,
+    userId,
+    owner,
+    prevImages,
     id,
-    status
+    content,
+    tentative,
+    ajk,
+    signature
   ) {
-    const sql = `UPDATE activities SET status = '${status}' where id = '${id}'`;
+    const sql = `update activities SET 
+                  submitOn = '${submitOn}',
+                  userId = '${userId}',
+                  owner = '${owner}', 
+                  images = '${JSON.stringify(prevImages)}',
+                  content = '${content}',
+                  tentative = '[${tentative}]',
+                  committee = '[${ajk}]',
+                  status = 'pending',
+                  signature = '${signature}' where id = '${id}'`;
+    console.log(sql);
+    return db.execute(sql);
+  }
+
+  static async updateStatus(id, status, signature, kjName) {
+    const sql = `UPDATE activities SET status = '${status}', kjSignature = '${signature}', kjName = '${kjName}' where id = '${id}'`;
     return db.execute(sql);
   }
 }

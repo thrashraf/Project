@@ -8,6 +8,7 @@ import Sidebar from '../../components/Sidebar/Sidebar';
 import HeaderStats from '../../components/Headers/HeaderStats';
 import FooterAdmin from '../../components/Footers/FooterAdmin';
 import Middleware from '../../middleware/Middleware';
+import { hdSidebar } from '../../constant/hdSidebar';
 // views
 
 import Dashboard from './Dashboard';
@@ -17,7 +18,7 @@ import Events from './Events';
 export default function KJ() {
   return (
     <>
-      <Sidebar />
+      <Sidebar sidebar={hdSidebar} />
       <div className='relative md:ml-64 bg-blueGray-100 h-full '>
         <AdminNavbar />
         {/* Header */}
@@ -27,7 +28,7 @@ export default function KJ() {
             <Route element={<Middleware />}>
               <Route index element={<Dashboard />} />
               <Route path='dashboard' element={<Dashboard />} />
-              <Route path='tables' element={<Tables />} />
+              <Route path='report' element={<Tables />} />
               <Route path='events' element={<Events />} />
             </Route>
           </Routes>
