@@ -18,6 +18,7 @@ const initialState = () => ({
   errorMessage: '',
   redirect: '',
   expired: null,
+  editSignature: false,
 });
 
 export const userSlice = createSlice({
@@ -39,6 +40,12 @@ export const userSlice = createSlice({
     updateProfile: (state: any, action: { payload: any }) => {
       state.user = { ...state.user, profile_picture: action.payload };
     },
+    updateSignature: (state: any, action: { payload: any }) => {
+      state.user.signature = action.payload;
+    },
+    toggleEditSignature: (state: any) => {
+      state.editSignature = !state.editSignature;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(signupUser.fulfilled, (state, { payload }: any) => {
@@ -54,10 +61,13 @@ export const userSlice = createSlice({
       state.errorMessage = payload.message;
     });
     builder.addCase(loginUser.fulfilled, (state, { payload }: any) => {
+      const user: any = jwt_decode(payload.accessToken);
+
       state.isFetching = false;
       state.isSuccess = true;
       state.redirect = payload.route;
       state.user = jwt_decode(payload.accessToken);
+      state.expired = user.exp;
       state.token = payload.accessToken;
       localStorage.setItem('isAuth', 'true');
     });
@@ -221,7 +231,14 @@ export const updateUserInformation = createAsyncThunk(
   }
 );
 
-export const { login, logout, clearState, instance, updateProfile } =
-  userSlice.actions;
+export const {
+  login,
+  logout,
+  clearState,
+  instance,
+  updateProfile,
+  updateSignature,
+  toggleEditSignature,
+} = userSlice.actions;
 export const userSelector = (state: RootState) => state.user;
 export default userSlice.reducer;

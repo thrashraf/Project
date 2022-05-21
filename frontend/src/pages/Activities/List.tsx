@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import DropDown from '../../components/Dropdown';
 import useModal from '../../hooks/useModal';
 import generateYears from '../../utils/generateYears';
@@ -8,7 +8,6 @@ import ReactToPrint from 'react-to-print';
 
 type Props = {
   activities: any;
-  setFilterData: any;
   setFilterItem: any;
   setMonth: any;
   filterBy: string;
@@ -63,7 +62,7 @@ export const List = (props: Props) => {
         <ReactToPrint
           trigger={() => {
             return (
-              <button className='text-white bg-orange-500 font-medium hover:bg-slate-100 hover:text-black px-3 py-2 rounded-md'>
+              <button className='text-white bg-orange-500 z-10 font-medium hover:bg-slate-100 hover:text-black px-3 py-2 rounded-md'>
                 <i className='fa-solid fa-print mr-3' />
                 Print
               </button>
@@ -82,7 +81,6 @@ export const List = (props: Props) => {
             </div>
           </div>
         </div>
-
         <table
           className='items-center w-full bg-transparent border-collapse text-center '
           ref={tableRef}
@@ -101,7 +99,7 @@ export const List = (props: Props) => {
             </tr>
           </thead>
           <tbody className='shadow-md last:rounded-b-lg'>
-            {props.activities.map((item: any, index: number) => (
+            {props.activities?.map((item: any, index: number) => (
               <tr key={index}>
                 <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
                   <span className='font-bold uppercase text-blue-500 hover:underline cursor-pointer'>

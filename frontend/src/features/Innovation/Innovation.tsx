@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { RootState } from "../../app/Store";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
+import { RootState } from '../../app/Store';
 
 interface interfaceState {
   [key: string]: any;
@@ -12,10 +12,10 @@ const initialState: interfaceState = {
   isFetching: false,
   isSuccess: false,
   isError: false,
-  errorMessage: "",
+  errorMessage: '',
 
   //for filter user's search
-  query: "",
+  query: '',
 
   //for user's search features
   //? - this to show filer (by default it's false)
@@ -25,11 +25,11 @@ const initialState: interfaceState = {
 };
 
 export const innovationSlice = createSlice({
-  name: "Report",
+  name: 'Report',
   initialState,
   reducers: {
-    addInnovationHandler: (state, action) => {
-      state.allInnovation = [...state.allInnovation, action.payload]
+    addInnovationHandler: (state: any, action: any) => {
+      state.allInnovation = [...state.allInnovation, action.payload];
     },
     // filter reducers //
     handleFilter: (state: any, action: any) => {
@@ -42,9 +42,9 @@ export const innovationSlice = createSlice({
         value.Title.toLowerCase().includes(searchWord.toLowerCase())
       );
 
-      console.log(newFilter)
+      console.log(newFilter);
 
-      if (searchWord !== "") {
+      if (searchWord !== '') {
         state.filterData = newFilter;
         state.showFilter = true;
       } else {
@@ -64,6 +64,23 @@ export const innovationSlice = createSlice({
 
     setViewHandler: (state: any, action: any) => {
       state.view = action.payload;
+    },
+
+    editInnovationHandler: (state: any, action: any) => {
+      const index = state.allInnovation.findIndex(
+        (innovation: any) => innovation.id === action.payload.id
+      );
+
+      console.log(index);
+
+      state.allInnovation[index] = action.payload;
+    },
+
+    deleteInnovationHandler: (state: any, action: any) => {
+      const index = state.allInnovation.findIndex(
+        (publication: any) => publication.id === action.payload
+      );
+      state.allInnovation.splice(index, 1);
     },
   },
   extraReducers: (builder: any) => {
@@ -85,14 +102,14 @@ export const innovationSlice = createSlice({
 });
 
 export const getInnovation = createAsyncThunk(
-  "Innovation/getAllInnovation",
+  'Innovation/getAllInnovation',
   async (query: any, thunkAPI) => {
     try {
       const response = await axios.get(`/api/inno/getAllInno?q=${query}`, {
-        method: "GET",
+        method: 'GET',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
       });
       let data = await response.data;
@@ -105,18 +122,19 @@ export const getInnovation = createAsyncThunk(
       }
     } catch (e: any) {
       console.log(e);
-      console.log("Error", e.response.data);
+      console.log('Error', e.response.data);
       return thunkAPI.rejectWithValue(e.response.data);
     }
   }
 );
 export const {
-
   addInnovationHandler,
   handleFilter,
   setFilterHandler,
   setViewHandler,
-  setFilterInnovation
+  setFilterInnovation,
+  editInnovationHandler,
+  deleteInnovationHandler,
   // filterFile,
   // resetFile,
 } = innovationSlice.actions;

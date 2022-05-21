@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { DynamicInput } from '../../components/DynamicInput';
 import useInput from '../../hooks/useInput';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { userSelector, updateUserInformation } from '../../features/user/User';
+import {
+  userSelector,
+  updateUserInformation,
+  toggleEditSignature,
+} from '../../features/user/User';
 import Draw from './Draw';
 import Notify from '../../components/Notify';
 import useModal from '../../hooks/useModal';
@@ -15,7 +19,7 @@ type Props = {};
 export const Information = (props: Props) => {
   const [editMode, setEditMode] = useState<boolean>(true);
 
-  const { user }: any = useAppSelector(userSelector);
+  const { user, editSignature }: any = useAppSelector(userSelector);
   const dispatch = useAppDispatch();
 
   const name = useInput('');
@@ -26,6 +30,7 @@ export const Information = (props: Props) => {
   // const { isShowing: showUploadSignature, toggle: toggleUploadSignature } =
   //   useModal();
   const { isShowing, toggle } = useModal();
+
   const { isShowing: showSignatureModal, toggle: toggleSignature }: any =
     useModal();
 
@@ -150,7 +155,13 @@ export const Information = (props: Props) => {
 
           <div
             className={` justify-around ${
-              user ? (user.signature ? 'hidden' : 'block lg:flex') : 'hidden'
+              user
+                ? user.signature
+                  ? !editSignature
+                    ? 'hidden'
+                    : 'block lg:flex'
+                  : 'block lg:flex'
+                : 'hidden'
             }`}
           >
             <section className='mt-5 text-sm'>
@@ -195,14 +206,16 @@ export const Information = (props: Props) => {
           >
             <img
               src={user && `/assets/${user.signature}`}
-              className='w-[150px] h-[100px] object-cover'
+              className={`${
+                editSignature && 'hidden'
+              } w-[150px] h-[100px] object-cover`}
             />
 
             <button
               className='flex mt-5 bg-blue-500 px-3 py-2 text-white rounded-lg'
-              onClick={() => toggleSignature()}
+              onClick={() => dispatch(toggleEditSignature())}
             >
-              Edit
+              {editSignature ? 'Cancel' : 'Edit'}
             </button>
           </div>
         </div>

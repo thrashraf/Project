@@ -1,11 +1,12 @@
 /*eslint-disable*/
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { userSelector, clearState } from '../features/user/User';
 import { Link } from 'react-router-dom';
 import NavDrop from '../components/NavDrop';
 import { useNavigate } from 'react-router-dom';
+import UserDropdown from './Dropdowns/UserDropdown';
 
 type Props = {};
 
@@ -17,6 +18,12 @@ export default function Navbar(props: any) {
   const { user }: any = useAppSelector(userSelector);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const [userRole, setUserRole] = useState(null);
+
+  useEffect(() => {
+    user && setUserRole(user.role);
+  }, [user]);
 
   return (
     <>
@@ -39,25 +46,26 @@ export default function Navbar(props: any) {
           </div>
           <div
             className={
-              'lg:flex flex-grow items-center bg-white lg:bg-opacity-0 lg:shadow-none' +
+              'lg:flex flex-grow items-center bg-white lg:bg-opacity-0 lg:shadow-none justify-end' +
               (navbarOpen ? ' block' : ' hidden')
             }
             id='example-navbar-warning'
           >
-            <ul className='flex flex-col lg:flex-row list-none lg:ml-auto'>
+            <ul
+              className={`${
+                userRole
+                  ? userRole !== 'staff'
+                    ? 'hidden'
+                    : 'visible'
+                  : 'visible'
+              } flex flex-col lg:flex-row list-none lg:ml-auto`}
+            >
               <li className='flex items-center'>
                 <NavDrop />
               </li>
 
               <li className='flex items-center ml-10'>
                 {user ? (
-                  // <button
-                  //   className="bg-blue-500 text-white active:bg-blue-500 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
-                  //   type="button"
-                  //   onClick={logoutHandler}
-                  // >
-                  //   <i className="fas fa-arrow-alt-circle-down"></i> Logout
-                  // </button>
                   <div
                     className='flex items-center space-x-4 relative cursor-pointer'
                     onClick={() => navigate('/profile/account')}
@@ -84,6 +92,17 @@ export default function Navbar(props: any) {
                 )}
               </li>
             </ul>
+            <div
+              className={`${
+                userRole
+                  ? userRole !== 'staff'
+                    ? 'visible'
+                    : 'hidden'
+                  : 'hidden'
+              }`}
+            >
+              <UserDropdown />
+            </div>
           </div>
         </div>
       </nav>

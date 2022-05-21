@@ -1,9 +1,8 @@
-import db from "../config/db.js";
+import db from '../config/db.js';
 
 class admin {
-  
-    static async updateUser(id, name, email, role) {
-        const sql = `
+  static async updateUser(id, name, email, role) {
+    const sql = `
         UPDATE
             users
         SET
@@ -12,12 +11,27 @@ class admin {
             role = '${role}'
         where
             id = '${id}'        
-    `
-        return db.execute(sql)
-    }
+    `;
+    return db.execute(sql);
+  }
 
-    static async updateUserWithPassword(id, name, email, role, hashPassword) {
-        const sql = `
+  static async updateUserWithImages(id, name, email, role, image) {
+    const sql = `
+        UPDATE
+            users
+        SET
+            name = '${name}',
+            email = '${email}',
+            role = '${role}',
+            profile_picture = '${image}'
+        where
+            id = '${id}'        
+    `;
+    return db.execute(sql);
+  }
+
+  static async updateUserWithPassword(id, name, email, role, hashPassword) {
+    const sql = `
         UPDATE
             users
         SET
@@ -27,18 +41,35 @@ class admin {
             password = '${hashPassword}'
         where
             id = '${id}'        
-    `
-        return db.execute(sql)
-    }
+    `;
+    return db.execute(sql);
+  }
 
-    static async deleteUser(id) {
-        const sql = `
+  static async deleteUser(id) {
+    const sql = `
         DELETE FROM users
         where
             id = '${id}'        
-    `
-        return db.execute(sql)
-    }
+    `;
+    return db.execute(sql);
+  }
+
+  static async createUser(id, name, email, role, phone_number, password) {
+    const sql = `
+        INSERT INTO
+            users (id, name, email, password, role, phone_number)
+        VALUES
+        (
+            '${id}',
+            '${name}',
+            '${email}',
+            '${password}',
+            '${role}',
+            '${phone_number}'
+        )    
+    `;
+    return db.execute(sql);
+  }
 }
 
 export default admin;

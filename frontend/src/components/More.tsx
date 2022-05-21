@@ -12,6 +12,7 @@ const More = ({
   toggleModal,
   modal,
   id,
+  editHandler,
   deleteItem,
 }: any) => {
   const dispatch = useAppDispatch();
@@ -21,10 +22,6 @@ const More = ({
   const deleteEvents = () => {
     // dispatch(deleteActivities(id));
     deleteItem();
-    toggle();
-    toggleModal(!modal);
-
-    isSuccess && dispatch(deleteActivitiesHandler(id));
   };
 
   const edit = () => {
@@ -45,7 +42,7 @@ const More = ({
 
       {/* navdrop */}
       {isShowing && (
-        <section className='bg-white absolute -left-32 w-[120px] z-50'>
+        <section className='bg-slate-50 absolute -left-32 w-[120px] z-50'>
           <ul>
             <li
               className='cursor-pointer hover:bg-slate-200 py-1 px-5'

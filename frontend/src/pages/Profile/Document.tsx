@@ -1,6 +1,8 @@
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAppSelector } from '../../app/hooks';
+import { userSelector } from '../../features/user/User';
 import api from '../../utils/api';
 import { Template } from '../Report/Template';
 
@@ -9,9 +11,13 @@ export const Document = () => {
   const [document, setDocument] = useState<any>();
   const [allDocuments, setAllDocuments] = useState<any>();
 
+  const { user }: any = useAppSelector(userSelector);
+
   useEffect(() => {
+    if (!user) return;
+
     api
-      .get(`/api/activities/getAllActivities?q=${''}`)
+      .get(`/api/activities/getReportUser?q=${user.id}`)
       .then((res) => {
         setAllDocuments(res.data);
 
@@ -23,7 +29,7 @@ export const Document = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (!document) return;
@@ -84,7 +90,7 @@ export const Document = () => {
           <table className='items-center w-full bg-transparent border-collapse text-center '>
             <thead>
               <tr>
-                {['Title', 'Date', 'Status', 'Submit On'].map(
+                {['Title', 'Date', 'Status', 'Submit On', 'Action'].map(
                   (item: any, index) => (
                     <th
                       key={index}
@@ -123,13 +129,14 @@ export const Document = () => {
                         {item.status}
                       </td>
                       <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                        10/05/2022
+                        {item.submitOn}
                       </td>
                       <td
                         className={`border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ${
                           tabs === 1 ? 'visible' : 'hidden'
                         }`}
                       >
+                        {console.log(item.images)}
                         <button>
                           <PDFDownloadLink
                             document={
@@ -145,6 +152,8 @@ export const Document = () => {
                                 ajk={item.ajk}
                                 staffName={item.owner}
                                 signature={item.signature}
+                                kjSignature={item.kjSignature}
+                                kjName={item.kjName}
                               />
                             }
                             fileName={item.title}
@@ -161,7 +170,9 @@ export const Document = () => {
                         }`}
                       >
                         <Link to={`/create-report/${item.id}`}>
-                          <button>Resubmit</button>
+                          <button className='bg-blue-500 rounded-lg px-5 py-2 text-white'>
+                            Resubmit
+                          </button>
                         </Link>
                       </td>
                     </tr>

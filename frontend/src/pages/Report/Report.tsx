@@ -55,28 +55,25 @@ const Report = () => {
 
   //get specific activities and put in state
   useEffect(() => {
-    axios
-      .get(`/api/activities/getActivitiesById?q=${id}`)
-      .then((res) => {
-        console.log(res);
+    const fetchData = async () => {
+      await axios
+        .get(`/api/activities/getActivitiesById?q=${id}`)
+        .then((res) => {
+          if (res.data.images) {
+            setImages([...res.data.images]);
+          }
 
-        setTitle(res.data.title);
-        setDate(res.data.start);
-        setOrganizer(res.data.organizer);
-        setVenue(res.data.venue);
-        setPhoto([...res.data.images]);
-        setDocumentStatus(res.data.status);
-
-        setContent(res.data.content);
-        setAjk([...res.data.committee]);
-        setTentative([...res.data.tentative]);
-
-        //for images template
-        setImages([...res.data.images]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+          setTitle(res.data.title);
+          setDate(res.data.start);
+          setOrganizer(res.data.organizer);
+          setVenue(res.data.venue);
+          setDocumentStatus(res.data.status);
+          setContent(res.data.content);
+          setAjk([...res.data.committee]);
+          setTentative([...res.data.tentative]);
+        });
+    };
+    fetchData().catch(console.error);
   }, []);
 
   useEffect(() => {
@@ -97,6 +94,60 @@ const Report = () => {
       uploadRef.current.click();
     }
   };
+
+  //? images
+
+  const [file, setFile] = useState<any>([]);
+  const [validFiles, setValidFiles] = useState<any>([]);
+
+  //for validate file
+  const validateFile = (file: any) => {
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    console.log(validTypes.indexOf(file.type) === -1);
+    if (validTypes.indexOf(file.type) === -1) {
+      return false;
+    }
+    return true;
+  };
+
+  const addFile = (e: any) => {
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+    for (let i = 0; i < files.length; i++) {
+      if (validateFile(files[i])) {
+        setFile((prevArray: any) => [...prevArray, ...files]);
+      } else {
+        // setStatus('error');
+        // setMessage('Not support file type');
+      }
+    }
+  };
+
+  //to remove file
+  const deleteFile = (name: any) => {
+    // find the index of the item
+    // remove the item from array
+    const selectedFileIndex = file.findIndex((e: any) => e.name === name);
+    file.splice(selectedFileIndex, 1);
+    // update selectedFiles array
+    setFile([...file]);
+  };
+
+  //remove duplicate name
+  useEffect(() => {
+    let filteredArray = file.reduce((file: any, current: any) => {
+      const x = file.find((item: any) => item.name === current.name);
+      if (!x) {
+        return file.concat([current]);
+      } else {
+        return file;
+      }
+    }, []);
+    setValidFiles([...filteredArray]);
+    validFiles.length > 0 && setIsPhoto(true);
+  }, [file]);
+
+  //? end images function
 
   const addTentativeHandler = () => {
     setTentative([...tentative, { time: '', activities: '' }]);
@@ -134,26 +185,23 @@ const Report = () => {
     setAjk(AjkList);
   };
 
-  const fileSelectorHandler = (e: any) => {
-    const tempArr: any = [];
-
-    console.log(e.target.files);
-    tempArr.push(...e.target.files);
-
-    setPhoto(tempArr);
-    setIsPhoto(true);
-  };
-
   const authHandler = async (e: any) => {
     e.preventDefault();
 
     const email = user.email;
     const reqPassword = password;
 
-    await api.post('/api/user/auth', { email, reqPassword }).then((res) => {
-      console.log(res);
-      formHandler(e);
-    });
+    await api
+      .post('/api/user/auth', { email, reqPassword })
+      .then((res) => {
+        console.log(res);
+        formHandler(e);
+      })
+      .catch((e) => {
+        setMessage(e.response.data.message);
+        setStatus('error');
+        toastRef.current.showToast();
+      });
   };
 
   const timeConvertor = (time: any) => {
@@ -191,7 +239,9 @@ const Report = () => {
     formData.append('venue', venue);
     formData.append('content', content);
     formData.append('signature', signature);
-    photo.forEach((tag) => formData.append('upload', tag));
+    formData.append('prevImages', images);
+    validFiles.forEach((tag: any) => formData.append('upload', tag));
+
     tentative.forEach((tentative: any) =>
       formData.append('tentative', JSON.stringify(tentative))
     );
@@ -234,7 +284,6 @@ const Report = () => {
         contentHandler={contentHandler}
         uploadFile={uploadFile}
         uploadRef={uploadRef}
-        fileSelectorHandler={fileSelectorHandler}
         tentative={tentative}
         addTentativeHandler={addTentativeHandler}
         removeTentativeHandler={removeTentativeHandler}
@@ -247,6 +296,10 @@ const Report = () => {
         setShowModal={toggle}
         password={password}
         formHandler={formHandler}
+        files={file}
+        validFiles={validFiles}
+        fileDrop={addFile}
+        removeFile={deleteFile}
       />
 
       <SignatureModal
@@ -272,13 +325,9 @@ const Report = () => {
             organizer={organizer}
             date={date}
             venue={venue}
-            isPhoto={isPhoto}
-            photo={photo}
-            tentative={tentative}
-            ajk={ajk}
             signature={signature}
           />
-          {content.length > 2186 ? (
+          {content?.length > 2186 ? (
             <div className='my-2.5 h-[800px] w-[500px] font-Arimo font-normal m-auto bg-white rounded-sm p-10 flex flex-col text-[12px] relative'>
               {content
                 .slice(2186, content.length)
@@ -318,9 +367,10 @@ const Report = () => {
 
           <ImageTemplate
             isPhoto={isPhoto}
-            photo={photo}
+            photo={validFiles}
             status={documentStatus}
             images={images}
+            setCurrentImage={setImages}
           />
 
           {tentative.length >= 1 ? (

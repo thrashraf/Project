@@ -7,6 +7,7 @@ import {
   editActivitiesHandler,
   editModeHandler,
   deleteActivities,
+  deleteActivitiesHandler,
 } from '../../features/activities/Activities';
 import Spinner from '../../components/Spinner/Spinner';
 import useInput from '../../hooks/useInput';
@@ -15,6 +16,8 @@ import { useDispatch } from 'react-redux';
 import Dropzone from '../../components/Dropzone';
 import axios from 'axios';
 import { unitArray } from '../../constant/unitArray';
+import { userSelector } from '../../features/user/User';
+import { Link } from 'react-router-dom';
 
 type Props = {
   showActivity: boolean;
@@ -28,7 +31,10 @@ export const ModalActivities = (props: Props) => {
 
   const dispatch = useDispatch();
 
-  const { detailActivities, editMode } = useAppSelector(activitiesSelector);
+  const { detailActivities, editMode, isSuccess } =
+    useAppSelector(activitiesSelector);
+
+  const { user }: any = useAppSelector(userSelector);
 
   const title = useInput('');
   const start = useInput('');
@@ -115,7 +121,9 @@ export const ModalActivities = (props: Props) => {
             start: start.value,
             organizer: organizer.value,
             venue: venue.value,
-            banner: res.data.image_url,
+            banner: res.data.image_url
+              ? res.data.image_url
+              : detailActivities.banner,
           };
 
           dispatch(editActivitiesHandler(newActivities));
@@ -132,6 +140,13 @@ export const ModalActivities = (props: Props) => {
       });
   };
 
+  const deleteCurrentActivities = () => {
+    if (!detailActivities) return;
+    dispatch(deleteActivities(detailActivities.id));
+    isSuccess && dispatch(deleteActivitiesHandler(detailActivities.id));
+    props.setShowActivity(!props.showActivity);
+  };
+
   return (
     <ModalUser modal={props.showActivity} setModal={props.setShowActivity}>
       {detailActivities && (
@@ -139,19 +154,19 @@ export const ModalActivities = (props: Props) => {
           {/* show when delete and update events */}
           {isFetching && <Spinner />}
           {/* show when delete and update events */}
-
+          {console.log(detailActivities.userId, user.id)}
           <div className='flex flex-col'>
             <section className='relative'>
-              <More
-                isShowing={isShowing}
-                toggle={toggle}
-                id={detailActivities.id}
-                modal={props.showActivity}
-                toggleModal={props.setShowActivity}
-                deleteItem={() =>
-                  dispatch(deleteActivities(detailActivities.id))
-                }
-              />
+              {detailActivities.userId === user?.id && (
+                <More
+                  isShowing={isShowing}
+                  toggle={toggle}
+                  id={detailActivities.id}
+                  modal={props.showActivity}
+                  toggleModal={props.setShowActivity}
+                  deleteItem={() => deleteCurrentActivities()}
+                />
+              )}
               <button
                 type='button'
                 onClick={() => props.setShowActivity(!props.showActivity)}
@@ -223,7 +238,7 @@ export const ModalActivities = (props: Props) => {
                     onChange={(e) => title.setInput(e.target.value)}
                     className={`bg-blue-50 px-3 py-2 rounded-md outline-none w-[full text-black ${showEditComp}`}
                   />
-                  <section className='flex justify-between items-center mt-3 h-10'>
+                  <section className='flex justify-between items-center mt-3 h-10 w-full'>
                     <span
                       className={`bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ${hideEditComp}`}
                     >
@@ -239,6 +254,7 @@ export const ModalActivities = (props: Props) => {
                         <option>{item}</option>
                       ))}
                     </select>
+
                     <section>
                       <button
                         className={`hover:bg-black mr-5 text-black px-4 py-2 rounded-lg hover:text-white ${showEditComp}`}
@@ -252,6 +268,19 @@ export const ModalActivities = (props: Props) => {
                       >
                         Save
                       </button>
+                      {new Date().toISOString().slice(0, 10) >=
+                        detailActivities.end && (
+                        <Link to={`/create-report/${detailActivities.id}`}>
+                          <button
+                            className={`items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-500 rounded-lg focus:outline-none focus:ring-blue-300 ${
+                              user ? 'visible' : 'hidden'
+                            } ${hideEditComp}`}
+                          >
+                            Create Report
+                            <i className='ml-2 fa-solid fa-arrow-right-long' />
+                          </button>
+                        </Link>
+                      )}
                     </section>
                   </section>
                 </section>

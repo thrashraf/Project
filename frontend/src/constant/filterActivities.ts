@@ -1,3 +1,3 @@
-const filterActivities = [ "All", "Draft activities", "Report activities"];
+const filterActivities = [ "All", "Upcoming Events", "Events"];
 
 export default filterActivities;

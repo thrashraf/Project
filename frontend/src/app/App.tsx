@@ -1,14 +1,14 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { Login } from '../pages/Login/Login';
 import Register from '../pages/Register';
 import Report from '../pages/Report';
 import { Home } from '../pages/Home/Home';
 import Admin from '../pages/Admin';
-import { useAppDispatch } from './hooks';
+import { useAppDispatch, useAppSelector } from './hooks';
 import { useEffect } from 'react';
-import { refreshUser } from '../features/user/User';
+import { refreshUser, userSelector } from '../features/user/User';
 import Middleware from '../middleware/Middleware';
-import { Publications } from '../pages/Publication/Publications'
+import { Publications } from '../pages/Publication/Publications';
 import { Innovation } from '../pages/Innovation.tsx/Innovation';
 import KJ from '../pages/HD/KJ';
 import VerifyReport from '../pages/HD/VerifyReport';
@@ -30,15 +30,14 @@ function App() {
           {/* public routes */}
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
-          <Route path='/' element={<Home/>} />
-          <Route path='/publication' element={<Publications/>} />
-          <Route path='/innovation' element={<Innovation/>} />
-
+          <Route path='/' element={<Home />} />
+          <Route path='/publication' element={<Publications />} />
+          <Route path='/innovation' element={<Innovation />} />
 
           {/* protected route */}
           <Route element={<Middleware />}>
             <Route path='/create-report/:id' element={<Report />} />
-            <Route path='/admin' element={<Admin />} />
+            <Route path='/admin/*' element={<Admin />} />
             <Route path='/verify-report/:id' element={<VerifyReport />} />
             <Route path='/kj/*' element={<KJ />} />
             <Route path='/profile/*' element={<Profile />} />

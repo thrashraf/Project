@@ -1,21 +1,21 @@
-import db from "../config/db.js";
+import db from '../config/db.js';
 
-class publication{
-    static async showUser() {
-        const sql = `SELECT * FROM publication`
-        return db.execute(sql)
-    }
-    static async createPublication(
-        id,
-        title,
-        description,
-        isbn,
-        staff,
-        year,
-        image,
-        pdf
-      ) {
-        const sql = `INSERT INTO
+class publication {
+  static async showUser() {
+    const sql = `SELECT * FROM publication`;
+    return db.execute(sql);
+  }
+  static async createPublication(
+    id,
+    title,
+    description,
+    isbn,
+    staff,
+    year,
+    images,
+    pdf
+  ) {
+    const sql = `INSERT INTO
                     publication (id, Title, Description, isbn, staff, year, img_url, pdf_url)
                 VALUES 
                 (
@@ -25,56 +25,49 @@ class publication{
                     '${isbn}',
                     '${staff}',
                     '${year}',
-                    '${image}',
+                    '${JSON.stringify(images)}',
                     '${pdf}'
                     
     
                 )`;
-        return db.execute(sql);
-      }
+    return db.execute(sql);
+  }
 
-      static async updatePublication(
-        id,
-        title, 
-        description,
-        isbn, 
-        staff, 
-        year, 
-      ) {
-        const sql = `UPDATE publication SET Title = '${title}',
+  static async updatePublication(id, title, description, isbn, staff, year) {
+    const sql = `UPDATE publication SET Title = '${title}',
             Description = '${description}',
             isbn = '${isbn}',
             year = '${year}',
             staff = '${staff}'
             where id = '${id}'`;
-        return db.execute(sql);
-      }
+    return db.execute(sql);
+  }
 
-      static async updatePublicationWithImage(
-        id,
-        title, 
-        description,
-        isbn, 
-        staff, 
-        year, 
-        images
-      ) {
-        const sql = `UPDATE publication SET Title = '${title}',
+  static async updatePublicationWithImage(
+    id,
+    title,
+    description,
+    isbn,
+    staff,
+    year,
+    images,
+    pdf
+  ) {
+    const sql = `UPDATE publication SET Title = '${title}',
             Description = '${description}',
             isbn = '${isbn}',
-            img_url = '${images}',
+            img_url = '${JSON.stringify(images)}',
             year = '${year}',
-            staff = '${staff}'
+            staff = '${staff}',
+            pdf_url = '${pdf}'
             where id = '${id}'`;
-        return db.execute(sql);
-      }
+    return db.execute(sql);
+  }
 
-      static async deletePublicationById(id) {
-        const sql = `DELETE FROM publication where id = '${id}'`;
-        return db.execute(sql);
-      }
-    
+  static async deletePublicationById(id) {
+    const sql = `DELETE FROM publication where id = '${id}'`;
+    return db.execute(sql);
+  }
 }
-
 
 export default publication;

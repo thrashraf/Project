@@ -5,11 +5,10 @@ import { Link, useLocation } from 'react-router-dom';
 import NotificationDropdown from '../Dropdowns/NotificationDropdown.js';
 import UserDropdown from '../Dropdowns/UserDropdown';
 
-export default function Sidebar() {
+const Sidebar = ({ sidebar }: any) => {
   const [collapseShow, setCollapseShow] = React.useState('hidden');
 
   const location = useLocation();
-  console.log(location);
 
   return (
     <>
@@ -86,75 +85,35 @@ export default function Sidebar() {
             {/* Navigation */}
 
             <ul className='md:flex-col md:min-w-full flex flex-col list-none'>
-              <li className='items-center'>
-                <Link
-                  className={
-                    'text-xs uppercase py-3 font-bold block ' +
-                    (location.pathname === '/kj/dashboard'
-                      ? 'text-lightBlue-500 hover:text-lightBlue-600'
-                      : 'text-blueGray-700 hover:text-blueGray-500')
-                  }
-                  to='/kj/dashboard'
-                >
-                  <i
+              {sidebar?.map((item: any, index: number) => (
+                <li className='items-center' key={index}>
+                  <Link
                     className={
-                      'fas fa-tv mr-2 text-sm ' +
-                      (window.location.href.indexOf('/kj/dashboard') !== -1
-                        ? 'opacity-75'
-                        : 'text-blueGray-300')
+                      'text-xs uppercase py-3 font-bold block ' +
+                      (location.pathname === item.link
+                        ? 'text-lightBlue-500 hover:text-lightBlue-600'
+                        : 'text-blueGray-700 hover:text-blueGray-500')
                     }
-                  ></i>{' '}
-                  Dashboard
-                </Link>
-              </li>
-
-              <li className='items-center'>
-                <Link
-                  className={
-                    'text-xs uppercase py-3 font-bold block ' +
-                    (location.pathname === '/kj/tables'
-                      ? 'text-lightBlue-500 hover:text-lightBlue-600'
-                      : 'text-blueGray-700 hover:text-blueGray-500')
-                  }
-                  to='/kj/tables'
-                >
-                  <i
-                    className={
-                      'fas fa-table mr-2 text-sm ' +
-                      (window.location.href.indexOf('/kj/tables') !== -1
-                        ? 'opacity-75'
-                        : 'text-blueGray-300')
-                    }
-                  ></i>{' '}
-                  Report
-                </Link>
-              </li>
-
-              <li className='items-center'>
-                <Link
-                  className={
-                    'text-xs uppercase py-3 font-bold block ' +
-                    (location.pathname === '/kj/events'
-                      ? 'text-lightBlue-500 hover:text-lightBlue-600'
-                      : 'text-blueGray-700 hover:text-blueGray-500')
-                  }
-                  to='/kj/events'
-                >
-                  <i
-                    className={
-                      'fas fa-table mr-2 text-sm ' +
-                      (window.location.href.indexOf('/kj/events') !== -1
-                        ? 'opacity-75'
-                        : 'text-blueGray-300')
-                    }
-                  ></i>{' '}
-                  Events
-                </Link>
-              </li>
+                    to={item.link}
+                  >
+                    <i
+                      className={
+                        item.icon +
+                        (window.location.href.indexOf(item.link) !== -1
+                          ? 'opacity-75'
+                          : 'text-blueGray-300')
+                      }
+                    ></i>{' '}
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
       </nav>
     </>
   );
-}
+};
+
+export default Sidebar;

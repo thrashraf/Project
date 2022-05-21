@@ -22,6 +22,8 @@ type Props = {
   ajk: any;
   staffName: string;
   signature: string;
+  kjSignature: string;
+  kjName: string;
 };
 
 export const Template = (props: Props) => {
@@ -87,6 +89,12 @@ export const Template = (props: Props) => {
 
     signatureContainer: {
       marginTop: 10,
+      display: 'flex',
+    },
+
+    kjContainer: {
+      marginTop: 50,
+      display: 'flex',
     },
 
     signatureHeader: {
@@ -225,9 +233,23 @@ export const Template = (props: Props) => {
               <Text style={styles.name}>({props.staffName})</Text>
               <Text style={styles.signatureContainer}>(Jawatan)</Text>
             </View>
+
+            {props.kjSignature && props.kjName ? (
+              <View style={styles.kjContainer}>
+                <Text style={styles.signatureHeader}>Disahkan oleh:</Text>
+                <Image
+                  src={props.kjSignature && `/assets/${props.kjSignature}`}
+                  style={styles.signatureImage}
+                />
+                <Text style={styles.name}>({props.kjName})</Text>
+                <Text style={styles.signatureContainer}>
+                  (KETUA JABATAN TEKNOLOGI MAKLUMAT DAN KOMUNIKASI)
+                </Text>
+              </View>
+            ) : null}
           </View>
 
-          {props.photo !== 'undefined' && props.photo.length >= 0 ? (
+          {props.photo ? (
             <View break>
               <Text style={styles.aboutProgram}>
                 GAMBAR-GAMBAR SEPANJANG AKTIVITI

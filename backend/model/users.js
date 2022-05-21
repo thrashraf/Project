@@ -1,4 +1,4 @@
-import db from "../config/db.js";
+import db from '../config/db.js';
 
 class user {
   static async checkEmail(email) {
@@ -7,18 +7,16 @@ class user {
   }
 
   static async register(id, name, email, password) {
-
     const sql = `INSERT INTO
-            users (id, name, email, password, role, RefreshToken, profile_picture)
+            users (id, name, email, password, role)
         VALUES
         (
             '${id}',
             '${name}',
             '${email}',
             '${password}',
-            'staff',
-            '${null}',
-            '${null}'
+            'staff'
+            
         )`;
     return db.execute(sql);
   }
@@ -44,18 +42,18 @@ class user {
   }
 
   static async getAllUser() {
-    const sql = `SELECT * FROM users`
-    return db.execute(sql); 
+    const sql = `SELECT * FROM users`;
+    return db.execute(sql);
   }
 
   static async findByEmail(email) {
-    const sql = `SELECT * FROM users where email = '${email}'`
-    return db.execute(sql); 
+    const sql = `SELECT * FROM users where email = '${email}'`;
+    return db.execute(sql);
   }
 
   static async getUserById(id) {
-    const sql = `SELECT * FROM users where id = '${id}'`
-    return db.execute(sql); 
+    const sql = `SELECT * FROM users where id = '${id}'`;
+    return db.execute(sql);
   }
 
   static async updateUserInformation(id, name, position, email, phoneNumber) {
@@ -65,21 +63,28 @@ class user {
                 position = '${position}', 
                 phone_number = '${phoneNumber}'
                 where id = '${id}'`;
-    return db.execute(sql); 
+    return db.execute(sql);
   }
 
   static async updatePicture(image, email) {
     const sql = `UPDATE users 
                 SET profile_picture = '${image}'
                 where email = '${email}'`;
-    return db.execute(sql); 
+    return db.execute(sql);
   }
 
   static async updateSignature(image, email) {
     const sql = `UPDATE users 
                 SET signature = '${image}'
                 where email = '${email}'`;
-    return db.execute(sql); 
+    return db.execute(sql);
+  }
+
+  static async updatePassword(id, password) {
+    const sql = `UPDATE users 
+                SET password = '${password}'
+                where id = '${id}'`;
+    return db.execute(sql);
   }
 }
 
