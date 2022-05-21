@@ -113,8 +113,12 @@ export const activitiesSlice = createSlice({
       const searchWord = action.payload;
       state.query = searchWord;
 
+      const keys = ['title', 'organizer'];
+
       const newFilter = state.activities.filter((value: any) =>
-        value.title.toLowerCase().includes(searchWord.toLowerCase())
+        keys.some((key) =>
+          value[key].toLowerCase().includes(searchWord.toLowerCase())
+        )
       );
       if (searchWord !== '') {
         state.filterData = newFilter;
@@ -287,7 +291,7 @@ export const {
   deleteActivitiesHandler,
   editModeHandler,
   editActivitiesHandler,
-  closeEditMode
+  closeEditMode,
   // removeFile,
   // filterFile,
   // resetFile,

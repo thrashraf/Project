@@ -264,3 +264,18 @@ export const verifyReport = async (req, res) => {
     });
   }
 };
+
+export const getReportByUser = async (req, res) => {
+  try {
+    const { q } = req.query;
+    console.log(q);
+
+    const [report] = await activities.getReportUser(q);
+
+    res.status(200).json(report);
+  } catch (error) {
+    res.status(400).json({
+      message: 'something went wrong',
+    });
+  }
+};

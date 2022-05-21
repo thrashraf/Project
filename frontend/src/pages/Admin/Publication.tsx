@@ -2,15 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import Toast from '../../components/Toast';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
-import {
-  activitiesSelector,
-  deleteActivities,
-  deleteActivitiesHandler,
-  getActivities,
-  getMonthActivities,
-  handleFilter,
-  setFilterHandler,
-} from '../../features/activities/Activities';
 // components
 
 import useModal from '../../hooks/useModal';
@@ -19,14 +10,17 @@ import ModalPublication from './ModalPublication';
 import {
   getAllPublication,
   publicationSelector,
+  handleFilter,
+  setFilterHandler,
+  deletePublicationHandler,
 } from '../../features/Publication/Publication';
+import axios from 'axios';
 
 export default function Publication() {
-  const { activities, query, filterData, showFilter, isSuccess } =
-    useAppSelector(activitiesSelector);
   const dispatch = useAppDispatch();
 
-  const { allPublication } = useAppSelector(publicationSelector);
+  const { allPublication, query, filterData, showFilter, isSuccess } =
+    useAppSelector(publicationSelector);
 
   const { isShowing, toggle } = useModal();
   const { isShowing: showModal, toggle: toggleModal } = useModal();
@@ -41,9 +35,19 @@ export default function Publication() {
     fetch();
   }, []);
 
-  const deleteUserById = (id: string) => {
-    dispatch(deleteActivities(id));
-    isSuccess && dispatch(deleteActivitiesHandler(id));
+  const deletePublicationById = (id: string) => {
+    axios
+      .post(`/api/publication/deletePublication?q=${id}`)
+      .then((res: any) => {
+        if (res.status === 200) {
+          console.log('ok');
+
+          dispatch(deletePublicationHandler(id));
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
   };
 
   const setMode = (currentMode: string) => {
@@ -77,7 +81,7 @@ export default function Publication() {
           </span>
           <input
             type='text'
-            placeholder='search by name'
+            placeholder='search by Title'
             className='text-lg px-4 py-2 bg-white rounded-t-lg rounded-b-lg  w-[400px] focus:outline-none'
             onChange={(e) => dispatch(handleFilter(e.target.value))}
             value={query}
@@ -87,10 +91,10 @@ export default function Publication() {
               {filterData?.map((item: any, index: number) => (
                 <p
                   className='p-3 cursor-pointer hover:bg-slate-100'
-                  onClick={() => dispatch(setFilterHandler(item.title))}
+                  onClick={() => dispatch(setFilterHandler(item.Title))}
                   key={index}
                 >
-                  {item.title}
+                  {item.Title}
                 </p>
               ))}
             </div>
@@ -179,7 +183,9 @@ export default function Publication() {
                                     </li>
                                     <li
                                       className='cursor-pointer hover:bg-slate-200 py-1 px-5'
-                                      onClick={() => deleteUserById(item.id)}
+                                      onClick={() =>
+                                        deletePublicationById(item.id)
+                                      }
                                     >
                                       Delete
                                     </li>

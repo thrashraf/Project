@@ -3,43 +3,39 @@ import Toast from '../../components/Toast';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 import {
-  activitiesSelector,
-  deleteActivities,
-  deleteActivitiesHandler,
-  getActivities,
-  getMonthActivities,
+  deleteInnovationHandler,
+  getInnovation,
   handleFilter,
+  innovationSelector,
   setFilterHandler,
-} from '../../features/activities/Activities';
+  setFilterInnovation,
+} from '../../features/Innovation/Innovation';
 // components
 
 import useModal from '../../hooks/useModal';
 import useInput from '../../hooks/useInput';
 import ModalInnovation from './ModalInnovation';
+import api from '../../utils/api';
 
 export default function Innovation() {
-  const { activities, query, filterData, showFilter, isSuccess } =
-    useAppSelector(activitiesSelector);
+  const { query, allInnovation, filterData, showFilter, tempInnovation } =
+    useAppSelector(innovationSelector);
   const dispatch = useAppDispatch();
 
   const { isShowing, toggle } = useModal();
   const { isShowing: showModal, toggle: toggleModal } = useModal();
 
-  const [activitiesDetail, setActivitiesDetail] = useState<any>();
+  const [innovationDetail, setInnovationDetail] = useState<any>();
   const mode = useInput('');
 
   useEffect(() => {
-    const fetch = async () => {
-      dispatch(getActivities(query));
-      dispatch(getMonthActivities());
-    };
-    fetch();
+    dispatch(getInnovation(query));
   }, [query]);
 
-  const deleteUserById = (id: string) => {
-    dispatch(deleteActivities(id));
-    isSuccess && dispatch(deleteActivitiesHandler(id));
-  };
+  // const deleteUserById = (id: string) => {
+  //   dispatch(deleteActivities(id));
+  //   isSuccess && dispatch(deleteActivitiesHandler(id));
+  // };
 
   const setMode = (currentMode: string) => {
     toggleModal();
@@ -50,9 +46,24 @@ export default function Innovation() {
     setMode('update');
   };
 
-  const toggleAction = (activities: any) => {
+  const toggleAction = (innovation: any) => {
     toggle();
-    setActivitiesDetail(activities);
+    setInnovationDetail(innovation);
+  };
+
+  const deletePublicationById = (id: string) => {
+    api
+      .delete(`/api/inno/deleteInnovation?q=${id}`)
+      .then((res: any) => {
+        if (res.status === 200) {
+          console.log('ok');
+
+          dispatch(deleteInnovationHandler(id));
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -72,7 +83,7 @@ export default function Innovation() {
           </span>
           <input
             type='text'
-            placeholder='search by name'
+            placeholder='search by Title'
             className='text-lg px-4 py-2 bg-white rounded-t-lg rounded-b-lg  w-[400px] focus:outline-none'
             onChange={(e) => dispatch(handleFilter(e.target.value))}
             value={query}
@@ -115,10 +126,12 @@ export default function Innovation() {
                   <tr>
                     {[
                       'Title',
-                      'Start',
-                      'End',
-                      'Organizer',
-                      'Venue',
+                      'Description',
+                      'Name',
+                      'Program',
+                      'Level',
+                      'Medal',
+                      'Year',
                       'Actions',
                     ].map((item: any, index: number) => (
                       <th
@@ -133,38 +146,44 @@ export default function Innovation() {
                   </tr>
                 </thead>
                 <tbody>
-                  {activities && activities.length > 0 ? (
-                    activities?.map((item: any, index: number) => {
+                  {allInnovation && allInnovation.length > 0 ? (
+                    allInnovation?.map((item: any, index: number) => {
                       return (
                         <tr key={index} className='text-center relative'>
                           <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
                             <span className='font-bold uppercase text-blue-500 hover:underline cursor-pointer'>
-                              {item.title}
+                              {item.Title}
                             </span>
                           </td>
                           <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                            {item.start.split('-').reverse().join('/')}
+                            {item.Description}
                           </td>
                           <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                            {item.end.split('-').reverse().join('/')}
+                            {item.Name}
                           </td>
                           <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                            <p>{item.organizer}</p>
+                            <p>{item.Program}</p>
                           </td>
                           <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                            <p>{item.venue}</p>
+                            <p>{item.Level}</p>
                           </td>
-                          <td className='absolute right-[90px]'>
+                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                            <p>{item.Medal}</p>
+                          </td>
+                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                            <p>{item.Year}</p>
+                          </td>
+                          <td className='right-[90px]'>
                             <section className='relative'>
                               <button
-                                className='top-2 left-2 absolute text-black bg-transparent hover:bg-slate-100 z-10 rounded-lg text-sm py-5 px-3 ml-auto inline-flex items-center focus:outline-none '
+                                className='top-2 left-10  text-black bg-transparent hover:bg-slate-100 z-10 rounded-lg text-sm py-5 px-3 ml-auto inline-flex items-center focus:outline-none '
                                 onClick={() => toggleAction(item)}
                               >
                                 <i className='fa-solid fa-ellipsis-vertical fa-xl ' />
                               </button>
 
-                              {isShowing && item.id === activitiesDetail.id ? (
-                                <section className='bg-slate-50 absolute -left-32 w-[120px] z-50'>
+                              {isShowing && item.id === innovationDetail.id ? (
+                                <section className='bg-slate-50 absolute top-0 -left-16 w-[120px] z-50'>
                                   <ul>
                                     <li
                                       className='cursor-pointer hover:bg-slate-200 py-1 px-5'
@@ -174,7 +193,9 @@ export default function Innovation() {
                                     </li>
                                     <li
                                       className='cursor-pointer hover:bg-slate-200 py-1 px-5'
-                                      onClick={() => deleteUserById(item.id)}
+                                      onClick={() =>
+                                        deletePublicationById(item.id)
+                                      }
                                     >
                                       Delete
                                     </li>
@@ -198,7 +219,7 @@ export default function Innovation() {
                   <ModalInnovation
                     isShowing={showModal}
                     toggle={toggleModal}
-                    user={activitiesDetail}
+                    innovation={innovationDetail}
                     mode={mode.value}
                   />
                 </tbody>

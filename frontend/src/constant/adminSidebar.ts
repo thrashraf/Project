@@ -1,10 +1,5 @@
 export const adminSidebar = [
     {
-        icon: 'fas fa-tv mr-2 text-sm',
-        link: '/admin/dashboard',
-        name: 'Dashboard'
-    },
-    {
         icon: 'fa-solid fa-users  mr-2 text-sm',
         link: '/admin/users',
         name: 'Users'

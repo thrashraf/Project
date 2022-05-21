@@ -35,4 +35,5 @@ activitiesRoute.get(
 );
 activitiesRoute.post('/activities/verifyReport', activities.verifyReport);
 
+activitiesRoute.get('/activities/getReportUser', activities.getReportByUser);
 export default activitiesRoute;

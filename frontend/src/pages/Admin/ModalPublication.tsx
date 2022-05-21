@@ -6,7 +6,10 @@ import useModal from '../../hooks/useModal';
 import Toast from '../../components/Toast';
 import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { addUser, updateUserHandler } from '../../features/admin/Admin';
+import {
+  addPublication,
+  editPublicationHandler,
+} from '../../features/Publication/Publication';
 import { userSelector } from '../../features/user/User';
 import api from '../../utils/api';
 import DropZoneFile from '../../components/DropZoneFile';
@@ -37,11 +40,15 @@ const ModalPublication = (props: Props) => {
 
   const toastRef = useRef<any>(null);
 
+  const [prevImages, setPrevImages] = useState<any>([]);
+  const prevPdf = useInput('');
+
   //dropzone State
   const { isShowing, toggle } = useModal();
 
   // for images
   const [file, setFile] = useState<any>([]);
+  const [validFiles, setValidFiles] = useState<any>([]);
 
   // for PDF
   const [filePDF, setFilePDF] = useState<any>([]);
@@ -55,10 +62,17 @@ const ModalPublication = (props: Props) => {
     const files = e.dataTransfer.files;
     for (let i = 0; i < files.length; i++) {
       if (validateFile(files[i])) {
-        setFile([...files]);
+        if (file.length < 2) {
+          setFile((prevArray: any) => [...prevArray, ...files]);
+        } else {
+          file.splice(0, 1);
+          setFile((prevArray: any) => [...prevArray, ...files]);
+        }
       }
     }
   };
+
+  console.log(file);
 
   //for validate file
   const validateFile = (file: any) => {
@@ -127,7 +141,28 @@ const ModalPublication = (props: Props) => {
     setFilePDF([...filePDF]);
   };
 
-  const formHandler = (e: any) => {
+  //remove duplicate name
+  useEffect(() => {
+    let filteredArray = file.reduce((file: any, current: any) => {
+      const x = file.find((item: any) => item.name === current.name);
+      if (!x) {
+        return file.concat([current]);
+      } else {
+        return file;
+      }
+    }, []);
+    setValidFiles([...filteredArray]);
+  }, [file]);
+
+  const createPublication = (e: any) => {
+    if (validFiles.length < 2 || filePDF.length < 1) {
+      setMessage('Please insert all the field');
+      setStatus('error');
+      toastRef.current.showToast();
+      e.preventDefault();
+      return;
+    }
+
     e.preventDefault();
 
     const formData = new FormData();
@@ -144,8 +179,65 @@ const ModalPublication = (props: Props) => {
       .post('/api/publication/createPublication', formData)
       .then((res: any) => {
         if (res.status === 200) {
-          //update Publication
-          toggle();
+          const newPublication = {
+            Title: title.value,
+            Description: description.value,
+            isbn: isbn.value,
+            staff: staff.value,
+            year: year.value,
+            img_url: res.data.image_url ? res.data.image_url : null,
+            pdf_url: res.data.pdf_url,
+          };
+
+          dispatch(addPublication(newPublication));
+          props.toggle();
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  };
+
+  const updateCurrentPublication = (e: any) => {
+    const formData = new FormData();
+
+    e.preventDefault();
+
+    formData.append('title', title.value);
+    formData.append('description', description.value);
+    formData.append('isbn', isbn.value);
+    formData.append('staff', staff.value);
+    formData.append('year', year.value);
+    formData.append('prevImages', prevImages);
+    formData.append('prevPdf', prevPdf.value);
+    file.forEach((image: any) => formData.append('upload', image));
+    filePDF.forEach((file: any) => formData.append('upload', file));
+
+    const id = props.publication.id;
+
+    axios
+      .post(`/api/publication/updatePublication?q=${id}`, formData)
+      .then((res: any) => {
+        if (res.status === 200) {
+          console.log('ok');
+          const newActivities = {
+            id: props.publication.id,
+            Title: title.value,
+            Description: description.value,
+            isbn: isbn.value,
+            staff: staff.value,
+            year: year.value,
+            img_url: res.data.image_url
+              ? res.data.image_url
+              : props.publication.img_url,
+            pdf_url: res.data.pdf_url
+              ? res.data.pdf_url
+              : props.publication.pdf_url,
+          };
+          dispatch(editPublicationHandler(newActivities));
+          //toggle modal
+          props.toggle();
+          // //toggle more button
         }
       })
       .catch((err: any) => {
@@ -167,6 +259,8 @@ const ModalPublication = (props: Props) => {
       isbn.setInput(props.publication.isbn);
       staff.setInput(props.publication.staff);
       year.setInput(props.publication.year);
+      setPrevImages([...props.publication.img_url]);
+      prevPdf.setInput(props.publication.pdf_url);
     }
   }, [props.mode, props.publication]);
 
@@ -181,9 +275,11 @@ const ModalPublication = (props: Props) => {
       <Toast status='error' message={message} ref={toastRef} />
       <div className='relative mx-auto bg-white max-w-lg rounded-lg shadow z-50 p-5'>
         <form
-        //   onSubmit={
-        //     props.mode === 'add' ? (e) => createUser(e) : (e) => updateUser(e)
-        //   }
+          onSubmit={
+            props.mode === 'add'
+              ? (e) => createPublication(e)
+              : (e) => updateCurrentPublication(e)
+          }
         >
           <div>
             <section className='my-5 grid grid-cols-2 gap-5'>
@@ -240,6 +336,7 @@ const ModalPublication = (props: Props) => {
                 <input
                   type='text'
                   value={isbn.value}
+                  required
                   onChange={isbn.onChange}
                   className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
                 />
@@ -303,7 +400,10 @@ const ModalPublication = (props: Props) => {
               isShowing={showDropzone}
               hide={toggleDropzone}
               fileDrop={fileDrop}
-              files={file}
+              files={validFiles}
+              content={
+                'Add cover as the first value and backpage as the second value'
+              }
               removeFile={removeFile}
             />
             <DropZoneFile

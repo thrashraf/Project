@@ -133,6 +133,11 @@ class activities {
     const sql = `UPDATE activities SET status = '${status}', kjSignature = '${signature}', kjName = '${kjName}' where id = '${id}'`;
     return db.execute(sql);
   }
+
+  static async getReportUser(id) {
+    const sql = `SELECT * FROM activities where userId = '${id}'`;
+    return db.execute(sql);
+  }
 }
 
 export default activities;

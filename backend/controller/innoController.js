@@ -1,12 +1,12 @@
-import inno from "../model/inno.js";
-import crypto from "crypto";
+import inno from '../model/inno.js';
+import crypto from 'crypto';
 
 export const showInno = async (req, res) => {
   try {
     const { q } = req.query;
 
     //add search by year
-    const keys = ["Title"];
+    const keys = ['Title'];
 
     const search = (data) => {
       return data.filter((item) =>
@@ -26,20 +26,29 @@ export const showInno = async (req, res) => {
 
 export const createInnovation = async (req, res) => {
   try {
-    const { Title,Description, Name, Program, Level, Medal, Year } = req.body;
+    const { Title, Description, Name, Program, Level, Medal, Year } = req.body;
     const files = req.files;
 
-    const id = crypto.randomBytes(16).toString("hex");
+    const id = crypto.randomBytes(16).toString('hex');
 
     //filter images
-    const images =
-      files.length >= 0
-        ? files.filter((images) => images.mimetype.slice(0, 5) === "image")
+    const filterImages =
+      files.length > 0
+        ? files.filter((images) => images.mimetype.slice(0, 5) === 'image')
         : null;
+
+    const images = filterImages.map((item) => item.filename);
     console.log(images);
 
+    //filter pdf
+    const pdf =
+      files.length >= 0
+        ? files.filter((images) => images.mimetype.slice(0, 5) !== 'image')
+        : null;
+    console.log(pdf);
+
     console.log(Title, Description, Name, Program, Level, Medal, Year);
-    
+
     const [activitiesCreated] = await inno.createInnovation(
       id,
       Title,
@@ -49,12 +58,118 @@ export const createInnovation = async (req, res) => {
       Level,
       Medal,
       Year,
-      images[0]?.filename
+      images[0],
+      pdf[0].filename
     );
-    console.log(images[0]?.filename)
+    console.log(images[0]?.filename);
 
+    res
+      .status(200)
+      .json({ message: 'successful', img_url: images[0]?.filename });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      message: "can't load data",
+    });
+  }
+};
 
-    res.status(200).json({message: 'successful', img_url: images[0]?.filename});
+export const updatedInnovation = async (req, res) => {
+  try {
+    const { q } = req.query;
+
+    const files = req.files;
+
+    const {
+      Title,
+      Description,
+      Name,
+      Program,
+      Level,
+      Medal,
+      Year,
+      prevImages,
+      prevPdf,
+    } = req.body;
+
+    console.log(req.body);
+    //filter images
+    const filterImages =
+      files.length >= 0
+        ? files.filter((images) => images.mimetype.slice(0, 5) === 'image')
+        : null;
+
+    const images = filterImages.map((item) => item.filename);
+    console.log(images);
+
+    //filter pdf
+    const pdf =
+      files.length >= 0
+        ? files.filter((images) => images.mimetype.slice(0, 5) !== 'image')
+        : null;
+    console.log(pdf);
+
+    console.log(prevPdf, pdf);
+
+    if (files.length > 0) {
+      const [updatedPublication] = await inno.updateInnovationWithImages(
+        q,
+        Title,
+        Description,
+        Name,
+        Program,
+        Level,
+        Medal,
+        Year,
+        images.length > 0 ? images[0].filename : prevImages,
+        pdf.length > 0 ? pdf[0].filename : prevPdf
+      );
+
+      if (updatedPublication.affectedRows !== 1) {
+        res.status(400).json({
+          message: 'something went wrong',
+        });
+      }
+    }
+
+    const [updatedPublication] = await inno.updateInnovation(
+      q,
+      Title,
+      Description,
+      Name,
+      Program,
+      Level,
+      Medal,
+      Year
+    );
+
+    if (updatedPublication.affectedRows !== 1) {
+      res.status(400).json({
+        message: 'something went wrong',
+      });
+    }
+
+    res.status(200).json({
+      message: 'successful',
+      image_url: images.length > 0 ? images : null,
+      pdf_url: pdf.length > 0 ? pdf[0].filename : null,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      message: "can't load data",
+    });
+  }
+};
+
+export const deleteInnovation = async (req, res) => {
+  try {
+    const { q } = req.query;
+    console.log(q);
+    const [deleteInnovation] = await inno.deleteInnovationById(q);
+    console.log(deleteInnovation.affectedRows);
+
+    res.status(200).json('successful');
   } catch (error) {
     console.log(error);
     res.status(400).json({

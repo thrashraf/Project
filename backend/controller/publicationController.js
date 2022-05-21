@@ -1,5 +1,5 @@
-import publication from "../model/publication.js";
-import crypto from "crypto";
+import publication from '../model/publication.js';
+import crypto from 'crypto';
 
 export const showPublication = async (req, res) => {
   try {
@@ -19,19 +19,21 @@ export const createPublication = async (req, res) => {
     const { title, description, isbn, staff, year } = req.body;
     const files = req.files;
 
-    const id = crypto.randomBytes(16).toString("hex");
+    const id = crypto.randomBytes(16).toString('hex');
 
     //filter images
-    const images =
+    const filterImages =
       files.length >= 0
-        ? files.filter((images) => images.mimetype.slice(0, 5) === "image")
+        ? files.filter((images) => images.mimetype.slice(0, 5) === 'image')
         : null;
+
+    const images = filterImages.map((item) => item.filename);
     console.log(images);
 
     //filter pdf
     const pdf =
       files.length >= 0
-        ? files.filter((images) => images.mimetype.slice(0, 5) !== "image")
+        ? files.filter((images) => images.mimetype.slice(0, 5) !== 'image')
         : null;
     console.log(pdf);
 
@@ -42,17 +44,15 @@ export const createPublication = async (req, res) => {
       isbn,
       staff,
       year,
-      images[0]?.filename,
+      images,
       pdf[0]?.filename
     );
 
-    res
-      .status(200)
-      .json({
-        message: "successful",
-        image_url: files.length > 0 ? files[0].filename : null,
-        pdf_url:  pdf[0]?.filename,
-      });
+    res.status(200).json({
+      message: 'successful',
+      image_url: files.length > 0 ? files[0].filename : null,
+      pdf_url: pdf[0]?.filename,
+    });
   } catch (error) {
     console.log(error);
     res.status(400).json({
@@ -61,13 +61,32 @@ export const createPublication = async (req, res) => {
   }
 };
 
-export const updateActivities = async (req, res) => {
+export const updatePublication = async (req, res) => {
   try {
     const { q } = req.query;
 
     const files = req.files;
 
-    const { title, description, isbn, staff, year } = req.body;
+    const { title, description, isbn, staff, year, prevImages, prevPdf } =
+      req.body;
+
+    //filter images
+    const filterImages =
+      files.length >= 0
+        ? files.filter((images) => images.mimetype.slice(0, 5) === 'image')
+        : null;
+
+    const images = filterImages.map((item) => item.filename);
+    console.log(images);
+
+    //filter pdf
+    const pdf =
+      files.length >= 0
+        ? files.filter((images) => images.mimetype.slice(0, 5) !== 'image')
+        : null;
+    console.log(pdf);
+
+    console.log(prevPdf, pdf);
 
     if (files.length > 0) {
       const [updatedPublication] = await publication.updatePublicationWithImage(
@@ -77,12 +96,13 @@ export const updateActivities = async (req, res) => {
         isbn,
         staff,
         year,
-        files[0].filename
+        images.length > 0 ? images : prevImages,
+        pdf.length > 0 ? pdf[0].filename : prevPdf
       );
 
       if (updatedPublication.affectedRows !== 1) {
         res.status(400).json({
-          message: "something went wrong",
+          message: 'something went wrong',
         });
       }
     }
@@ -98,14 +118,14 @@ export const updateActivities = async (req, res) => {
 
     if (updatedPublication.affectedRows !== 1) {
       res.status(400).json({
-        message: "something went wrong",
+        message: 'something went wrong',
       });
     }
 
     res.status(200).json({
-      message: "successful",
-      image_url: files.length > 0 ? files[0].filename : null,
-      
+      message: 'successful',
+      image_url: images.length > 0 ? images : null,
+      pdf_url: pdf.length > 0 ? pdf[0].filename : null,
     });
   } catch (error) {
     console.log(error);
@@ -122,7 +142,7 @@ export const deletePublication = async (req, res) => {
     const [deletePublication] = await publication.deletePublicationById(q);
     console.log(deletePublication.affectedRows);
 
-    res.status(200).json("successful");
+    res.status(200).json('successful');
   } catch (error) {
     console.log(error);
     res.status(400).json({
