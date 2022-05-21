@@ -167,11 +167,11 @@ console.log(props.innovation)
       <div>
         {props.show && props.innovation && (
           <div
-            className="py-12 transition duration-150 ease-in-out z-10 absolute top-0  bottom-0 right-0 left-0 text-center"
+            className="py-12 transition duration-150 ease-in-out z-20 absolute top-0 bottom-0 right-0 left-0 text-center"
             id="modal"
           >
             <div
-              className="bg-[#00000055] fixed z-10 inset-0 "
+              className=" bg-opacity-10 bg-black fixed inset-0 "
               onClick={closeModal}
             />
             <div

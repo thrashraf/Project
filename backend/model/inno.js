@@ -2,7 +2,7 @@ import db from "../config/db.js";
 
 class inno{
     static async showUser() {
-        const sql = `SELECT * FROM innovasion`
+        const sql = `SELECT * FROM innovation`
         return db.execute(sql)
     }
     static async createInnovation(
@@ -17,7 +17,7 @@ class inno{
         image
       ) {
         const sql = `INSERT INTO
-                    innovasion (id, Title,Description, Name, Program, Level, Medal, Year, img_url)
+                    innovation (id, Title,Description, Name, Program, Level, Medal, Year, img_url)
                 VALUES 
                 (
                     '${id}',

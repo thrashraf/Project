@@ -13,7 +13,7 @@ import {
 
 export const Publications = () => {
   const background = {
-    backgroundImage: "url(" + "/assets/bookshelves.jpg" + ")",
+    backgroundImage: "url(" + "/assets/wood.jpg" + ")",
   };
 
   const { allPublication, isFetching }: any =

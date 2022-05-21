@@ -5,14 +5,22 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
 export const Home =() =>{
+  const background = {
+    backgroundImage: "url(" + "/assets/bg.jpg" + ")",
+  };
   return (
     <>
       <Navbar fixed />
-       <section className="header relative pt-16 items-center flex h-screen max-h-860-px">
-        <div className="container mx-auto items-center flex flex-wrap">
+       <section className=" pt-16 items-center bg-cover overflow-x-hidden flex h-screen w-full"
+       style={background}>
+        
+         
+        <div className="container mx-auto items-center flex flex-wrap"
+        // style={background}
+        >
           <div className="w-full md:w-8/12 lg:ml-[100px] lg:w-6/12 xl:w-6/12 px-4">
             <div className="pt-32 sm:pt-0">
-              <h2 className="font-semibold text-4xl text-[#4c4c4c]">
+              <h2 className="font-semibold z-10 text-4xl text-[#4c4c4c]">
                 Staff Activity Management System 
               </h2>
               <p className="mt-4 text-lg leading-relaxed text-[#a7adba]">
@@ -32,9 +40,10 @@ export const Home =() =>{
           </div>
         </div>
 
+        
         {/* <img
-          className="absolute top-0 b-auto right-0 pt-16 sm:w-6/12 -mt-48 sm:mt-0 w-10/12 max-h-860px"
-          src="/assets/pattern_react.png"
+          className="absolute object-cover top-0 b-auto right-0 pt-16  -mt-48 sm:mt-0 w-full h-screen"
+          src="/assets/bg.jpg"
           alt="..."
         /> */}
       </section> 
