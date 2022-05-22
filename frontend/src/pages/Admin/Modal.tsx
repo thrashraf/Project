@@ -98,8 +98,10 @@ const Modal = (props: Props) => {
             email: email.value,
             role: role.value,
             phone_number: phone_number.value,
-            // banner: res.data.image_url,
+            img_url: res.data.img_url,
           };
+
+          console.log(newActivities);
 
           dispatch(updateUserHandler(newActivities));
           props.toggle();
@@ -112,17 +114,29 @@ const Modal = (props: Props) => {
 
   const createUser = (e: any) => {
     e.preventDefault();
-    const newUser = {
-      name: name.value,
-      email: email.value,
-      role: role.value,
-      phone_number: phone_number.value,
-      password: password.value,
-    };
 
     api
-      .post('/api/admin/createUser', newUser)
+      .post(
+        '/api/admin/createUser',
+        {
+          name: name.value,
+          email: email.value,
+          role: role.value,
+          phone_number: phone_number.value,
+          password: password.value,
+        },
+        { withCredentials: true }
+      )
       .then((res) => {
+        const newUser = {
+          name: name.value,
+          email: email.value,
+          role: role.value,
+          phone_number: phone_number.value,
+          password: password.value,
+          id: res.data.id,
+        };
+
         dispatch(addUser(newUser));
         props.toggle();
       })

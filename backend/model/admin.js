@@ -27,6 +27,7 @@ class admin {
         where
             id = '${id}'        
     `;
+    console.log(sql);
     return db.execute(sql);
   }
 

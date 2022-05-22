@@ -31,7 +31,7 @@ export const createUser = async (req, res) => {
       hashPassword
     );
 
-    return res.status(200).json({ message: 'successfully update user!' });
+    return res.status(200).json({ message: 'successfully update user!', id });
   } catch (error) {
     console.log(error);
 
@@ -44,9 +44,9 @@ export const createUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const { id, name, email, role, img_url, phone_number } = req.body;
-    console.log(req.file, id, name, email, role, img_url);
+    console.log(req.file.filename, id, name, email, role, img_url);
 
-    if (req.file !== undefined) {
+    if (req.file.filename) {
       const [updateResult] = await admin.updateUserWithImages(
         id,
         name,
@@ -55,6 +55,8 @@ export const updateUser = async (req, res) => {
         req.file.filename
       );
 
+      console.log('lol');
+      console.log(updateResult);
       return updateResult.affectedRows === 1
         ? res.status(200).json({
             message: 'successfully update user!',
