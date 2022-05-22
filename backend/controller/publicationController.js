@@ -5,10 +5,10 @@ export const showPublication = async (req, res) => {
   try {
     const [allPublication] = await publication.showUser();
 
-    res.status(200).json({ allPublication });
+    return res.status(200).json({ allPublication });
   } catch (error) {
     console.log(error);
-    res.status(400).json({
+    return res.status(400).json({
       message: "can't load data",
     });
   }
@@ -48,14 +48,15 @@ export const createPublication = async (req, res) => {
       pdf[0]?.filename
     );
 
-    res.status(200).json({
+    return res.status(200).json({
       message: 'successful',
-      image_url: files.length > 0 ? files[0].filename : null,
+      image_url: files.length > 0 ? images : null,
       pdf_url: pdf[0]?.filename,
+      id
     });
   } catch (error) {
     console.log(error);
-    res.status(400).json({
+    return res.status(400).json({
       message: "can't load data",
     });
   }
@@ -101,7 +102,7 @@ export const updatePublication = async (req, res) => {
       );
 
       if (updatedPublication.affectedRows !== 1) {
-        res.status(400).json({
+       return res.status(400).json({
           message: 'something went wrong',
         });
       }
@@ -117,19 +118,19 @@ export const updatePublication = async (req, res) => {
     );
 
     if (updatedPublication.affectedRows !== 1) {
-      res.status(400).json({
+      return res.status(400).json({
         message: 'something went wrong',
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       message: 'successful',
       image_url: images.length > 0 ? images : null,
       pdf_url: pdf.length > 0 ? pdf[0].filename : null,
     });
   } catch (error) {
     console.log(error);
-    res.status(400).json({
+    return res.status(400).json({
       message: "can't load data",
     });
   }
@@ -142,10 +143,10 @@ export const deletePublication = async (req, res) => {
     const [deletePublication] = await publication.deletePublicationById(q);
     console.log(deletePublication.affectedRows);
 
-    res.status(200).json('successful');
+    return res.status(200).json('successful');
   } catch (error) {
     console.log(error);
-    res.status(400).json({
+    return res.status(400).json({
       message: "can't load data",
     });
   }

@@ -131,7 +131,9 @@ const AddPublication = ({ isShowing, toggle }: any) => {
       })
       .then((res: any) => {
         if (res.status === 200) {
+          console.log(res.data)
           const newPublication = {
+            id: res.data.id,
             Title: title.value,
             Description: description.value,
             isbn: isbn.value,
@@ -140,7 +142,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
             img_url: res.data.image_url ? res.data.image_url : null,
             pdf_url: res.data.pdf_url,
           };
-
+          console.log(newPublication)
           dispatch(addPublication(newPublication));
           toggle();
         }

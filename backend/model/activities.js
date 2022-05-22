@@ -52,10 +52,11 @@ class activities {
     const sql = `UPDATE activities SET title = '${title}',
         start = '${start}',
         organizer = '${organizer}',
-        venue = '${venue}',
+        venue = '${venue}'
         where id = '${id}'`;
     return db.execute(sql);
   }
+
 
   static async updateActivitiesWithImage(
     id,

@@ -63,7 +63,7 @@ const UserDropdown = () => {
               className='w-full rounded-full align-middle border-none shadow-lg'
               src={
                 user?.profile_picture
-                  ? `/assets/${user.profile_picture}`
+                  ? `/file/${user.profile_picture}`
                   : '/assets/dummy_profile.png'
               }
             />
