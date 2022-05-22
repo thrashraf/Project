@@ -29,6 +29,7 @@ export const publicationSlice = createSlice({
   initialState,
   reducers: {
     addPublication: (state: any, action: any) => {
+      console.log(action.payload)
       state.allPublication = [...state.allPublication, action.payload];
     },
 

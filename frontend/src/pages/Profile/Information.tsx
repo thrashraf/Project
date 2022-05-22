@@ -87,7 +87,7 @@ export const Information = (props: Props) => {
               className='w-[100px] h-[100px] rounded-full  absolute top-32 left-5 object-cover'
               src={`${
                 user && user.profile_picture
-                  ? `/uploads/${user?.profile_picture}`
+                  ? `/file/${user?.profile_picture}`
                   : '/assets/dummy_profile.png'
               }`}
               alt=''

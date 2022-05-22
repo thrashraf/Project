@@ -76,7 +76,8 @@ export const Table = ({
       console.log(filteredInnovation);
       dispatch(setFilterInnovation(filteredInnovation));
     } 
-
+ 
+    
 
     if((year && year !== "Year") && (medalFilter && medalFilter !== "Medal")){
       const filteredInnovation = tempInnovation?.filter(

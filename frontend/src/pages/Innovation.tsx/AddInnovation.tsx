@@ -135,7 +135,7 @@ const AddInnovation = (props: Props) => {
       toastRef.current.showToast();
       e.preventDefault();
       return;
-    }
+    }e.preventDefault();
 
     const formData = new FormData();
 

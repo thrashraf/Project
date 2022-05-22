@@ -146,7 +146,6 @@ const ModalInnovation = (props: Props) => {
 
   const deletePublication = () => {
     const id = publication.id;
-
     axios
       .post(`${url}/api/publication/deletePublication?q=${id}`, {
         withCredentials: true,
@@ -190,7 +189,7 @@ const ModalInnovation = (props: Props) => {
                 <div className='w-full flex justify-center text-green-400 mb-4'></div>
                 <div>
                   <img
-                    src={`/assets/${props.innovation?.img_url}`}
+                    src={`/file/${props.innovation?.img_url}`}
                     className=' rounded-lg mb-10 w-[400px] h-[200px] object-contain'
                   ></img>
                   <i

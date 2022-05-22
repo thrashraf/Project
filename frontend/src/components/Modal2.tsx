@@ -158,7 +158,6 @@ const Modal2 = (props: Props) => {
     filePDF.forEach((file: any) => formData.append('upload', file));
 
     const id = publication.id;
-
     axios
       .post(`${url}/api/publication/updatePublication?q=${id}`, formData, {
         withCredentials: true,
@@ -166,7 +165,8 @@ const Modal2 = (props: Props) => {
       .then((res: any) => {
         if (res.status === 200) {
           console.log('ok');
-
+          
+          
           const newActivities = {
             id: publication.id,
             Title: title.value,
@@ -242,7 +242,7 @@ const Modal2 = (props: Props) => {
                 <div className='w-full flex justify-center text-green-400 mb-4'></div>
                 <div className='relative'>
                   <img
-                    src={`/uploads/${publication?.img_url[imageIndex]}`}
+                    src={`/file/${publication?.img_url[imageIndex]}`}
                     className=' rounded-lg mb-10 w-[400px] h-[200px] object-contain'
                   ></img>
                   <div className='w-full absolute top-20 flex justify-between'>
@@ -365,7 +365,7 @@ const Modal2 = (props: Props) => {
                   className={`flex items-center mr-3 justify-center w-full ${hideEditComp}`}
                 >
                   <button className='focus:outline-none transition duration-150 ease-in-out hover:bg-indigo-600 bg-blue-500 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm'>
-                    <a href={`/assets/${publication?.pdf_url}`} target='_blank'>
+                    <a href={`/file/${publication?.pdf_url}`} target='_blank'>
                       View Details
                     </a>
                   </button>

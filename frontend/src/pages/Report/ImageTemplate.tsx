@@ -75,7 +75,7 @@ export const ImageTemplate = (props: Props) => {
                     <i className='fa-solid fa-xmark fa-2xl' />
                   </section>
                   <img
-                    src={`/uploads/${image}`}
+                    src={`/file/${image}`}
                     alt='pho'
                     key={index}
                     className='w-[400px] h-[200px] object-cover m-auto'
