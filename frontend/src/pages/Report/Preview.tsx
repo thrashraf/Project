@@ -1,4 +1,6 @@
 import React from 'react';
+import { useAppSelector } from '../../app/hooks';
+import { userSelector } from '../../features/user/User';
 
 type Props = {
   title: string;
@@ -7,11 +9,13 @@ type Props = {
   organizer: string;
   date: string;
   venue: string;
-
+  position: string;
   signature: string;
 };
 
 export const Preview = (props: Props) => {
+  const { user }: any = useAppSelector(userSelector);
+
   return (
     <div className='my-2/5 h-[800px] w-[500px] text-[12px] font-serif m-auto  bg-white rounded-sm p-10 flex flex-col relative'>
       <img
@@ -42,7 +46,7 @@ export const Preview = (props: Props) => {
         <section className='mt-10'>
           <h1 className='font-bold'>PENGISIAN/PERLAKSANAAN PROGRAM</h1>
           {props.content
-            ?.slice(0, 2205)
+            ?.slice(0, 2100)
             .split('\n')
             .map((text, index) => {
               return (
@@ -65,35 +69,16 @@ export const Preview = (props: Props) => {
             <p>Disediakan oleh: </p>
             <div className=' border-b-2 border-dotted border-black w-[80px] mt-2 h-[30px]'>
               <img
-                src={props.signature && `/assets/${props.signature}`}
+                src={props.signature && `/uploads/${props.signature}`}
                 alt='signature'
                 className='object-cover h-[50px] mx-auto'
               />
             </div>
             <section className='text-[8px]'>
-              <p>(MUHAMMAD ZULASRAF BIN ZULKIFLI)</p>
-              <p>(PENGARAH)</p>
+              <p>({user?.name})</p>
+              <p>({props.position})</p>
             </section>
           </section>
-
-          {/* <section
-            className={` ${
-              props.content.length > 2051 ? 'hidden' : null
-            } absolute bottom-5 right-10 font-Arimo font-normal`}
-          >
-            <p>Disahkan oleh: </p>
-            <div className=' border-b-2 border-dotted border-black w-[80px] mt-2 h-[30px]'>
-              <img
-                src={props.signature && `/assets/${props.signature}`}
-                alt='signature'
-                className='object-cover h-[50px] mx-auto'
-              />
-            </div>
-            <section className='text-[8px]'>
-              <p>(MUHAMMAD ZULASRAF BIN ZULKIFLI)</p>
-              <p>(PENGARAH)</p>
-            </section>
-          </section> */}
         </div>
       </div>
     </div>

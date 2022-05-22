@@ -86,6 +86,7 @@ class activities {
     id,
     images,
     content,
+    position,
     tentative,
     ajk,
     signature
@@ -96,6 +97,7 @@ class activities {
                 owner = '${owner}', 
                 images = '${JSON.stringify(images)}',
                 content = '${content}',
+                position = '${position}',
                 tentative = '[${tentative}]',
                 committee = '[${ajk}]',
                 status = 'pending',
@@ -111,6 +113,7 @@ class activities {
     prevImages,
     id,
     content,
+    position,
     tentative,
     ajk,
     signature
@@ -121,6 +124,7 @@ class activities {
                   owner = '${owner}', 
                   images = '${JSON.stringify(prevImages)}',
                   content = '${content}',
+                  position = '${position}',
                   tentative = '[${tentative}]',
                   committee = '[${ajk}]',
                   status = 'pending',

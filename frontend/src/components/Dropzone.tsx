@@ -21,7 +21,7 @@ const Dropzone = ({ isShowing, hide, ...props }: any) => {
 
   return (
     <Modal isShowing={isShowing} hide={hide}>
-      <div className='p-5 bg-white mx-auto relative max-w-lg rounded-lg '>
+      <div className=' top-20 p-5 bg-white mx-auto relative max-w-lg rounded-lg '>
         <section
           className='flex justify-end mb-5 cursor-pointer'
           onClick={hide}

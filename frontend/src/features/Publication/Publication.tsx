@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../app/Store';
 import api from '../../utils/api';
+import url from '../../utils/url';
 
 interface interfaceState {
   [key: string]: any;
@@ -98,13 +99,12 @@ export const getAllPublication = createAsyncThunk(
   '/api/Publication/getAllPublication',
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get('/api/publication/getAllPublication', {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await axios.get(
+        `${url}/api/publication/getAllPublication`,
+        {
+          withCredentials: true,
+        }
+      );
       let data = await response.data;
 
       if (response.status === 200) {

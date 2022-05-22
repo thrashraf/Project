@@ -169,7 +169,7 @@ export default function Users() {
                             <img
                               src={
                                 user.profile_picture
-                                  ? `/assets/${user.profile_picture}`
+                                  ? `/uploads/${user.profile_picture}`
                                   : '/assets/defaultProfile.jpg'
                               }
                               alt=''

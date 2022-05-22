@@ -1,3 +1,4 @@
+import url from '../../utils/url';
 import React, { useEffect, useRef, useState } from 'react';
 import ModalContainer from '../../components/ModalContainer';
 import Dropzone from '../../components/Dropzone';
@@ -154,10 +155,11 @@ const AddInnovation = (props: Props) => {
     formData.append('Medal', Medal.value);
     formData.append('Year', Year.value);
     file?.forEach((image: any) => formData.append('upload', image));
-    filePDF.forEach((file: any) => formData.append('upload', file));
 
     axios
-      .post('/api/inno/createInnovation', formData)
+      .post(`${url}/api/inno/createInnovation`, formData, {
+        withCredentials: true,
+      })
       .then((res: any) => {
         if (res.status === 200) {
           const newInnovation = {
@@ -255,111 +257,112 @@ const AddInnovation = (props: Props) => {
     }
   }, [props.mode, props.innovation]);
 
-
   return (
-    <ModalContainer  isShowing={props.isShowing}
-    toggle={props.toggle}
-    hide={props.toggle}>
-      <div className="relative">
-        <div className="left-0 right-0 mx-6 lg:mx-auto lg:max-w-lg break-words  py-8 px-8 lg:md:px-16  bg-white  shadow-md rounded-lg border border-gray-400">
+    <ModalContainer
+      isShowing={props.isShowing}
+      toggle={props.toggle}
+      hide={props.toggle}
+    >
+      <div className='relative'>
+        <div className='left-0 right-0 mx-6 lg:mx-auto lg:max-w-lg break-words  py-8 px-8 lg:md:px-16  bg-white  shadow-md rounded-lg border border-gray-400'>
           <button
-            type="button"
+            type='button'
             onClick={() => props.toggle()}
-            className=" absolute -top-5 -right-10 text-black bg-transparent z-10 hover:bg-black hover:text-white  rounded-lg text-sm p-2 py-4 ml-auto inline-flex items-center"
-            data-modal-toggle="authentication-modal"
+            className=' absolute -top-5 -right-10 text-black bg-transparent z-10 hover:bg-black hover:text-white  rounded-lg text-sm p-2 py-4 ml-auto inline-flex items-center'
+            data-modal-toggle='authentication-modal'
           >
-            <i className="fa-solid fa-xmark fa-lg" />
+            <i className='fa-solid fa-xmark fa-lg' />
           </button>
-          <section className="">
-            <p className="m-1">Innovation Title</p>
+          <section className=''>
+            <p className='m-1'>Innovation Title</p>
             <input
-              type="text"
+              type='text'
               value={Title.value}
               onChange={Title.onChange}
-              className="bg-blue-100 py-1 rounded-lg w-full"
+              className='bg-blue-100 py-1 rounded-lg w-full'
             />
           </section>
-          <section className="mt-1">
-            <p className="m-1">Description</p>
+          <section className='mt-1'>
+            <p className='m-1'>Description</p>
             <textarea
               value={Description.value}
               onChange={Description.onChange}
               //onChange={(e) => contentHandler(e)}
-              className="bg-blue-100 py-1 rounded-lg w-full"
+              className='bg-blue-100 py-1 rounded-lg w-full'
             />
           </section>
 
-          <section className="mt-1">
-            <p className="m-1">Name</p>
+          <section className='mt-1'>
+            <p className='m-1'>Name</p>
             <textarea
               value={Name.value}
               onChange={Name.onChange}
               //onChange={(e) => contentHandler(e)}
-              className="bg-blue-100 py-1 rounded-lg w-full"
+              className='bg-blue-100 py-1 rounded-lg w-full'
             />
           </section>
 
-          <section className="mt-1">
-            <p className="m-1">Program</p>
+          <section className='mt-1'>
+            <p className='m-1'>Program</p>
             <input
-              type="text"
+              type='text'
               value={Program.value}
               onChange={Program.onChange}
-              className="bg-blue-100 py-1 rounded-lg w-full"
+              className='bg-blue-100 py-1 rounded-lg w-full'
             />
           </section>
-          <section className="">
-            <p className="m-1">Level</p>
+          <section className=''>
+            <p className='m-1'>Level</p>
             <input
-              type="text"
+              type='text'
               value={Level.value}
               onChange={Level.onChange}
-              className="bg-blue-100 py-1 rounded-lg w-full"
+              className='bg-blue-100 py-1 rounded-lg w-full'
             />
           </section>
 
-          <section className="mt-1">
-            <p className="m-1">Medal</p>
+          <section className='mt-1'>
+            <p className='m-1'>Medal</p>
             <input
-              type="text"
+              type='text'
               value={Medal.value}
               onChange={Medal.onChange}
-              className="bg-blue-100 py-1 rounded-lg w-full"
+              className='bg-blue-100 py-1 rounded-lg w-full'
             />
           </section>
-          <section className="mt-1">
-            <p className="m-1">Year</p>
+          <section className='mt-1'>
+            <p className='m-1'>Year</p>
             <input
-              type="number"
+              type='number'
               value={Year.value}
               onChange={Year.onChange}
-              className="bg-blue-100 py-1 rounded-lg w-full"
+              className='bg-blue-100 py-1 rounded-lg w-full'
             />
           </section>
 
-          <section className="my-5">
+          <section className='my-5'>
             <section
-              className="mt-5 flex  w-[200px] items-center cursor-pointer 
+              className='mt-5 flex  w-[200px] items-center cursor-pointer 
               text-slate-400 hover:text-blue-500
-            "
-            onClick={toggleDropzone}
+            '
+              onClick={toggleDropzone}
             >
-              <div className="p-5 rounded-md bg-blue-50 ">
-                <i className="fa-solid fa-images fa-2xl"></i>
+              <div className='p-5 rounded-md bg-blue-50 '>
+                <i className='fa-solid fa-images fa-2xl'></i>
               </div>
-              <p className="ml-5 text-sm">Upload Images</p>
+              <p className='ml-5 text-sm'>Upload Images</p>
             </section>
             <section
-                className="mt-5 flex  w-[200px] items-center cursor-pointer 
+              className='mt-5 flex  w-[200px] items-center cursor-pointer 
               text-slate-400 hover:text-blue-500
-            "
-                onClick={toggleDropFile}
-              >
-                <div className="p-5 rounded-md bg-blue-50 ">
-                  <i className="fa-solid fa-file-pdf fa-2xl"></i>
-                </div>
-                <p className="ml-5 text-sm">Upload File</p>
-              </section>
+            '
+              onClick={toggleDropFile}
+            >
+              <div className='p-5 rounded-md bg-blue-50 '>
+                <i className='fa-solid fa-file-pdf fa-2xl'></i>
+              </div>
+              <p className='ml-5 text-sm'>Upload File</p>
+            </section>
           </section>
 
           <Dropzone
@@ -371,18 +374,18 @@ const AddInnovation = (props: Props) => {
             removeFile={removeFile}
           />
           <DropZoneFile
-              isShowing={showDropFile}
-              hide={toggleDropFile}
-              fileDrop={fileDropPDF}
-              fileSize={fileSize}
-              files={filePDF}
-              content={'Drop Certification PDF'}
-              removeFile={removeFilePDF}
-            />
+            isShowing={showDropFile}
+            hide={toggleDropFile}
+            fileDrop={fileDropPDF}
+            fileSize={fileSize}
+            files={filePDF}
+            content={'Drop Certification PDF'}
+            removeFile={removeFilePDF}
+          />
 
-          <div className=" justify-center flex">
+          <div className=' justify-center flex'>
             <button
-              className="focus:outline-none transition duration-150 mt-5 ease-in-out hover:bg-indigo-600 bg-blue-500 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm"
+              className='focus:outline-none transition duration-150 mt-5 ease-in-out hover:bg-indigo-600 bg-blue-500 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm'
               onClick={(e) => createInnovation(e)}
             >
               CREATE

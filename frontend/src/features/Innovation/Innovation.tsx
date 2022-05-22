@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../app/Store';
+import url from '../../utils/url';
 
 interface interfaceState {
   [key: string]: any;
@@ -106,13 +107,12 @@ export const getInnovation = createAsyncThunk(
   'Innovation/getAllInnovation',
   async (query: any, thunkAPI) => {
     try {
-      const response = await axios.get(`/api/inno/getAllInno?q=${query}`, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await axios.get(
+        `${url}/api/inno/getAllInno?q=${query}`,
+        {
+          withCredentials: true,
+        }
+      );
       let data = await response.data;
 
       if (response.status === 200) {

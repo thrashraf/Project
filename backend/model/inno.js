@@ -68,6 +68,7 @@ class inno {
     images,
     pdf
   ) {
+    console.log(images, pdf);
     const sql = `UPDATE innovation SET Title = '${Title}',
             Description = '${Description}',
             Name = '${Name}',

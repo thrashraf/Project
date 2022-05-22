@@ -227,7 +227,7 @@ export const Template = (props: Props) => {
             <View style={styles.signatureContainer}>
               <Text style={styles.signatureHeader}>Disediakan oleh:</Text>
               <Image
-                src={props.signature && `/assets/${props.signature}`}
+                src={props.signature && `/uploads/${props.signature}`}
                 style={styles.signatureImage}
               />
               <Text style={styles.name}>({props.staffName})</Text>
@@ -238,7 +238,7 @@ export const Template = (props: Props) => {
               <View style={styles.kjContainer}>
                 <Text style={styles.signatureHeader}>Disahkan oleh:</Text>
                 <Image
-                  src={props.kjSignature && `/assets/${props.kjSignature}`}
+                  src={props.kjSignature && `/uploads/${props.kjSignature}`}
                   style={styles.signatureImage}
                 />
                 <Text style={styles.name}>({props.kjName})</Text>
@@ -259,7 +259,7 @@ export const Template = (props: Props) => {
                 return (
                   <View style={styles.photoContainer}>
                     <Image
-                      src={`/assets/${img}`}
+                      src={`/uploads/${img}`}
                       key={index}
                       style={styles.image}
                     />

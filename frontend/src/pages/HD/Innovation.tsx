@@ -6,7 +6,7 @@ export const Innovation = (props: any) => {
 
   return (
     <>
-      <div className=' max-w-7xl mx-auto'>
+      <div className=' max-w-7xl mx-auto relative top-14'>
         <Table isShowing={isShowing} toggle={toggle} />
       </div>
     </>

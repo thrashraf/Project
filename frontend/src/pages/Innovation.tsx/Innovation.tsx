@@ -1,16 +1,15 @@
-import React, { useState } from "react";
-import { useAppDispatch } from "../../app/hooks";
-import Categories from "../../components/Categories";
-import Footer from "../../components/Footer";
-import Navbar from "../../components/Navbar";
-import { Table } from "../../components/Table";
-import { deleteInnovationHandler } from "../../features/Innovation/Innovation";
-import useInput from "../../hooks/useInput";
-import useModal from "../../hooks/useModal";
-import api from "../../utils/api";
-import ModalInnovation from "../Admin/ModalInnovation";
-import AddInnovation from "./AddInnovation";
-
+import React, { useState } from 'react';
+import { useAppDispatch } from '../../app/hooks';
+import Categories from '../../components/Categories';
+import Footer from '../../components/Footer';
+import Navbar from '../../components/Navbar';
+import { Table } from '../../components/Table';
+import { deleteInnovationHandler } from '../../features/Innovation/Innovation';
+import useInput from '../../hooks/useInput';
+import useModal from '../../hooks/useModal';
+import api from '../../utils/api';
+import ModalInnovation from '../Admin/ModalInnovation';
+import AddInnovation from './AddInnovation';
 
 export const Innovation = (props: any) => {
   const { isShowing, toggle } = useModal();
@@ -26,16 +25,15 @@ export const Innovation = (props: any) => {
     mode.setInput(currentMode);
   };
 
-  console.log(showModal)
+  console.log(showModal);
 
   const edit = (innovation: any) => {
-    setInnovationDetail(innovation)
+    setInnovationDetail(innovation);
     setMode('update');
   };
 
-  
   const toggleAction = (innovation: any) => {
-    setInnovationDetail(innovation)
+    setInnovationDetail(innovation);
     toggle();
   };
 
@@ -58,18 +56,27 @@ export const Innovation = (props: any) => {
     <>
       <Navbar />
 
-      <div className=" max-w-7xl mx-auto">
-        <Table isShowing={isShowing} toggle={toggle} 
-        toggleAction={toggleAction} innovationDetail={innovationDetail} 
-        edit={edit} deletePublicationById={deletePublicationById}
-        setMode={setMode}/>
+      <div className=' max-w-7xl mx-auto'>
+        <Table
+          isShowing={isShowing}
+          toggle={toggle}
+          toggleAction={toggleAction}
+          innovationDetail={innovationDetail}
+          edit={edit}
+          deletePublicationById={deletePublicationById}
+          setMode={setMode}
+        />
       </div>
 
       {/* <AddInnovation isShowing={showModal} toggle={toggleModal} innovation={innovationDetail}
                     mode={mode.value} /> */}
 
-      <ModalInnovation  isShowing={showModal} toggle={toggleModal} innovation={innovationDetail}
-                    mode={mode.value} /> 
+      <ModalInnovation
+        isShowing={showModal}
+        toggle={toggleModal}
+        innovation={innovationDetail}
+        mode={mode.value}
+      />
 
       <Footer />
     </>

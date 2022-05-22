@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"nodemon backend\" \"cd frontend && npm run start\""
+    "start": "concurrently \"nodemon backend\" \"cd frontend && npm run start\"",
+    "build": "concurrently \"nodemon backend\" \"cd frontend && serve -s build\""
   },
   "keywords": [],
   "author": "",

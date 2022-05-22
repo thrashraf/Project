@@ -9,6 +9,7 @@ import {
   toggleEditSignature,
 } from '../../features/user/User';
 import { useDispatch } from 'react-redux';
+import url from '../../utils/url';
 
 type Props = {
   modal: boolean;
@@ -91,7 +92,9 @@ const Draw = (props: Props) => {
       formData.append('email', user?.email);
       formData.append('upload', file);
       axios
-        .post('/api/user/uploadSignature', formData)
+        .post(`${url}/api/user/uploadSignature`, formData, {
+          withCredentials: true,
+        })
         .then((res) => {
           props.setModal(!props.modal);
           dispatch(updateSignature(res.data.signature));
