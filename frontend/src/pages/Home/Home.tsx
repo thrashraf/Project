@@ -233,14 +233,16 @@ export const Home = () => {
                       </a>
                     </div>
                     <div className='bg-emerald-500 shadow-lg rounded-lg text-center p-8 mt-8'>
+                    <a href='/activities' target='_blank'>
                       <img
                         alt='...'
                         className='shadow-md rounded-full max-w-full w-16 mx-auto p-2 bg-white'
-                        src='/assets/right.png'
+                        src='/assets/planner.png'
                       />
                       <p className='text-lg text-white mt-4 font-semibold'>
-                        Verify
+                        Events
                       </p>
+                      </a>
                     </div>
                   </a>
                 </div>
@@ -260,7 +262,7 @@ export const Home = () => {
               </p>
 
               <a
-                href=''
+                href='/activities'
                 target='_blank'
                 className='font-bold text-blueGray-700 hover:text-blueGray-500 ease-linear transition-all duration-150'
               >

@@ -54,6 +54,7 @@ export const innovationSlice = createSlice({
     },
 
     setFilterInnovation: (state: any, action: any) => {
+      console.log(action.payload)
       state.allInnovation = action.payload;
     },
 

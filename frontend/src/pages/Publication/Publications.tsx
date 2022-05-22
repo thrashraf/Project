@@ -10,6 +10,7 @@ import {
   publicationSelector,
   getAllPublication,
 } from "../../features/Publication/Publication";
+import { userSelector } from "../../features/user/User";
 
 export const Publications = () => {
   const background = {
@@ -23,6 +24,8 @@ export const Publications = () => {
   const [eShow, setEShow] = useState(false);
   // const [allPublication, setAllPublication] = useState<any>();
   const [publication, setPublication] = useState<any>(null);
+
+  const { user }: any = useAppSelector(userSelector)
 
   const viewPublicationHandler = (id: string, publication: any) => {
     setPublication(publication);
@@ -48,13 +51,14 @@ export const Publications = () => {
 
             <AddPublication isShowing={eShow} toggle={setEShow} />
 
-              
+            {user && (    
           <button
             className=" bg-blue-500 absolute top-20 right-10 transition duration-150 ease-in-out hover:bg-indigo-600 rounded text-white px-6 py-1 mx-10 text-xl"
             onClick={() => setEShow(!eShow)}
           >
             +
           </button>
+          )}
               
             <Modal2 publication={publication} show={show} setShow={setShow} />
           </div>

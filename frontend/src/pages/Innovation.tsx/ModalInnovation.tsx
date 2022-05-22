@@ -57,7 +57,7 @@ const ModalInnovation = (props: Props) => {
     dispatch(closeEditMode())
   };
 
-  console.log(file)
+  // console.log(file)
 
 
   const addFile = (e: any) => {
@@ -77,7 +77,7 @@ const ModalInnovation = (props: Props) => {
   //for validate file
   const validateFile = (file: any) => {
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-    console.log(validTypes.indexOf(file.type) === -1);
+    //console.log(validTypes.indexOf(file.type) === -1);
     if (validTypes.indexOf(file.type) === -1) {
       return false;
     }
@@ -111,7 +111,7 @@ const ModalInnovation = (props: Props) => {
       .post(`/api/publication/updatePublication?q=${id}`, formData)
       .then((res: any) => {
         if (res.status === 200) {
-          console.log('ok');
+          //console.log('ok');
 
           const newActivities = {
             id: publication.id,
@@ -145,7 +145,7 @@ const ModalInnovation = (props: Props) => {
       .post(`/api/publication/deletePublication?q=${id}`)
       .then((res: any) => {
         if (res.status === 200) {
-          console.log('ok');
+          //console.log('ok');
           
           dispatch(deletePublicationHandler(id));
           //toggle modal
@@ -161,7 +161,7 @@ const ModalInnovation = (props: Props) => {
         console.log(err);
       });
   }
-console.log(props.innovation)
+// console.log(props.innovation)
   return (
     <div>
       <div>
@@ -265,7 +265,6 @@ console.log(props.innovation)
                 </div>
                 <div className="cursor-pointer absolute top-0 left-3 mt-4 mr-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-500 transition duration-150 ease-in-out">
                   <section className="fixed w-10">
-                    <More isShowing={isShowing} toggle={toggle} deleteItem={deletePublication} />
                   </section>
                 </div>
               </div>

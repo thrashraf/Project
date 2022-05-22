@@ -75,7 +75,7 @@ class inno {
             Level = '${Level}',
             Medal = '${Medal}',
             Year = '${Year}',
-            img_url = '${images}'
+            img_url = '${images}',
             pdf_url = '${pdf}'
             where id = '${id}'`;
     return db.execute(sql);

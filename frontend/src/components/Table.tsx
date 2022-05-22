@@ -15,23 +15,34 @@ import {
 import useInput from "../hooks/useInput";
 import generateYears from "../utils/generateYears";
 import { medal } from "../utils/medal";
-import ModalInnovation from "../pages/Innovation.tsx/ModalInnovation"
+import ModalInnovation from "../pages/Innovation.tsx/ModalInnovation";
+import { userSelector } from "../features/user/User";
 
-export const Table = ({ isShowing, toggle }: any) => {
+export const Table = ({
+  isShowing,
+  toggle,
+  toggleAction,
+  innovationDetail,
+  edit,
+  deletePublicationById,
+  setMode,
+}: any) => {
   const dispatch = useAppDispatch();
 
   const { query, allInnovation, filterData, showFilter, tempInnovation } =
     useAppSelector(innovationSelector);
 
+  const { user }: any = useAppSelector(userSelector);
+
   const [medalFilter, setMedalFilter] = useState<string>("");
+  const [year, setYear] = useState<string>("");
 
   const { isShowing: openFilter, toggle: toggleFilter } = useModal();
   const { isShowing: openYear, toggle: toggleYear } = useModal();
   const { isShowing: openMonth, toggle: toggleMonth } = useModal();
   const { isShowing: openModal, toggle: toggleModal } = useModal();
 
-  const [detailInnovation, setDetailInnovation] = useState(null)
-
+  const [detailInnovation, setDetailInnovation] = useState(null);
 
   const years = generateYears();
 
@@ -40,22 +51,45 @@ export const Table = ({ isShowing, toggle }: any) => {
   }, [query]);
 
   useEffect(() => {
-    if (medalFilter) {
-      const filteredInnovation = tempInnovation.filter(
-        (item: any) => item.Medal === medalFilter
-      );
-      dispatch(setFilterInnovation(filteredInnovation));
-    }
 
+    
     if (medalFilter === "Medal") {
       setMedalFilter("");
       dispatch(setFilterInnovation(tempInnovation));
     }
-  }, [medalFilter]);
+
+    if (year === "Year") {
+      setYear("");
+      dispatch(setFilterInnovation(tempInnovation));
+    }
+    
+    if (medalFilter && medalFilter !== "Medal") {
+      const filteredInnovation = tempInnovation?.filter(
+        (item: any) => item.Medal === medalFilter
+      );
+      dispatch(setFilterInnovation(filteredInnovation));
+    } else if (year && year !== "Year") {
+      const filteredInnovation = tempInnovation?.filter(
+        (item: any) =>
+          (new Date(item.Year.toString()).getFullYear() as any) === year
+      );
+      console.log(filteredInnovation);
+      dispatch(setFilterInnovation(filteredInnovation));
+    } 
+
+
+    if((year && year !== "Year") && (medalFilter && medalFilter !== "Medal")){
+      const filteredInnovation = tempInnovation?.filter(
+        (item: any) => (new Date(item.Year.toString()).getFullYear() as any) === year && item.Medal === medalFilter
+      );
+      dispatch(setFilterInnovation(filteredInnovation));
+    }
+  }, [medalFilter, year]);
+
   const showModal = (innovation: any) => {
-    setDetailInnovation(innovation)
-    toggleModal()
-  }
+    setDetailInnovation(innovation);
+    toggleModal();
+  };
   return (
     <div className="mt-20  pb-10" id="Inno">
       <h1 className=" font-extrabold lg:text-5xl mb-8 text-center rounded-2xl border-gray-800 border-2 w-[50%] mx-auto p-2">
@@ -64,12 +98,14 @@ export const Table = ({ isShowing, toggle }: any) => {
 
       <div className="flex justify-between items-center">
         <section className="flex ">
-          <button
-            className=" bg-blue-500  transition duration-150 ease-in-out hover:bg-indigo-600 rounded text-white px-6 py-0 mx-10 text-xl"
-            onClick={() => toggle()}
-          >
-            +
-          </button>
+          {user && (
+            <button
+              className=" bg-blue-500  transition duration-150 ease-in-out hover:bg-indigo-600 rounded text-white px-6 py-0 mx-10 text-xl"
+              onClick={() => setMode("add")}
+            >
+              +
+            </button>
+          )}
           <section className=" bg-blue-50 rounded-lg flex">
             <span className="p-2 ml-3 text-gray-400">
               <i className="fa-solid fa-magnifying-glass" />
@@ -97,23 +133,13 @@ export const Table = ({ isShowing, toggle }: any) => {
           </section>
         </section>
         <section className="flex w-full justify-end">
-          <section className="flex w-[400px] justify-between my-5">
-            <DropDown
-              isOpen={openFilter}
-              setIsOpen={toggleFilter}
-              //setFilterBy={props.setFilterItem}
-              //navdropArr={filterActivities}
-              //filterBy={props.filterBy}
-              bgColor="bg-blue-500"
-              title="Filter By"
-              icon="fa-solid fa-filter mr-3"
-            />
+          <section className="flex w-[250px] justify-between my-5">
             <DropDown
               isOpen={openYear}
               setIsOpen={toggleYear}
-              //setFilterBy={props.setYear}
+              setFilterBy={setYear}
               navdropArr={years}
-              //filterBy={props.year}
+              filterBy={year}
               bgColor="bg-blue-500"
               title="Year"
               icon="fa-solid fa-calendar mr-3"
@@ -165,6 +191,11 @@ export const Table = ({ isShowing, toggle }: any) => {
                 <th className="text-gray-600 dark:text-gray-400 font-normal  text-center text-sm  tracking-normal leading-4">
                   Years
                 </th>
+                {user && (
+                  <th className="text-gray-600 dark:text-gray-400 font-normal  text-center text-sm  tracking-normal leading-4">
+                    Actions
+                  </th>
+                )}
               </tr>
             </thead>
 
@@ -172,45 +203,80 @@ export const Table = ({ isShowing, toggle }: any) => {
               {allInnovation?.map((inno: any, index: number) => {
                 return (
                   <>
-                  
-                  <ModalInnovation show={openModal} setShow={toggleModal} innovation={detailInnovation}/>
-                  <tr
-                    className="h-24   border-gray-300 dark:border-gray-200 border-b"
-                    key={index}
-                  >
-                    
-                    
+                    <ModalInnovation
+                      show={openModal}
+                      setShow={toggleModal}
+                      innovation={detailInnovation}
+                    />
+                    <tr
+                      className="h-24   border-gray-300 dark:border-gray-200 border-b"
+                      key={index}
+                    >
+                      <td className="text-md pr-5 text-center whitespace-no-wrap text-gray-800  tracking-normal leading-4">
+                        {index + 1}
+                      </td>
+                      <td className=" whitespace-pre-line max-w-[100px]">
+                        <div className="flex items-center">
+                          <p
+                            className=" text-gray-800 text-left hover:underline hover:cursor-pointer hover:text-blue-500 tracking-normal leading-4 text-md"
+                            onClick={() => showModal(inno)}
+                          >
+                            {inno.Title}
+                          </p>
+                        </div>
+                      </td>
+                      <td className="text-md whitespace-pre-line max-w-[200px] text-center text-gray-800  tracking-normal leading-4">
+                        {inno.Name}
+                      </td>
+                      <td className="text-md whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
+                        {inno.Program}
+                      </td>
+                      <td className="text-md whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
+                        {inno.Level}
+                      </td>{" "}
+                      <td className="text-md whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
+                        {inno.Medal}
+                      </td>
+                      <td className="text-md whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
+                        {inno.Year}
+                      </td>
+                      {user && (
+                        <td className="right-[90px]">
+                          <section className="relative">
+                            <button
+                              className="top-2 left-10  text-black bg-transparent hover:bg-slate-100 z-10 rounded-lg text-sm py-5 px-3 ml-auto inline-flex items-center focus:outline-none "
+                              onClick={() => toggleAction(inno)}
+                            >
+                              <i className="fa-solid fa-ellipsis-vertical fa-xl " />
+                            </button>
 
-                    <td className="text-md pr-5 text-center whitespace-no-wrap text-gray-800  tracking-normal leading-4">
-                      {index + 1}
-                    </td>
-                    <td className=" whitespace-pre-line max-w-[100px]">
-                      <div className="flex items-center">
-                        <p className=" text-gray-800 text-left hover:underline hover:cursor-pointer hover:text-blue-500 tracking-normal leading-4 text-md"
-                        onClick={() => showModal(inno)}
-                        >
-                          {inno.Title}
-                          
-                        </p>
-                      </div>
-                    </td>
-                    <td className="text-md whitespace-pre-line max-w-[200px] text-center text-gray-800  tracking-normal leading-4">
-                      {inno.Name}
-                    </td>
-                    <td className="text-md whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
-                      {inno.Program}
-                    </td>
-                    <td className="text-md whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
-                      {inno.Level}
-                    </td>{" "}
-                    <td className="text-md whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
-                      {inno.Medal}
-                    </td>
-                    <td className="text-md whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4">
-                      {inno.Year}
-                    </td>
-                    <div className={`z-[10px] inset-0 `} />
-                  </tr>
+                            {isShowing &&
+                            innovationDetail &&
+                            inno.id === innovationDetail.id ? (
+                              <section className="bg-slate-50 absolute top-0 -left-16 w-[120px] z-50">
+                                <ul>
+                                  <li
+                                    className="cursor-pointer hover:bg-slate-200 py-1 px-5"
+                                    onClick={() => edit(inno)}
+                                  >
+                                    Edit
+                                  </li>
+                                  <li
+                                    className="cursor-pointer hover:bg-slate-200 py-1 px-5"
+                                    onClick={() =>
+                                      deletePublicationById(inno.id)
+                                    }
+                                  >
+                                    Delete
+                                  </li>
+                                </ul>
+                              </section>
+                            ) : null}
+                          </section>
+                        </td>
+                      )}
+                      <div className={`z-[10px] inset-0 `} />
+                    </tr>
                   </>
                 );
               })}

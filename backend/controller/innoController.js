@@ -15,7 +15,7 @@ export const showInno = async (req, res) => {
     };
     const [allInno] = await inno.showUser();
 
-    res.status(200).json(search(allInno).splice(0, 10));
+    res.status(200).json(search(allInno));
   } catch (error) {
     console.log(error);
     res.status(400).json({
@@ -110,7 +110,7 @@ export const updatedInnovation = async (req, res) => {
     console.log(pdf);
 
     console.log(prevPdf, pdf);
-
+console.log(prevImages)
     if (files.length > 0) {
       const [updatedPublication] = await inno.updateInnovationWithImages(
         q,
@@ -121,7 +121,7 @@ export const updatedInnovation = async (req, res) => {
         Level,
         Medal,
         Year,
-        images.length > 0 ? images[0].filename : prevImages,
+        images.length > 0 ? images[0] : prevImages,
         pdf.length > 0 ? pdf[0].filename : prevPdf
       );
 
@@ -141,6 +141,7 @@ export const updatedInnovation = async (req, res) => {
       Level,
       Medal,
       Year
+      
     );
 
     if (updatedPublication.affectedRows !== 1) {
