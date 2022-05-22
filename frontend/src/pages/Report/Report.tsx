@@ -12,6 +12,7 @@ import useModal from '../../hooks/useModal';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import SignatureModal from './SignatureModal';
+import url from '../../utils/url';
 
 const Report = () => {
   const { user }: any = useAppSelector(userSelector);
@@ -26,6 +27,7 @@ const Report = () => {
   const [programName, setProgramName] = useState<string>('');
   const [organizer, setOrganizer] = useState<string>('');
   const [venue, setVenue] = useState<string>('');
+  const [position, setPosition] = useState<string>('');
   const [isPhoto, setIsPhoto] = useState<boolean>(false);
   const [photo, setPhoto] = useState<any[]>([]);
   const [tentative, setTentative] = useState<any>([]);
@@ -57,7 +59,9 @@ const Report = () => {
   useEffect(() => {
     const fetchData = async () => {
       await axios
-        .get(`/api/activities/getActivitiesById?q=${id}`)
+        .get(`${url}/api/activities/getActivitiesById?q=${id}`, {
+          withCredentials: true,
+        })
         .then((res) => {
           if (res.data.images) {
             setImages([...res.data.images]);
@@ -70,6 +74,7 @@ const Report = () => {
           setDocumentStatus(res.data.status);
           setContent(res.data.content);
           setAjk([...res.data.committee]);
+          setPosition(res.data.position);
           setTentative([...res.data.tentative]);
         });
     };
@@ -237,6 +242,7 @@ const Report = () => {
     formData.append('date', date);
     formData.append('organizer', organizer);
     formData.append('venue', venue);
+    formData.append('position', position);
     formData.append('content', content);
     formData.append('signature', signature);
     formData.append('prevImages', images);
@@ -300,6 +306,8 @@ const Report = () => {
         validFiles={validFiles}
         fileDrop={addFile}
         removeFile={deleteFile}
+        position={position}
+        setPosition={setPosition}
       />
 
       <SignatureModal
@@ -310,14 +318,6 @@ const Report = () => {
 
       <section className='hidden lg:flex flex-col col-start-3 col-end-[-1] bg-[#525659] '>
         <div className='h-[800px] overflow-y-auto overflow-x-hidden w-[500px] m-auto mt-10 fixed left-[50%]'>
-          {/* <PDFViewer 
-            showToolbar={false}
-            style={{
-              width: '100%',
-              height: '95%',
-            }}>
-
-          </PDFViewer> */}
           <Preview
             title={title}
             content={content}
@@ -326,11 +326,12 @@ const Report = () => {
             date={date}
             venue={venue}
             signature={signature}
+            position={position}
           />
-          {content?.length > 2186 ? (
+          {content?.length > 2100 ? (
             <div className='my-2.5 h-[800px] w-[500px] font-Arimo font-normal m-auto bg-white rounded-sm p-10 flex flex-col text-[12px] relative'>
               {content
-                .slice(2186, content.length)
+                .slice(2101, content.length)
                 .split('\n')
                 .map((text, index) => {
                   console.log(text.length);
@@ -347,14 +348,14 @@ const Report = () => {
               <section
                 className={`mt-10 ${
                   content.length > 2186 ? null : 'hidden'
-                } absolute bottom-10`}
+                } absolute bottom-5`}
               >
                 <p>Disediakan oleh: </p>
                 <div className=' border-b-2 border-dotted border-black w-[80px] mt-2 h-[30px]'>
                   <img
-                    src='/assets/signature.png'
+                    src={user.signature && `/uploads/${user.signature}`}
                     alt='signature'
-                    className='object-cover h-[30px] mx-auto'
+                    className='object-cover h-[50px] mx-auto'
                   />
                 </div>
                 <section className='text-[8px]'>

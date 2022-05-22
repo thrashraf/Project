@@ -15,6 +15,7 @@ import {
   deletePublicationHandler,
 } from '../../features/Publication/Publication';
 import axios from 'axios';
+import url from '../../utils/url';
 
 export default function Publication() {
   const dispatch = useAppDispatch();
@@ -37,7 +38,9 @@ export default function Publication() {
 
   const deletePublicationById = (id: string) => {
     axios
-      .post(`/api/publication/deletePublication?q=${id}`)
+      .post(`${url}/api/publication/deletePublication?q=${id}`, {
+        withCredentials: true,
+      })
       .then((res: any) => {
         if (res.status === 200) {
           console.log('ok');

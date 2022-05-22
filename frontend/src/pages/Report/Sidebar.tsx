@@ -14,6 +14,7 @@ type Props = {
   organizer: string;
   venue: string;
   tentative: any;
+  position: string;
 
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   setContent: React.Dispatch<React.SetStateAction<string>>;
@@ -33,6 +34,8 @@ type Props = {
   handleAjk: any;
   ajk: any;
   password: string;
+
+  setPosition: any;
 
   contentHandler: (e: any) => void;
   uploadFile: () => void;
@@ -54,7 +57,8 @@ export const Sidebar = (props: Props) => {
       props.title.length > 0 &&
       props.date.length > 0 &&
       props.organizer.length > 0 &&
-      props.content.length > 0
+      props.content.length > 0 &&
+      props.position.length > 0
     ) {
       props.setShowModal();
     } else {
@@ -131,6 +135,19 @@ export const Sidebar = (props: Props) => {
             />
           </div>
 
+          <div>
+            <p className='my-1 text-sm text-gray-400 ml-1'>
+              Position <span className='text-red-500'>*</span>
+            </p>
+            <input
+              type='string'
+              className='bg-blue-50 px-3 py-3 rounded-lg outline-none w-full'
+              value={props.position}
+              required
+              onChange={(e) => props.setPosition(e.target.value)}
+            />
+          </div>
+
           <section
             className='mt-5 flex  w-[200px] items-center cursor-pointer 
               text-slate-400 hover:text-blue-500
@@ -147,7 +164,7 @@ export const Sidebar = (props: Props) => {
         <section className='w-full my-5'>
           <p className='my-1 text-sm text-gray-400 ml-1'>
             Content{' '}
-            <span className='text-slate-400 text-xs'>(max 860 words) </span>
+            <span className='text-slate-400 text-xs'>(max 767 words) </span>
             <span className='text-red-500'>*</span>
           </p>
           <textarea
@@ -155,7 +172,7 @@ export const Sidebar = (props: Props) => {
             rows={13}
             value={props.content}
             required
-            maxLength={6000}
+            maxLength={5600}
             onChange={props.contentHandler}
             onKeyPress={props.contentHandler}
             className='bg-blue-50 px-3 py-3 rounded-lg outline-none w-full resize-none'
@@ -259,6 +276,7 @@ export const Sidebar = (props: Props) => {
         <Dropzone
           isShowing={isShowing}
           hide={toggle}
+          content={'Accept PNG, JPEG, JPG'}
           fileDrop={props.fileDrop}
           files={props.files}
           removeFile={props.removeFile}

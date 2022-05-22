@@ -42,8 +42,9 @@ export default function Innovation() {
     mode.setInput(currentMode);
   };
 
-  const edit = () => {
+  const edit = (innovation: any) => {
     setMode('update');
+    setInnovationDetail(innovation);
   };
 
   const toggleAction = (innovation: any) => {
@@ -51,6 +52,7 @@ export default function Innovation() {
     setInnovationDetail(innovation);
   };
 
+  console.log(innovationDetail);
   const deletePublicationById = (id: string) => {
     api
       .delete(`/api/inno/deleteInnovation?q=${id}`)
@@ -187,7 +189,7 @@ export default function Innovation() {
                                   <ul>
                                     <li
                                       className='cursor-pointer hover:bg-slate-200 py-1 px-5'
-                                      onClick={edit}
+                                      onClick={() => edit(item)}
                                     >
                                       Edit
                                     </li>

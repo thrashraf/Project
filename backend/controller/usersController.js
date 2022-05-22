@@ -116,9 +116,9 @@ export const loginUser = async (req, res) => {
 
     //create dynamic routes based on role
     if (userInfo.role === 'admin') {
-      route = '/admin/dashboard';
+      route = '/admin/users';
     } else if (userInfo.role === 'hd') {
-      route = '/kj/dashboard';
+      route = '/kj/report';
     } else {
       route = '/';
     }
@@ -304,6 +304,20 @@ export const updatePassword = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400).json({
+      message: 'Something went wrong',
+    });
+  }
+};
+
+export const getAmountUser = async (req, res) => {
+  try {
+    const [amountUser] = await user.calculateUser();
+
+    return res.status(200).json({
+      amount: amountUser[0]['COUNT(*)'],
+    });
+  } catch (error) {
+    return res.status(400).json({
       message: 'Something went wrong',
     });
   }

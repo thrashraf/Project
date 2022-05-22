@@ -33,6 +33,7 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/publication' element={<Publications />} />
           <Route path='/innovation' element={<Innovation />} />
+          <Route path='/activities' element={<Activities />} />
 
           {/* protected route */}
           <Route element={<Middleware />}>
@@ -41,7 +42,6 @@ function App() {
             <Route path='/verify-report/:id' element={<VerifyReport />} />
             <Route path='/kj/*' element={<KJ />} />
             <Route path='/profile/*' element={<Profile />} />
-            <Route path='/activities' element={<Activities />} />
           </Route>
         </Routes>
       </BrowserRouter>

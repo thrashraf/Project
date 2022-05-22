@@ -100,7 +100,7 @@ export const updatedInnovation = async (req, res) => {
         : null;
 
     const images = filterImages.map((item) => item.filename);
-    console.log(images);
+    console.log(prevImages, images);
 
     //filter pdf
     const pdf =
@@ -121,7 +121,7 @@ export const updatedInnovation = async (req, res) => {
         Level,
         Medal,
         Year,
-        images.length > 0 ? images[0].filename : prevImages,
+        images.length > 0 ? images[0] : prevImages,
         pdf.length > 0 ? pdf[0].filename : prevPdf
       );
 

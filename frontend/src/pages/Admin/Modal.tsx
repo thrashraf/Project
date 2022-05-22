@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { addUser, updateUserHandler } from '../../features/admin/Admin';
 import { userSelector } from '../../features/user/User';
 import api from '../../utils/api';
+import url from '../../utils/url';
 
 type Props = {
   isShowing: boolean;
@@ -88,7 +89,7 @@ const Modal = (props: Props) => {
     file.forEach((image: any) => formData.append('upload', image));
 
     axios
-      .post('/api/admin/updateUser', formData)
+      .post(`${url}/api/admin/updateUser`, formData, { withCredentials: true })
       .then((res: any) => {
         if (res.status === 200) {
           const newActivities = {

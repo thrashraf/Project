@@ -4,6 +4,7 @@ import { createPopper } from '@popperjs/core';
 import axios from 'axios';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { userSelector, clearState } from '../features/user/User';
+import url from '../utils/url';
 
 const IndexDropdown = () => {
   // dropdown props
@@ -28,7 +29,7 @@ const IndexDropdown = () => {
 
   const logoutHandler = () => {
     axios
-      .delete('/api/user/logout')
+      .delete(`${url}/api/user/logout`, { withCredentials: true })
       .then((res) => {
         console.log(res);
         dispatch(clearState());
@@ -53,52 +54,11 @@ const IndexDropdown = () => {
         MENU
       </a>
       <div
-        ref={popoverDropdownRef}
         className={
           (dropdownPopoverShow ? 'block ' : 'hidden ') +
-          'bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48'
+          'bg-white text-base z-50 py-2 list-none absolute top-16 right-32 text-left rounded shadow-lg min-w-48'
         }
       >
-        <span
-          className={
-            'text-sm pt-2 pb-0 px-4 font-bold block w-full whitespace-nowrap bg-transparent '
-          }
-        >
-          Layout
-        </span>
-
-        <Link
-          to='/setting'
-          className='text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:text-blue-500'
-        >
-          Settings
-        </Link>
-
-        {user && (
-          <>
-            <Link
-              to='/profile'
-              className='text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:text-blue-500'
-            >
-              Profile
-            </Link>
-            <Link
-              to='/create-report'
-              className='text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:text-blue-500'
-            >
-              Reports
-            </Link>
-          </>
-        )}
-
-        <div className='h-0 mx-4 my-2 border border-solid border-blueGray-100 hover:text-blue-500' />
-        <span
-          className={
-            'text-sm pt-2 pb-0 px-4 font-bold block w-full whitespace-nowrap bg-transparent '
-          }
-        >
-          Staff Activities
-        </span>
         <Link
           to='/activities'
           className='text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent hover:text-blue-500'

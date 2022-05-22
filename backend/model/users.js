@@ -86,6 +86,14 @@ class user {
                 where id = '${id}'`;
     return db.execute(sql);
   }
+
+  static async calculateUser() {
+    const sql = `SELECT 
+                  COUNT(*)
+              FROM
+                  users;`;
+    return db.execute(sql);
+  }
 }
 
 export default user;

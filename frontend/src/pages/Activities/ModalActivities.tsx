@@ -18,6 +18,7 @@ import axios from 'axios';
 import { unitArray } from '../../constant/unitArray';
 import { userSelector } from '../../features/user/User';
 import { Link } from 'react-router-dom';
+import url from '../../utils/url';
 
 type Props = {
   showActivity: boolean;
@@ -109,7 +110,9 @@ export const ModalActivities = (props: Props) => {
     isFetching = true;
 
     axios
-      .post(`/api/activities/updateActivities?q=${id}`, formData)
+      .post(`${url}/api/activities/updateActivities?q=${id}`, formData, {
+        withCredentials: true,
+      })
       .then((res: any) => {
         if (res.status === 200) {
           console.log('ok');
@@ -181,7 +184,7 @@ export const ModalActivities = (props: Props) => {
                 <img
                   src={
                     detailActivities.banner
-                      ? `/assets/${detailActivities.banner}`
+                      ? `/uploads/${detailActivities.banner}`
                       : '/assets/default-placeholder.jpg'
                   }
                   alt={detailActivities.title}

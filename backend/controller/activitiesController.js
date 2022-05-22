@@ -31,6 +31,7 @@ export const createActivities = async (req, res) => {
     const { title, start, end, venue, organizer, username, email, userId } =
       req.body;
     const files = req.files;
+
     console.log(files);
     const id = crypto.randomBytes(16).toString('hex');
     const [activitiesCreated] = await activities.createActivities(
@@ -155,6 +156,7 @@ export const createReport = async (req, res, next) => {
       userId,
       owner,
       content,
+      position,
       signature,
       tentative,
       ajk,
@@ -178,6 +180,7 @@ export const createReport = async (req, res, next) => {
         id,
         updateImage ? updateImage : images,
         content,
+        position,
         ten,
         committee,
         signature
@@ -190,6 +193,7 @@ export const createReport = async (req, res, next) => {
         prevImages,
         id,
         content,
+        position,
         ten,
         committee,
         signature

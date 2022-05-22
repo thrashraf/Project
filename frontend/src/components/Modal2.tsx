@@ -15,6 +15,7 @@ import {
 } from '../features/Publication/Publication';
 import Dropzone from './Dropzone';
 import axios from 'axios';
+import url from '../utils/url';
 
 type Props = {
   show: boolean;
@@ -112,7 +113,9 @@ const Modal2 = (props: Props) => {
     const id = publication.id;
 
     axios
-      .post(`/api/publication/updatePublication?q=${id}`, formData)
+      .post(`${url}/api/publication/updatePublication?q=${id}`, formData, {
+        withCredentials: true,
+      })
       .then((res: any) => {
         if (res.status === 200) {
           console.log('ok');
@@ -147,7 +150,9 @@ const Modal2 = (props: Props) => {
     const id = publication.id;
 
     axios
-      .post(`/api/publication/deletePublication?q=${id}`)
+      .post(`${url}/api/publication/deletePublication?q=${id}`, {
+        withCredentials: true,
+      })
       .then((res: any) => {
         if (res.status === 200) {
           console.log('ok');

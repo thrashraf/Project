@@ -68,6 +68,7 @@ class inno {
     images,
     pdf
   ) {
+    console.log(images, pdf);
     const sql = `UPDATE innovation SET Title = '${Title}',
             Description = '${Description}',
             Name = '${Name}',
@@ -75,7 +76,7 @@ class inno {
             Level = '${Level}',
             Medal = '${Medal}',
             Year = '${Year}',
-            img_url = '${images}'
+            img_url = '${images}',
             pdf_url = '${pdf}'
             where id = '${id}'`;
     return db.execute(sql);

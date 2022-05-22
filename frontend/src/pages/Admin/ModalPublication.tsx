@@ -14,6 +14,7 @@ import { userSelector } from '../../features/user/User';
 import api from '../../utils/api';
 import DropZoneFile from '../../components/DropZoneFile';
 import generateYears from '../../utils/generateYears';
+import url from '../../utils/url';
 
 type Props = {
   isShowing: boolean;
@@ -176,7 +177,9 @@ const ModalPublication = (props: Props) => {
     filePDF.forEach((file: any) => formData.append('upload', file));
 
     axios
-      .post('/api/publication/createPublication', formData)
+      .post(`${url}/api/publication/createPublication`, formData, {
+        withCredentials: true,
+      })
       .then((res: any) => {
         if (res.status === 200) {
           const newPublication = {
@@ -216,7 +219,9 @@ const ModalPublication = (props: Props) => {
     const id = props.publication.id;
 
     axios
-      .post(`/api/publication/updatePublication?q=${id}`, formData)
+      .post(`${url}/api/publication/updatePublication?q=${id}`, formData, {
+        withCredentials: true,
+      })
       .then((res: any) => {
         if (res.status === 200) {
           console.log('ok');

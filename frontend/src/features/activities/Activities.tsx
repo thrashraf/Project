@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/Store';
 import api from '../../utils/api';
+import url from '../../utils/url';
 
 interface interfaceState {
   [key: string]: any;
@@ -200,13 +201,9 @@ export const getActivities = createAsyncThunk(
   async (query: any, thunkAPI) => {
     try {
       const response = await api.get(
-        `/api/activities/getAllActivities?q=${query}`,
+        `${url}/api/activities/getAllActivities?q=${query}`,
         {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
+          withCredentials: true,
         }
       );
       let data = await response.data;
@@ -229,13 +226,12 @@ export const getMonthActivities = createAsyncThunk(
   'activities/getMonthActivities',
   async (_, thunkAPI) => {
     try {
-      const response = await api.get(`/api/activities/getAllActivities?q=`, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await api.get(
+        `${url}/api/activities/getAllActivities?q=`,
+        {
+          withCredentials: true,
+        }
+      );
       let data = await response.data;
 
       if (response.status === 200) {
@@ -257,13 +253,9 @@ export const deleteActivities = createAsyncThunk(
   async (id: string, thunkAPI) => {
     try {
       const response = await api.delete(
-        `/api/activities/deleteActivities?q=${id}`,
+        `${url}/api/activities/deleteActivities?q=${id}`,
         {
-          method: 'DELETE',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
+          withCredentials: true,
         }
       );
       let data = await response.data;

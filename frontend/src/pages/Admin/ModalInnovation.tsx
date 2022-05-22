@@ -13,6 +13,8 @@ import {
 import api from '../../utils/api';
 import DropZoneFile from '../../components/DropZoneFile';
 import generateYears from '../../utils/generateYears';
+import { refreshUser } from '../../features/user/User';
+import url from '../../utils/url';
 
 type Props = {
   isShowing: boolean;
@@ -156,7 +158,9 @@ const ModalInnovation = (props: Props) => {
     filePDF.forEach((file: any) => formData.append('upload', file));
 
     axios
-      .post('/api/inno/createInnovation', formData)
+      .post(`${url}/api/inno/createInnovation`, formData, {
+        withCredentials: true,
+      })
       .then((res: any) => {
         if (res.status === 200) {
           const newInnovation = {
@@ -199,7 +203,9 @@ const ModalInnovation = (props: Props) => {
     const id = props.innovation.id;
 
     axios
-      .post(`/api/inno/updateInnovation?q=${id}`, formData)
+      .post(`${url}/api/inno/updateInnovation?q=${id}`, formData, {
+        withCredentials: true,
+      })
       .then((res: any) => {
         if (res.status === 200) {
           console.log('ok');
@@ -219,6 +225,8 @@ const ModalInnovation = (props: Props) => {
               ? res.data.pdf_url
               : props.innovation.pdf_url,
           };
+          setFile([]);
+          setFilePDF([]);
 
           dispatch(editInnovationHandler(newInnovation));
           //toggle modal
