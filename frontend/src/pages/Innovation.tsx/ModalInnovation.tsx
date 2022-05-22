@@ -61,7 +61,7 @@ const ModalInnovation = (props: Props) => {
     dispatch(closeEditMode());
   };
 
-  console.log(file);
+  // console.log(file)
 
   const addFile = (e: any) => {
     e.preventDefault();
@@ -80,7 +80,7 @@ const ModalInnovation = (props: Props) => {
   //for validate file
   const validateFile = (file: any) => {
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-    console.log(validTypes.indexOf(file.type) === -1);
+    //console.log(validTypes.indexOf(file.type) === -1);
     if (validTypes.indexOf(file.type) === -1) {
       return false;
     }
@@ -116,7 +116,7 @@ const ModalInnovation = (props: Props) => {
       })
       .then((res: any) => {
         if (res.status === 200) {
-          console.log('ok');
+          //console.log('ok');
 
           const newActivities = {
             id: publication.id,
@@ -153,7 +153,7 @@ const ModalInnovation = (props: Props) => {
       })
       .then((res: any) => {
         if (res.status === 200) {
-          console.log('ok');
+          //console.log('ok');
 
           dispatch(deletePublicationHandler(id));
           //toggle modal
@@ -169,17 +169,17 @@ const ModalInnovation = (props: Props) => {
         console.log(err);
       });
   };
-  console.log(props.innovation);
+  // console.log(props.innovation)
   return (
     <div>
       <div>
         {props.show && props.innovation && (
           <div
-            className='py-12 transition duration-150 ease-in-out z-10 absolute top-0  bottom-0 right-0 left-0 text-center'
+            className='py-12 transition duration-150 ease-in-out z-20 absolute top-0 bottom-0 right-0 left-0 text-center'
             id='modal'
           >
             <div
-              className='bg-[#00000055] fixed z-10 inset-0 '
+              className=' bg-opacity-10 bg-black fixed inset-0 '
               onClick={closeModal}
             />
             <div
@@ -270,13 +270,7 @@ const ModalInnovation = (props: Props) => {
                   </svg>
                 </div>
                 <div className='cursor-pointer absolute top-0 left-3 mt-4 mr-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-500 transition duration-150 ease-in-out'>
-                  <section className='fixed w-10'>
-                    <More
-                      isShowing={isShowing}
-                      toggle={toggle}
-                      deleteItem={deletePublication}
-                    />
-                  </section>
+                  <section className='fixed w-10'></section>
                 </div>
               </div>
             </div>

@@ -66,7 +66,6 @@ const ModalInnovation = (props: Props) => {
   //for validate file
   const validateFile = (file: any) => {
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-    console.log(validTypes.indexOf(file.type) === -1);
     if (validTypes.indexOf(file.type) === -1) {
       return false;
     }
@@ -98,7 +97,6 @@ const ModalInnovation = (props: Props) => {
   const fileDropPDF = (e: any) => {
     e.preventDefault();
     const files = e.dataTransfer.files;
-    console.log(files);
     for (let i = 0; i < files.length; i++) {
       if (validateFilePDF(files[i])) {
         setFilePDF([...files]);
@@ -109,14 +107,12 @@ const ModalInnovation = (props: Props) => {
   //for validate file
   const validateFilePDF = (file: any) => {
     const validTypes = ['application/pdf'];
-    console.log(validTypes.indexOf(file.type) === -1);
     if (validTypes.indexOf(file.type) === -1) {
       return false;
     }
     return true;
   };
 
-  console.log(file);
 
   //to remove file
   const removeFilePDF = (name: any) => {
@@ -208,7 +204,6 @@ const ModalInnovation = (props: Props) => {
       })
       .then((res: any) => {
         if (res.status === 200) {
-          console.log('ok');
           const newInnovation = {
             id: props.innovation.id,
             Title: Title.value,
@@ -249,7 +244,6 @@ const ModalInnovation = (props: Props) => {
       Medal.setInput('');
       Year.setInput('');
     } else {
-      console.log(props.innovation);
       Title.setInput(props.innovation.Title);
       Description.setInput(props.innovation.Description);
       Name.setInput(props.innovation.Name);
@@ -324,31 +318,32 @@ const ModalInnovation = (props: Props) => {
               />
             </section>
             <div className='grid grid-cols-2 gap-5'>
-              <section className=''>
-                <p className='my-1 text-sm text-gray-400 ml-1'>
-                  Level <span className='text-red-500'>*</span>
-                </p>
-                <input
-                  type='text'
+            <select
+                  onChange={Level.onChange}
                   value={Level.value}
                   required
-                  onChange={Level.onChange}
                   className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
-                />
-              </section>
+                >
+                  {['Level','International','National']?.map((item: any, index: number) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
               <div>
                 <section className=''>
-                  <p className='my-1 text-sm text-gray-400 ml-1'>
-                    Medal<span className='text-red-500'>*</span>
-                  </p>
-
-                  <input
-                    type='text'
-                    value={Medal.value}
-                    required
-                    onChange={Medal.onChange}
-                    className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
-                  />
+                <select
+                  onChange={Medal.onChange}
+                  value={Medal.value}
+                  required
+                  className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
+                >
+                  {['Medal','Gold','Silver','Bronze']?.map((item: any, index: number) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
                 </section>
               </div>
               <div>
@@ -357,8 +352,8 @@ const ModalInnovation = (props: Props) => {
                     Program<span className='text-red-500'>*</span>
                   </p>
 
-                  <input
-                    type='text'
+                  <textarea
+                    rows={4}
                     value={Program.value}
                     required
                     onChange={Program.onChange}
@@ -371,8 +366,8 @@ const ModalInnovation = (props: Props) => {
                   Name<span className='text-red-500'>*</span>
                 </p>
 
-                <input
-                  type='text'
+                <textarea
+                  rows={4}
                   value={Name.value}
                   required
                   onChange={Name.onChange}
@@ -427,7 +422,7 @@ const ModalInnovation = (props: Props) => {
               fileDrop={fileDrop}
               files={file}
               content={
-                'Add cover as the first value and backpage as the second value'
+                'Add Cover Image'
               }
               removeFile={removeFile}
             />
@@ -437,6 +432,9 @@ const ModalInnovation = (props: Props) => {
               fileDrop={fileDropPDF}
               fileSize={fileSize}
               files={filePDF}
+              content={
+                'Add Innovation Cerificate'
+              }
               removeFile={removeFilePDF}
             />
             <Toast ref={toastRef} status={status} message={message} />

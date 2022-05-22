@@ -35,7 +35,12 @@ const AddPublication = ({ isShowing, toggle }: any) => {
     const files = e.dataTransfer.files;
     for (let i = 0; i < files.length; i++) {
       if (validateFile(files[i])) {
-        setFile((previousFile: any) => [...previousFile, ...files]);
+        if (file.length < 2) {
+          setFile((prevArray: any) => [...prevArray, ...files]);
+        } else {
+          file.splice(0, 1);
+          setFile((prevArray: any) => [...prevArray, ...files]);
+        }
       }
     }
   };
@@ -195,15 +200,27 @@ const AddPublication = ({ isShowing, toggle }: any) => {
               />
             </section>
 
-            <section className='mt-1'>
-              <p className='m-1'>Year</p>
-              <input
-                type='number'
-                value={year.value}
-                onChange={year.onChange}
-                className='bg-blue-100 py-1 rounded-lg w-full'
-              />
-            </section>
+            <select
+              onChange={year.onChange}
+              value={year.value}
+              required
+              className='bg-blue-100 px-3 mt-3 py-2 rounded-lg outline-none w-full'
+            >
+              {[
+                'Year',
+                '2017',
+                '2018',
+                '2019',
+                '2020',
+                '2021',
+                '2022',
+                '2023',
+              ]?.map((item: any, index: number) => (
+                <option key={index} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
 
             <section className='my-5 flex'>
               <section
@@ -246,6 +263,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
               fileDrop={fileDropPDF}
               fileSize={fileSize}
               files={filePDF}
+              content={'Drop Publication Detail'}
               removeFile={removeFilePDF}
             />
 

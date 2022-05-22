@@ -16,6 +16,7 @@ import {
 import Dropzone from './Dropzone';
 import axios from 'axios';
 import url from '../utils/url';
+import DropZoneFile from './DropZoneFile';
 
 type Props = {
   show: boolean;
@@ -42,7 +43,13 @@ const Modal2 = (props: Props) => {
   const year = useInput('');
   const [file, setFile] = useState<any>([]);
 
+  const [filePDF, setFilePDF] = useState<any>([]);
+  const { isShowing: showDropFile, toggle: toggleDropFile } = useModal();
+
   const [imageIndex, setImageIndex] = useState<any>(0);
+
+  const [prevImages, setPrevImages] = useState<any>([]);
+  const prevPdf = useInput('');
 
   const toggleEditMode = () => dispatch(editModeHandler());
 
@@ -55,6 +62,8 @@ const Modal2 = (props: Props) => {
       isbn.setInput(props.publication.isbn);
       staff.setInput(props.publication.staff);
       year.setInput(props.publication.year);
+      setPrevImages([...props.publication.img_url]);
+      prevPdf.setInput(props.publication.pdf_url);
     }
   }, [props.publication]);
 
@@ -62,23 +71,6 @@ const Modal2 = (props: Props) => {
     props.setShow(!props.show);
     dispatch(closeEditMode());
   };
-
-  console.log(file);
-
-  const addFile = (e: any) => {
-    e.preventDefault();
-    const files = e.dataTransfer.files;
-    for (let i = 0; i < files.length; i++) {
-      if (validateFile(files[i])) {
-        setFile([...files]);
-      } else {
-        // setStatus('error');
-        // setMessage('Not support file type');
-        // toastRef.current && toastRef.current.showToast();
-      }
-    }
-  };
-
   //for validate file
   const validateFile = (file: any) => {
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
@@ -100,6 +92,58 @@ const Modal2 = (props: Props) => {
     setFile([...file]);
   };
 
+  console.log(file);
+
+  const fileDrop = (e: any) => {
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+    for (let i = 0; i < files.length; i++) {
+      if (validateFile(files[i])) {
+        if (file.length < 2) {
+          setFile((prevArray: any) => [...prevArray, ...files]);
+        } else {
+          file.splice(0, 1);
+          setFile((prevArray: any) => [...prevArray, ...files]);
+        }
+      }
+    }
+  };
+
+  //PDF form
+  const fileDropPDF = (e: any) => {
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+    console.log(files);
+    for (let i = 0; i < files.length; i++) {
+      if (validateFilePDF(files[i])) {
+        setFilePDF([...files]);
+      }
+    }
+  };
+  const validateFilePDF = (file: any) => {
+    const validTypes = ['application/pdf'];
+    console.log(validTypes.indexOf(file.type) === -1);
+    if (validTypes.indexOf(file.type) === -1) {
+      return false;
+    }
+    return true;
+  };
+  const removeFilePDF = (name: any) => {
+    // find the index of the item
+    // remove the item from array
+    const selectedFileIndex = file.findIndex((e: any) => e.name === name);
+    filePDF.splice(selectedFileIndex, 1);
+    // update selectedFiles array
+    setFilePDF([...filePDF]);
+  };
+  const fileSize = (size: any) => {
+    if (size === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(size) / Math.log(k));
+    return parseFloat((size / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
   const updateCurrentPublication = () => {
     const formData = new FormData();
 
@@ -108,7 +152,10 @@ const Modal2 = (props: Props) => {
     formData.append('isbn', isbn.value);
     formData.append('staff', staff.value);
     formData.append('year', year.value);
+    formData.append('prevImages', prevImages);
+    formData.append('prevPdf', prevPdf.value);
     file.forEach((image: any) => formData.append('upload', image));
+    filePDF.forEach((file: any) => formData.append('upload', file));
 
     const id = publication.id;
 
@@ -130,6 +177,9 @@ const Modal2 = (props: Props) => {
             img_url: res.data.image_url
               ? res.data.image_url
               : publication.img_url,
+            pdf_url: res.data.pdf_url
+              ? res.data.pdf_url
+              : props.publication.pdf_url,
           };
 
           dispatch(editPublicationHandler(newActivities));
@@ -220,7 +270,7 @@ const Modal2 = (props: Props) => {
                   <Dropzone
                     isShowing={showDropzone}
                     hide={toggleDropzone}
-                    fileDrop={addFile}
+                    fileDrop={fileDrop}
                     files={file}
                     removeFile={deleteFile}
                   />
@@ -242,8 +292,7 @@ const Modal2 = (props: Props) => {
                 >
                   {publication?.Description}
                 </p>
-                <input
-                  type='text'
+                <textarea
                   onChange={(e) => description.setInput(e.target.value)}
                   value={description.value}
                   className={`bg-blue-50 px-3 py-2 rounded-md outline-none  text-black mb-4 w-full ${showEditComp}`}
@@ -279,11 +328,38 @@ const Modal2 = (props: Props) => {
                 >
                   {publication?.year}
                 </p>
-                <input
-                  onChange={(e) => year.setInput(e.target.value)}
+
+                <select
+                  onChange={year.onChange}
                   value={year.value}
+                  required
                   className={`bg-blue-50 px-3 py-2 rounded-md outline-none  text-black mb-4 w-full ${showEditComp}`}
-                />
+                >
+                  {[
+                    'Year',
+                    '2017',
+                    '2018',
+                    '2019',
+                    '2020',
+                    '2021',
+                    '2022',
+                    '2023',
+                  ]?.map((item: any, index: number) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
+                <section
+                  className={`mt-5 flex  w-[200px] items-center cursor-pointer 
+              text-slate-400 hover:text-blue-500  ${showEditComp}`}
+                  onClick={toggleDropFile}
+                >
+                  <div className='p-5 rounded-md bg-blue-50 '>
+                    <i className='fa-solid fa-file-pdf fa-2xl'></i>
+                  </div>
+                  <p className='ml-5 text-sm'>Upload File</p>
+                </section>
 
                 <div
                   className={`flex items-center mr-3 justify-center w-full ${hideEditComp}`}
@@ -338,6 +414,15 @@ const Modal2 = (props: Props) => {
                       isShowing={isShowing}
                       toggle={toggle}
                       deleteItem={deletePublication}
+                    />
+                    <DropZoneFile
+                      isShowing={showDropFile}
+                      hide={toggleDropFile}
+                      fileDrop={fileDropPDF}
+                      fileSize={fileSize}
+                      files={filePDF}
+                      content={'Drop Publication Detail'}
+                      removeFile={removeFilePDF}
                     />
                   </section>
                 </div>
