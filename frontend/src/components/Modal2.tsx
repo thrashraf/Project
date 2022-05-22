@@ -242,7 +242,7 @@ const Modal2 = (props: Props) => {
                 <div className='w-full flex justify-center text-green-400 mb-4'></div>
                 <div className='relative'>
                   <img
-                    src={`/assets/${publication?.img_url[imageIndex]}`}
+                    src={`/uploads/${publication?.img_url[imageIndex]}`}
                     className=' rounded-lg mb-10 w-[400px] h-[200px] object-contain'
                   ></img>
                   <div className='w-full absolute top-20 flex justify-between'>
