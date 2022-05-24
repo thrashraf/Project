@@ -5,6 +5,7 @@ import {
   setFilterHandler,
   setViewHandler,
 } from '../../features/activities/Activities';
+import { userSelector } from '../../features/user/User';
 import useModal from '../../hooks/useModal';
 
 type Props = {
@@ -16,6 +17,8 @@ export const Header = (props: Props) => {
   const dispatch = useAppDispatch();
   const { view, activities, filterData, query, showFilter, setFilterItem } =
     useAppSelector(activitiesSelector);
+
+  const { user }: any = useAppSelector(userSelector);
 
   const { isShowing, toggle } = useModal();
   const { isShowing: showListTooltip, toggle: toggleListTooltip } = useModal();
@@ -31,7 +34,7 @@ export const Header = (props: Props) => {
     <div>
       <div className='flex justify-between relative'>
         <section className='flex py-1 '>
-          {props.showView && (
+          {props.showView && user && (
             <button
               className='px-4 py-3 rounded-lg bg-white text-black mr-5'
               onClick={props.toggleAdd}

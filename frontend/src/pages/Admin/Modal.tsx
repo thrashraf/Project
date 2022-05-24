@@ -98,7 +98,7 @@ const Modal = (props: Props) => {
             email: email.value,
             role: role.value,
             phone_number: phone_number.value,
-            img_url: res.data.img_url,
+            profile_picture: res.data.img_url,
           };
 
           console.log(newActivities);
@@ -222,7 +222,7 @@ const Modal = (props: Props) => {
               <section className=''>
                 <p className='my-1 text-sm text-gray-400 ml-1'>Phone Number</p>
                 <input
-                  type='phone'
+                  type='tel'
                   value={phone_number.value}
                   onChange={phone_number.onChange}
                   className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'

@@ -205,7 +205,7 @@ export const Information = (props: Props) => {
             }`}
           >
             <img
-              src={user && `/uploads/${user.signature}`}
+              src={user && `/file/${user.signature}`}
               className={`${
                 editSignature && 'hidden'
               } w-[150px] h-[100px] object-cover`}

@@ -43,6 +43,7 @@ export const userSlice = createSlice({
     },
     updateSignature: (state: any, action: { payload: any }) => {
       state.user.signature = action.payload;
+      state.editSignature = false;
     },
     toggleEditSignature: (state: any) => {
       state.editSignature = !state.editSignature;

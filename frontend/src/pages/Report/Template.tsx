@@ -248,7 +248,7 @@ export const Template = (props: Props) => {
               </View>
             ) : null}
           </View>
-
+          console.log(props.photo)
           {props.photo ? (
             <View break>
               <Text style={styles.aboutProgram}>
@@ -305,7 +305,6 @@ export const Template = (props: Props) => {
               </View>
             ) : null
           ) : null}
-
           {props.ajk !== undefined ? (
             props.ajk.length > 0 ? (
               <View break>

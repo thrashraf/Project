@@ -167,7 +167,7 @@ export const createReport = async (req, res, next) => {
       files.length >= 0 ? files.map((images) => images.filename) : null;
 
     const updateImage = images && prevImages && images.concat(prevImages);
-    console.log(updateImage, images);
+    console.log(prevImages);
 
     const ten = tentative === undefined ? '' : tentative;
     const committee = ajk === undefined ? '' : ajk;
@@ -190,7 +190,11 @@ export const createReport = async (req, res, next) => {
         submitOn,
         userId,
         owner,
-        prevImages,
+        prevImages
+          ? Array.isArray(prevImages)
+            ? prevImages
+            : [prevImages]
+          : [],
         id,
         content,
         position,

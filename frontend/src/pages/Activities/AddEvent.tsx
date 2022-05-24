@@ -80,20 +80,28 @@ const AddEvent = (props: Props) => {
   };
 
   const formHandler = (e: any) => {
-    if (
-      organizer.value === 'select' ||
-      (organizer.value === 'Others' && selectOrganizer.value.length <= 0)
-    ) {
+    if (organizer.value === 'select' || venue.value === 'select') {
+      toastRef.current.showToast();
+      setMessage('Please insert all the field!');
+      e.preventDefault();
+      return;
+    }
+
+    if (organizer.value === 'select') {
+      toastRef.current.showToast();
+      setMessage('Please insert all the field!');
+      e.preventDefault();
+      return;
+    }
+
+    if (organizer.value === 'Others' && selectOrganizer.value.length <= 0) {
       toastRef.current.showToast();
       setMessage('Please select organizer!');
       e.preventDefault();
       return;
     }
 
-    if (
-      venue.value === 'select' ||
-      (venue.value === 'Others' && selectVenue.value.length <= 0)
-    ) {
+    if (venue.value === 'Others' && selectVenue.value.length <= 0) {
       toastRef.current.showToast();
       setMessage('Please select venue!');
       e.preventDefault();
@@ -106,6 +114,13 @@ const AddEvent = (props: Props) => {
     ) {
       toastRef.current.showToast();
       setMessage('Cannot create past date event ');
+      e.preventDefault();
+      return;
+    }
+
+    if (new Date(endEvent.value) < new Date(startEvent.value)) {
+      setMessage('End date should be greater than start date');
+      toastRef.current.showToast();
       e.preventDefault();
       return;
     }
@@ -140,8 +155,8 @@ const AddEvent = (props: Props) => {
           const newActivities = {
             id: res.data.id,
             title: title.value,
-            start: startEvent.value,
-            end: endEvent.value,
+            start: new Date(startEvent.value),
+            end: new Date(endEvent.value),
             organizer:
               organizer.value !== 'Others'
                 ? organizer.value

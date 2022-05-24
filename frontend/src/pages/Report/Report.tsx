@@ -4,7 +4,7 @@ import { ImageTemplate } from './ImageTemplate';
 import { Sidebar } from './Sidebar';
 import { PasswordModal } from './PasswordModal';
 import api from '../../utils/api';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { userSelector } from '../../features/user/User';
 import { useNavigate } from 'react-router-dom';
 import Toast from '../../components/Toast';
@@ -50,6 +50,8 @@ const Report = () => {
   const [message, setMessage] = useState('');
   const [status, setStatus] = useState('');
   const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
 
   //for signatureModal
   const { isShowing: showSignatureModal, toggle: toggleSignature } = useModal();
@@ -199,6 +201,7 @@ const Report = () => {
     await api
       .post('/api/user/auth', { email, reqPassword })
       .then((res) => {
+        e.preventDefault();
         console.log(res);
         formHandler(e);
       })
@@ -207,6 +210,7 @@ const Report = () => {
         setStatus('error');
         toastRef.current.showToast();
       });
+    e.preventDefault();
   };
 
   const timeConvertor = (time: any) => {
@@ -245,23 +249,23 @@ const Report = () => {
     formData.append('position', position);
     formData.append('content', content);
     formData.append('signature', signature);
-    formData.append('prevImages', images);
+    // formData.append('prevImages', images);
+    images.forEach((tag: any) => formData.append('prevImages', tag));
     validFiles.forEach((tag: any) => formData.append('upload', tag));
 
     tentative.forEach((tentative: any) =>
       formData.append('tentative', JSON.stringify(tentative))
     );
     ajk.forEach((ajk: any) => formData.append('ajk', JSON.stringify(ajk)));
-
+    e.preventDefault();
     await api
       .post('/api/activities/createReport', formData)
       .then((res) => {
         setMessage('Successful submit report! 🎉');
         setStatus('success');
         toastRef.current.showToast();
-        setTimeout(() => {
-          navigate('/profile/documents');
-        }, 4000);
+        navigate('/profile/documents');
+        e.preventDefault();
       })
       .catch((err) => {
         console.log(err);
@@ -269,6 +273,8 @@ const Report = () => {
         setStatus('error');
         toastRef.current.showToast();
       });
+
+    e.preventDefault();
   };
 
   return (
@@ -379,33 +385,35 @@ const Report = () => {
               <h1 className='font-bold'>TENTATIF PROGRAM</h1>
 
               <div className='ml-10'>
-                <section className='flex flex-row py-[8px] font-bold mt-10'>
-                  <p className='mr-10'>MASA</p>
-                  <p className='absolute left-[200px] max-w-[200px] break-words'>
-                    AKTIVITI
-                  </p>
-                </section>
-                <section>
+                <section className='grid grid-cols-2 py-[8px]  mt-10'>
+                  <section className='font-bold'>
+                    <p className='mr-10'>MASA</p>
+                  </section>
+
+                  <section className='font-bold'>
+                    <p className=' max-w-[200px] break-words'>AKTIVITI</p>
+                  </section>
                   {tentative.map((row: any, index: number) => {
                     return (
-                      <section key={index} className='flex flex-row py-[8px]'>
-                        <p className='mr-10'>{timeConvertor(row.time)}</p>
+                      <>
+                        <p className='mr-10 my-2.5'>
+                          {timeConvertor(row.time)}
+                        </p>
                         <section>
                           {row.activities
                             .split('\n')
                             .map((act: string, num: number) => {
                               return (
-                                //fix absolute
                                 <p
                                   key={num}
-                                  className='max-w-[200px] break-words relative left-[50px]'
+                                  className='max-w-[200px] break-words my-2.5 '
                                 >
                                   {act}
                                 </p>
                               );
                             })}
                         </section>
-                      </section>
+                      </>
                     );
                   })}
                 </section>
@@ -418,24 +426,27 @@ const Report = () => {
               <h1 className='font-bold'>JAWATANKUASA</h1>
 
               <div className='ml-10'>
-                <section className='flex flex-row py-[8px] font-bold mt-10'>
-                  <p>JAWATAN</p>
-                  <p className='absolute left-[200px] '>NAMA</p>
-                </section>
-                <section>
+                <section className='grid grid-cols-2 py-[8px]  mt-10'>
+                  <section className='font-bold'>
+                    <p>JAWATAN</p>
+                  </section>
+
+                  <section className='font-bold'>
+                    <p className=''>NAMA</p>
+                  </section>
                   {ajk.map((row: any, index: number) => {
                     return (
-                      <section key={index} className='flex flex-row py-[8px]'>
-                        <section className='max-w-[110px] break-words'>
+                      <>
+                        <section className='max-w-[110px] break-words my-2.5'>
                           <p>{row.role}</p>
                         </section>
-                        <section className='max-w-[300px] break-words'>
+                        <section className='max-w-[300px] break-words my-2.5'>
                           {row.names
                             .split('\n')
                             .map((act: string, num: number) => {
                               return (
                                 <p
-                                  className='max-w-[200px] break-words relative left-[90px]'
+                                  className='max-w-[200px] break-words '
                                   key={num}
                                 >
                                   {act}
@@ -443,7 +454,7 @@ const Report = () => {
                               );
                             })}
                         </section>
-                      </section>
+                      </>
                     );
                   })}
                 </section>

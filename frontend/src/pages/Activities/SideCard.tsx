@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
+import More from '../../components/More';
 import { activitiesSelector } from '../../features/activities/Activities';
 import { userSelector } from '../../features/user/User';
+import useModal from '../../hooks/useModal';
 
 type Props = {
   activities: any;
@@ -11,6 +13,9 @@ type Props = {
 export const SideCard = (props: Props) => {
   const { user }: any = useAppSelector(userSelector);
   const { activitiesMonth }: any = useAppSelector(activitiesSelector);
+
+  const { isShowing, toggle } = useModal();
+  const { isShowing: showTooltip, toggle: toggleTooltip } = useModal();
 
   return (
     <>
@@ -30,9 +35,23 @@ export const SideCard = (props: Props) => {
           })
           .map((event: any, index: number) => (
             <section
-              className='shadow-md mt-10 rounded-lg bg-white'
+              className='shadow-md mt-10 rounded-lg bg-white relative'
               key={index}
             >
+              {/* <section
+                className='absolute right-2 w-10 h-10 flex justify-end'
+                onMouseEnter={toggleTooltip}
+                onMouseLeave={toggleTooltip}
+              >
+                <div
+                  className={`${
+                    showTooltip ? 'visible' : 'hidden'
+                  } px-3 py-1 bg-slate-600 rounded-lg absolute -top-10 -left-2 w-16 text-white`}
+                >
+                  Edit
+                </div>
+                <More toggle={toggle} isShowing={isShowing} />
+              </section> */}
               <img
                 src={
                   event.banner
@@ -46,7 +65,12 @@ export const SideCard = (props: Props) => {
               <section className='p-4'>
                 <section className='flex justify-between items-center text-gray-400 text-sm'>
                   <p>
-                    {event.start.slice(0, 10).split('-').reverse().join('/')}
+                    {new Date(event.start)
+                      .toISOString()
+                      .slice(0, 10)
+                      .split('-')
+                      .reverse()
+                      .join('/')}
                   </p>
                   <p>{event.venue}</p>
                 </section>

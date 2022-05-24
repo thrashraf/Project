@@ -97,8 +97,8 @@ const Draw = (props: Props) => {
         })
         .then((res) => {
           props.setModal(!props.modal);
-          dispatch(updateSignature(res.data.signature));
           dispatch(toggleEditSignature());
+          dispatch(updateSignature(res.data.signature));
         })
         .catch((err) => {
           console.log(err);

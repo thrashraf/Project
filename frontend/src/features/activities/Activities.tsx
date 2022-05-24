@@ -147,10 +147,16 @@ export const activitiesSlice = createSlice({
       state.isFetching = false;
       state.isSuccess = true;
       //sort activities: any
-      state.activities = payload?.sort(
-        (start: any, end: any) =>
-          (new Date(start.end) as any) - (new Date(end.end) as any)
-      );
+      state.activities = payload
+        ?.map((item: any) => ({
+          ...item,
+          start: new Date(item.start),
+          end: new Date(item.end),
+        }))
+        .sort(
+          (start: any, end: any) =>
+            (new Date(start.end) as any) - (new Date(end.end) as any)
+        );
     });
     builder.addCase(getActivities.pending, (state) => {
       state.isFetching = true;

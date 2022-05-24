@@ -1,21 +1,7 @@
 import db from '../config/db.js';
 
 class admin {
-  static async updateUser(id, name, email, role) {
-    const sql = `
-        UPDATE
-            users
-        SET
-            name = '${name}',
-            email = '${email}',
-            role = '${role}'
-        where
-            id = '${id}'        
-    `;
-    return db.execute(sql);
-  }
-
-  static async updateUserWithImages(id, name, email, role, image) {
+  static async updateUser(id, name, email, role, phone_number) {
     const sql = `
         UPDATE
             users
@@ -23,6 +9,29 @@ class admin {
             name = '${name}',
             email = '${email}',
             role = '${role}',
+            phone_number = '${phone_number}'
+        where
+            id = '${id}'        
+    `;
+    return db.execute(sql);
+  }
+
+  static async updateUserWithImages(
+    id,
+    name,
+    email,
+    role,
+    phone_number,
+    image
+  ) {
+    const sql = `
+        UPDATE
+            users
+        SET
+            name = '${name}',
+            email = '${email}',
+            role = '${role}',
+            phone_number = '${phone_number}',
             profile_picture = '${image}'
         where
             id = '${id}'        

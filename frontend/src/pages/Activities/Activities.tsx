@@ -25,7 +25,7 @@ import {
 const Activities = () => {
   const dispatch = useAppDispatch();
 
-  const { activities, activitiesMonth, query, view } =
+  const { activities, activitiesMonth, query, view }: any =
     useAppSelector(activitiesSelector);
 
   //for activities and filter for list
@@ -179,7 +179,7 @@ const Activities = () => {
                         fontSize: '14px',
                       },
                     })}
-                    views={['month']}
+                    views={['month', 'day']}
                   />
                 </div>
               ) : (
