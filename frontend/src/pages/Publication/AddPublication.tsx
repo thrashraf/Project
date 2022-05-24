@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ModalUser from '../../components/ModalUser';
 import useModal from '../../hooks/useModal';
 import useInput from '../../hooks/useInput';
@@ -11,6 +11,7 @@ import {
 import Dropzone from '../../components/Dropzone';
 import DropZoneFile from '../../components/DropZoneFile';
 import url from '../../utils/url';
+import Toast from '../../components/Toast';
 
 const AddPublication = ({ isShowing, toggle }: any) => {
   const title = useInput('');
@@ -25,6 +26,13 @@ const AddPublication = ({ isShowing, toggle }: any) => {
 
   // for PDF
   const [filePDF, setFilePDF] = useState<any>([]);
+  const [validFiles, setValidFiles] = useState<any>([]);
+
+  //for toast
+  const [status, setStatus] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+
+  const toastRef = useRef<any>(null);
 
   const { isShowing: showDropzone, toggle: toggleDropzone } = useModal();
   const { isShowing: showDropFile, toggle: toggleDropFile } = useModal();
@@ -100,6 +108,19 @@ const AddPublication = ({ isShowing, toggle }: any) => {
     return true;
   };
 
+  //remove duplicate name
+  useEffect(() => {
+    let filteredArray = file.reduce((file: any, current: any) => {
+      const x = file.find((item: any) => item.name === current.name);
+      if (!x) {
+        return file.concat([current]);
+      } else {
+        return file;
+      }
+    }, []);
+    setValidFiles([...filteredArray]);
+  }, [file]);
+
   console.log(file);
 
   //to remove file
@@ -113,6 +134,27 @@ const AddPublication = ({ isShowing, toggle }: any) => {
   };
 
   const formHandler = (e: any) => {
+    if (validFiles.length < 2) {
+      toastRef.current.showToast();
+      setMessage('Please upload cover & backpage publication');
+      e.preventDefault();
+      return;
+    }
+
+    if (filePDF.length < 1) {
+      toastRef.current.showToast();
+      setMessage('Please upload PDF');
+      e.preventDefault();
+      return;
+    }
+
+    if (!year.value || year.value === 'Year') {
+      toastRef.current.showToast();
+      setMessage('Please select year');
+      e.preventDefault();
+      return;
+    }
+
     e.preventDefault();
 
     const formData = new FormData();
@@ -131,7 +173,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
       })
       .then((res: any) => {
         if (res.status === 200) {
-          console.log(res.data)
+          console.log(res.data);
           const newPublication = {
             id: res.data.id,
             Title: title.value,
@@ -142,7 +184,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
             img_url: res.data.image_url ? res.data.image_url : null,
             pdf_url: res.data.pdf_url,
           };
-          console.log(newPublication)
+          console.log(newPublication);
           dispatch(addPublication(newPublication));
           toggle();
         }
@@ -155,6 +197,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
   return (
     <ModalUser modal={isShowing} setModal={toggle}>
       <div className='relative'>
+        <Toast status='error' message={message} ref={toastRef} />
         <div className='left-0 right-0 mx-6 lg:mx-auto lg:max-w-lg break-words  py-8 px-8 lg:md:px-16  bg-white  shadow-md rounded-lg border border-gray-400'>
           <form onSubmit={(e) => formHandler(e)} className='relative'>
             <button
@@ -170,6 +213,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
               <input
                 type='text'
                 value={title.value}
+                required
                 onChange={title.onChange}
                 className='bg-blue-100 py-1 rounded-lg w-full'
               />
@@ -179,6 +223,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
               <p className='m-1'>Description</p>
               <textarea
                 value={description.value}
+                required
                 onChange={description.onChange}
                 className='bg-blue-100 py-1 rounded-lg w-full'
               />
@@ -189,6 +234,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
               <input
                 type='text'
                 value={isbn.value}
+                required
                 onChange={isbn.onChange}
                 className='bg-blue-100 py-1 rounded-lg w-full'
               />
@@ -197,6 +243,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
               <p className='m-1'>Staff Name:</p>
               <textarea
                 value={staff.value}
+                required
                 onChange={staff.onChange}
                 className='bg-blue-100 py-1 rounded-lg w-full'
               />
@@ -255,7 +302,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
               hide={toggleDropzone}
               fileDrop={fileDrop}
               fileSize={fileSize}
-              files={file}
+              files={validFiles}
               removeFile={removeFile}
             />
 

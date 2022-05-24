@@ -57,7 +57,6 @@ class activities {
     return db.execute(sql);
   }
 
-
   static async updateActivitiesWithImage(
     id,
     title,

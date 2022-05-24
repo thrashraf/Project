@@ -156,14 +156,26 @@ const ModalPublication = (props: Props) => {
   }, [file]);
 
   const createPublication = (e: any) => {
-    if (validFiles.length < 2 || filePDF.length < 1) {
-      setMessage('Please insert all the field');
-      setStatus('error');
+    if (validFiles.length < 2) {
       toastRef.current.showToast();
+      setMessage('Please upload cover & backpage publication');
       e.preventDefault();
       return;
     }
 
+    if (filePDF.length < 1) {
+      toastRef.current.showToast();
+      setMessage('Please upload PDF');
+      e.preventDefault();
+      return;
+    }
+
+    if (!year.value || year.value === 'Year') {
+      toastRef.current.showToast();
+      setMessage('Please select year');
+      e.preventDefault();
+      return;
+    }
     e.preventDefault();
 
     const formData = new FormData();
@@ -173,6 +185,7 @@ const ModalPublication = (props: Props) => {
     formData.append('isbn', isbn.value);
     formData.append('staff', staff.value);
     formData.append('year', year.value);
+
     file.forEach((image: any) => formData.append('upload', image));
     filePDF.forEach((file: any) => formData.append('upload', file));
 
@@ -202,6 +215,12 @@ const ModalPublication = (props: Props) => {
   };
 
   const updateCurrentPublication = (e: any) => {
+    if (validFiles.length == 1) {
+      toastRef.current.showToast();
+      setMessage('Please upload cover & backpage publication');
+      return;
+    }
+
     const formData = new FormData();
 
     e.preventDefault();
@@ -211,7 +230,7 @@ const ModalPublication = (props: Props) => {
     formData.append('isbn', isbn.value);
     formData.append('staff', staff.value);
     formData.append('year', year.value);
-    formData.append('prevImages', prevImages);
+    prevImages.forEach((image: any) => formData.append('prevImages', image));
     formData.append('prevPdf', prevPdf.value);
     file.forEach((image: any) => formData.append('upload', image));
     filePDF.forEach((file: any) => formData.append('upload', file));

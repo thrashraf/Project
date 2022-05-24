@@ -21,6 +21,7 @@ type Props = {
   show: boolean;
   setShow: any;
   innovation: any;
+  role: string;
 };
 
 const ModalInnovation = (props: Props) => {
@@ -174,7 +175,7 @@ const ModalInnovation = (props: Props) => {
       <div>
         {props.show && props.innovation && (
           <div
-            className='py-12 transition duration-150 ease-in-out z-20 absolute top-0 bottom-0 right-0 left-0 text-center'
+            className='py-12 transition duration-150 ease-in-out z-20 absolute overflow-x-hidden top-0 bottom-0 right-0 left-0 text-center'
             id='modal'
           >
             <div
@@ -192,20 +193,6 @@ const ModalInnovation = (props: Props) => {
                     src={`/file/${props.innovation?.img_url}`}
                     className=' rounded-lg mb-10 w-[400px] h-[200px] object-contain'
                   ></img>
-                  <i
-                    onClick={toggleDropzone}
-                    className={`fa-solid fa-camera cursor-pointer text-6xl fa-2xl absolute top-[20%] left-[45%] text-gray-300 ${
-                      editMode ? 'visible' : 'hidden'
-                    }`}
-                  ></i>
-
-                  <Dropzone
-                    isShowing={showDropzone}
-                    hide={toggleDropzone}
-                    fileDrop={addFile}
-                    files={file}
-                    removeFile={deleteFile}
-                  />
                 </div>
                 <h1
                   className={`${hideEditComp} text-center text-black  font-extrabold tracking-normal leading-tight mb-4`}
@@ -224,52 +211,22 @@ const ModalInnovation = (props: Props) => {
                 >
                   {props.innovation?.Description}
                 </p>
-                <input
-                  type='text'
-                  onChange={(e) => Description.setInput(e.target.value)}
-                  value={Description.value}
-                  className={`bg-blue-50 px-3 py-2 rounded-md outline-none  text-black mb-4 w-full ${showEditComp}`}
-                />
-
-                <section>
-                  <button
-                    className={`hover:bg-black mr-5 text-black px-4 py-2 rounded-lg hover:text-white ${showEditComp}`}
-                    onClick={toggleEditMode}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className={`bg-blue-500 px-4 py-2 rounded-lg text-white ${showEditComp}`}
-                    onClick={updateCurrentPublication}
-                  >
-                    Save
-                  </button>
-                </section>
 
                 <div
-                  className='cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-500 transition duration-150 ease-in-out'
-                  onClick={() => props.setShow(!props.show)}
+                  className={`flex items-center mr-3 justify-center w-full ${hideEditComp}`}
                 >
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    aria-label='Close'
-                    className='icon icon-tabler icon-tabler-x'
-                    width={20}
-                    height={20}
-                    viewBox='0 0 24 24'
-                    strokeWidth='2.5'
-                    stroke='currentColor'
-                    fill='none'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
+                  <button
+                    className={`focus:outline-none transition duration-150 ease-in-out hover:bg-indigo-600 bg-blue-500 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm ${
+                      props.role && props.role === 'hd' ? 'visible' : 'hidden'
+                    }`}
                   >
-                    <path stroke='none' d='M0 0h24v24H0z' />
-                    <line x1={18} y1={6} x2={6} y2={18} />
-                    <line x1={6} y1={6} x2={18} y2={18} />
-                  </svg>
-                </div>
-                <div className='cursor-pointer absolute top-0 left-3 mt-4 mr-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-500 transition duration-150 ease-in-out'>
-                  <section className='fixed w-10'></section>
+                    <a
+                      href={`/file/${props.innovation?.pdf_url}`}
+                      target='_blank'
+                    >
+                      View Details
+                    </a>
+                  </button>
                 </div>
               </div>
             </div>

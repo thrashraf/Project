@@ -52,7 +52,7 @@ export const createPublication = async (req, res) => {
       message: 'successful',
       image_url: files.length > 0 ? images : null,
       pdf_url: pdf[0]?.filename,
-      id
+      id,
     });
   } catch (error) {
     console.log(error);
@@ -78,7 +78,8 @@ export const updatePublication = async (req, res) => {
         : null;
 
     const images = filterImages.map((item) => item.filename);
-    console.log(images);
+    console.log('images: ' + images);
+    console.log('Prev Images: ' + prevImages);
 
     //filter pdf
     const pdf =
@@ -87,7 +88,7 @@ export const updatePublication = async (req, res) => {
         : null;
     console.log(pdf);
 
-    console.log(prevPdf, pdf);
+    // console.log(prevPdf, pdf);
 
     if (files.length > 0) {
       const [updatedPublication] = await publication.updatePublicationWithImage(
@@ -102,25 +103,25 @@ export const updatePublication = async (req, res) => {
       );
 
       if (updatedPublication.affectedRows !== 1) {
-       return res.status(400).json({
+        return res.status(400).json({
           message: 'something went wrong',
         });
       }
-    }
+    } else {
+      const [updatedPublication] = await publication.updatePublication(
+        q,
+        title,
+        description,
+        isbn,
+        staff,
+        year
+      );
 
-    const [updatedPublication] = await publication.updatePublication(
-      q,
-      title,
-      description,
-      isbn,
-      staff,
-      year
-    );
-
-    if (updatedPublication.affectedRows !== 1) {
-      return res.status(400).json({
-        message: 'something went wrong',
-      });
+      if (updatedPublication.affectedRows !== 1) {
+        return res.status(400).json({
+          message: 'something went wrong',
+        });
+      }
     }
 
     return res.status(200).json({

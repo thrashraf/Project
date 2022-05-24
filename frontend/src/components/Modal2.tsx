@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useInput from '../hooks/useInput';
 import useModal from '../hooks/useModal';
 import More from '../components/More';
@@ -17,6 +17,7 @@ import Dropzone from './Dropzone';
 import axios from 'axios';
 import url from '../utils/url';
 import DropZoneFile from './DropZoneFile';
+import Toast from './Toast';
 
 type Props = {
   show: boolean;
@@ -41,15 +42,25 @@ const Modal2 = (props: Props) => {
   const isbn = useInput('');
   const staff = useInput('');
   const year = useInput('');
-  const [file, setFile] = useState<any>([]);
 
+  // for PDF
+  // for images
+  const [file, setFile] = useState<any>([]);
+  const [validFiles, setValidFiles] = useState<any>([]);
   const [filePDF, setFilePDF] = useState<any>([]);
+
+  //for toast
+  const [status, setStatus] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+
   const { isShowing: showDropFile, toggle: toggleDropFile } = useModal();
 
   const [imageIndex, setImageIndex] = useState<any>(0);
 
   const [prevImages, setPrevImages] = useState<any>([]);
   const prevPdf = useInput('');
+
+  const toastRef = useRef<any>(null);
 
   const toggleEditMode = () => dispatch(editModeHandler());
 
@@ -80,6 +91,19 @@ const Modal2 = (props: Props) => {
     }
     return true;
   };
+
+  //remove duplicate name
+  useEffect(() => {
+    let filteredArray = file.reduce((file: any, current: any) => {
+      const x = file.find((item: any) => item.name === current.name);
+      if (!x) {
+        return file.concat([current]);
+      } else {
+        return file;
+      }
+    }, []);
+    setValidFiles([...filteredArray]);
+  }, [file]);
 
   //to remove file
   const deleteFile = (name: any) => {
@@ -145,6 +169,14 @@ const Modal2 = (props: Props) => {
   };
 
   const updateCurrentPublication = () => {
+    if (validFiles.length == 1) {
+      toastRef.current.showToast();
+      setMessage('Please upload cover & backpage publication');
+      return;
+    }
+
+    console.log(validFiles.length);
+
     const formData = new FormData();
 
     formData.append('title', title.value);
@@ -152,7 +184,7 @@ const Modal2 = (props: Props) => {
     formData.append('isbn', isbn.value);
     formData.append('staff', staff.value);
     formData.append('year', year.value);
-    formData.append('prevImages', prevImages);
+    prevImages.forEach((image: any) => formData.append('prevImages', image));
     formData.append('prevPdf', prevPdf.value);
     file.forEach((image: any) => formData.append('upload', image));
     filePDF.forEach((file: any) => formData.append('upload', file));
@@ -165,8 +197,7 @@ const Modal2 = (props: Props) => {
       .then((res: any) => {
         if (res.status === 200) {
           console.log('ok');
-          
-          
+
           const newActivities = {
             id: publication.id,
             Title: title.value,
@@ -266,12 +297,13 @@ const Modal2 = (props: Props) => {
                       editMode ? 'visible' : 'hidden'
                     }`}
                   ></i>
-
                   <Dropzone
+                    content={'Drop Front and Backpage'}
                     isShowing={showDropzone}
                     hide={toggleDropzone}
                     fileDrop={fileDrop}
-                    files={file}
+                    fileSize={fileSize}
+                    files={validFiles}
                     removeFile={deleteFile}
                   />
                 </div>
@@ -425,6 +457,7 @@ const Modal2 = (props: Props) => {
                       removeFile={removeFilePDF}
                     />
                   </section>
+                  <Toast status='error' message={message} ref={toastRef} />
                 </div>
               </div>
             </div>

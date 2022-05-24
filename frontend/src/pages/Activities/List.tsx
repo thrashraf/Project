@@ -107,7 +107,12 @@ export const List = (props: Props) => {
                   </span>
                 </td>
                 <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                  {item.start.split('-').reverse().join('/')}
+                  {new Date(item.start)
+                    .toISOString()
+                    .slice(0, 10)
+                    .split('-')
+                    .reverse()
+                    .join('/')}
                 </td>
                 <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
                   {item.organizer}

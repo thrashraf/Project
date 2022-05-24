@@ -68,9 +68,6 @@ export const Innovation = (props: any) => {
         />
       </div>
 
-      {/* <AddInnovation isShowing={showModal} toggle={toggleModal} innovation={innovationDetail}
-                    mode={mode.value} /> */}
-
       <ModalInnovation
         isShowing={showModal}
         toggle={toggleModal}
