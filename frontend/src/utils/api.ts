@@ -1,6 +1,7 @@
 import axios from "axios"
 import jwt_decode from 'jwt-decode'
 import { instance } from "../features/user/User"
+import url from '../utils/url'
 
 let store: any;
 
@@ -8,7 +9,7 @@ export const injectStore = (_store: any) => {
     store = _store
 }
 
-const api = axios.create();
+const api = axios.create({baseURL: process.env.REACT_APP_API_URL,});
 
 api.interceptors.request.use(async (config) => {
   
@@ -29,7 +30,7 @@ api.interceptors.request.use(async (config) => {
       if (expired * 1000 < currentDate.getTime()) {
         
         console.log('new token')
-        const response = await axios.get('/api/user/token');
+        const response = await axios.get(`${url}/api/user/token`, {withCredentials: true,});
   
         console.log('set New token');
   

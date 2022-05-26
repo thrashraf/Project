@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { addUser, updateUserHandler } from '../../features/admin/Admin';
 import { userSelector } from '../../features/user/User';
 import api from '../../utils/api';
+import url from '../../utils/url';
 
 type Props = {
   isShowing: boolean;
@@ -88,7 +89,7 @@ const Modal = (props: Props) => {
     file.forEach((image: any) => formData.append('upload', image));
 
     axios
-      .post('/api/admin/updateUser', formData)
+      .post(`${url}/api/admin/updateUser`, formData, { withCredentials: true })
       .then((res: any) => {
         if (res.status === 200) {
           const newActivities = {
@@ -97,8 +98,10 @@ const Modal = (props: Props) => {
             email: email.value,
             role: role.value,
             phone_number: phone_number.value,
-            // banner: res.data.image_url,
+            profile_picture: res.data.img_url,
           };
+
+          console.log(newActivities);
 
           dispatch(updateUserHandler(newActivities));
           props.toggle();
@@ -111,17 +114,29 @@ const Modal = (props: Props) => {
 
   const createUser = (e: any) => {
     e.preventDefault();
-    const newUser = {
-      name: name.value,
-      email: email.value,
-      role: role.value,
-      phone_number: phone_number.value,
-      password: password.value,
-    };
 
     api
-      .post('/api/admin/createUser', newUser)
+      .post(
+        '/api/admin/createUser',
+        {
+          name: name.value,
+          email: email.value,
+          role: role.value,
+          phone_number: phone_number.value,
+          password: password.value,
+        },
+        { withCredentials: true }
+      )
       .then((res) => {
+        const newUser = {
+          name: name.value,
+          email: email.value,
+          role: role.value,
+          phone_number: phone_number.value,
+          password: password.value,
+          id: res.data.id,
+        };
+
         dispatch(addUser(newUser));
         props.toggle();
       })
@@ -207,7 +222,7 @@ const Modal = (props: Props) => {
               <section className=''>
                 <p className='my-1 text-sm text-gray-400 ml-1'>Phone Number</p>
                 <input
-                  type='phone'
+                  type='tel'
                   value={phone_number.value}
                   onChange={phone_number.onChange}
                   className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'

@@ -8,7 +8,6 @@ import ReactToPrint from 'react-to-print';
 
 type Props = {
   activities: any;
-  setFilterData: any;
   setFilterItem: any;
   setMonth: any;
   filterBy: string;
@@ -63,7 +62,7 @@ export const List = (props: Props) => {
         <ReactToPrint
           trigger={() => {
             return (
-              <button className='text-white bg-orange-500 font-medium hover:bg-slate-100 hover:text-black px-3 py-2 rounded-md'>
+              <button className='text-white bg-orange-500 z-10 font-medium hover:bg-slate-100 hover:text-black px-3 py-2 rounded-md'>
                 <i className='fa-solid fa-print mr-3' />
                 Print
               </button>
@@ -100,7 +99,7 @@ export const List = (props: Props) => {
             </tr>
           </thead>
           <tbody className='shadow-md last:rounded-b-lg'>
-            {props.activities.map((item: any, index: number) => (
+            {props.activities?.map((item: any, index: number) => (
               <tr key={index}>
                 <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
                   <span className='font-bold uppercase text-blue-500 hover:underline cursor-pointer'>
@@ -108,7 +107,12 @@ export const List = (props: Props) => {
                   </span>
                 </td>
                 <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                  {item.start.split('-').reverse().join('/')}
+                  {new Date(item.start)
+                    .toISOString()
+                    .slice(0, 10)
+                    .split('-')
+                    .reverse()
+                    .join('/')}
                 </td>
                 <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
                   {item.organizer}

@@ -52,7 +52,7 @@ class activities {
     const sql = `UPDATE activities SET title = '${title}',
         start = '${start}',
         organizer = '${organizer}',
-        venue = '${venue}',
+        venue = '${venue}'
         where id = '${id}'`;
     return db.execute(sql);
   }
@@ -86,6 +86,7 @@ class activities {
     id,
     images,
     content,
+    position,
     tentative,
     ajk,
     signature
@@ -96,6 +97,7 @@ class activities {
                 owner = '${owner}', 
                 images = '${JSON.stringify(images)}',
                 content = '${content}',
+                position = '${position}',
                 tentative = '[${tentative}]',
                 committee = '[${ajk}]',
                 status = 'pending',
@@ -111,6 +113,7 @@ class activities {
     prevImages,
     id,
     content,
+    position,
     tentative,
     ajk,
     signature
@@ -121,6 +124,7 @@ class activities {
                   owner = '${owner}', 
                   images = '${JSON.stringify(prevImages)}',
                   content = '${content}',
+                  position = '${position}',
                   tentative = '[${tentative}]',
                   committee = '[${ajk}]',
                   status = 'pending',
@@ -131,6 +135,11 @@ class activities {
 
   static async updateStatus(id, status, signature, kjName) {
     const sql = `UPDATE activities SET status = '${status}', kjSignature = '${signature}', kjName = '${kjName}' where id = '${id}'`;
+    return db.execute(sql);
+  }
+
+  static async getReportUser(id) {
+    const sql = `SELECT * FROM activities where userId = '${id}'`;
     return db.execute(sql);
   }
 }

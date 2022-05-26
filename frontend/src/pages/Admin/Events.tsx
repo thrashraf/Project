@@ -72,7 +72,7 @@ export default function Users() {
           </span>
           <input
             type='text'
-            placeholder='search by name'
+            placeholder='search by Title'
             className='text-lg px-4 py-2 bg-white rounded-t-lg rounded-b-lg  w-[400px] focus:outline-none'
             onChange={(e) => dispatch(handleFilter(e.target.value))}
             value={query}
@@ -103,7 +103,7 @@ export default function Users() {
               <div className='flex flex-wrap items-center'>
                 <div className='relative w-full px-4 max-w-full flex-grow flex-1'>
                   <h3 className={'font-semibold text-lg text-blueGray-700'}>
-                    Users
+                    List of Events
                   </h3>
                 </div>
               </div>
@@ -143,10 +143,20 @@ export default function Users() {
                             </span>
                           </td>
                           <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                            {item.start.split('-').reverse().join('/')}
+                            {new Date(item.start)
+                              .toISOString()
+                              .slice(0, 10)
+                              .split('-')
+                              .reverse()
+                              .join('/')}
                           </td>
                           <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
-                            {item.end.split('-').reverse().join('/')}
+                            {new Date(item.end)
+                              .toISOString()
+                              .slice(0, 10)
+                              .split('-')
+                              .reverse()
+                              .join('/')}
                           </td>
                           <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
                             <p>{item.organizer}</p>
@@ -167,13 +177,13 @@ export default function Users() {
                                 <section className='bg-slate-50 absolute -left-32 w-[120px] z-50'>
                                   <ul>
                                     <li
-                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5'
+                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5 text-xs'
                                       onClick={edit}
                                     >
                                       Edit
                                     </li>
                                     <li
-                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5'
+                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5 text-xs'
                                       onClick={() => deleteUserById(item.id)}
                                     >
                                       Delete

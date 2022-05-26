@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/Store';
 import api from '../../utils/api';
+import url from '../../utils/url';
 
 interface interfaceState {
   [key: string]: any;
@@ -113,8 +114,12 @@ export const activitiesSlice = createSlice({
       const searchWord = action.payload;
       state.query = searchWord;
 
+      const keys = ['title', 'organizer'];
+
       const newFilter = state.activities.filter((value: any) =>
-        value.title.toLowerCase().includes(searchWord.toLowerCase())
+        keys.some((key) =>
+          value[key].toLowerCase().includes(searchWord.toLowerCase())
+        )
       );
       if (searchWord !== '') {
         state.filterData = newFilter;
@@ -142,10 +147,16 @@ export const activitiesSlice = createSlice({
       state.isFetching = false;
       state.isSuccess = true;
       //sort activities: any
-      state.activities = payload?.sort(
-        (start: any, end: any) =>
-          (new Date(start.end) as any) - (new Date(end.end) as any)
-      );
+      state.activities = payload
+        ?.map((item: any) => ({
+          ...item,
+          start: new Date(item.start),
+          end: new Date(item.end),
+        }))
+        .sort(
+          (start: any, end: any) =>
+            (new Date(start.end) as any) - (new Date(end.end) as any)
+        );
     });
     builder.addCase(getActivities.pending, (state) => {
       state.isFetching = true;
@@ -196,13 +207,9 @@ export const getActivities = createAsyncThunk(
   async (query: any, thunkAPI) => {
     try {
       const response = await api.get(
-        `/api/activities/getAllActivities?q=${query}`,
+        `${url}/api/activities/getAllActivities?q=${query}`,
         {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
+          withCredentials: true,
         }
       );
       let data = await response.data;
@@ -225,13 +232,12 @@ export const getMonthActivities = createAsyncThunk(
   'activities/getMonthActivities',
   async (_, thunkAPI) => {
     try {
-      const response = await api.get(`/api/activities/getAllActivities?q=`, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await api.get(
+        `${url}/api/activities/getAllActivities?q=`,
+        {
+          withCredentials: true,
+        }
+      );
       let data = await response.data;
 
       if (response.status === 200) {
@@ -253,13 +259,9 @@ export const deleteActivities = createAsyncThunk(
   async (id: string, thunkAPI) => {
     try {
       const response = await api.delete(
-        `/api/activities/deleteActivities?q=${id}`,
+        `${url}/api/activities/deleteActivities?q=${id}`,
         {
-          method: 'DELETE',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
+          withCredentials: true,
         }
       );
       let data = await response.data;
@@ -287,7 +289,7 @@ export const {
   deleteActivitiesHandler,
   editModeHandler,
   editActivitiesHandler,
-  closeEditMode
+  closeEditMode,
   // removeFile,
   // filterFile,
   // resetFile,

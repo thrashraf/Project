@@ -75,12 +75,12 @@ export const ImageTemplate = (props: Props) => {
                     <i className='fa-solid fa-xmark fa-2xl' />
                   </section>
                   <img
-                    src={`/assets/${image}`}
+                    src={`/file/${image}`}
                     alt='pho'
                     key={index}
                     className='w-[400px] h-[200px] object-cover m-auto'
                   />
-                  <p className='mt-[5px] text-center'>Rajah {index + 1.0}</p>
+                  <p className='mt-[5px] text-center'>Rajah {indexArr + 1.0}</p>
                   {console.log(props.status)}
                 </section>
               ))}
@@ -119,8 +119,6 @@ export const ImageTemplate = (props: Props) => {
                       ? index * 2 + 3 + currentIndex
                       : currentIndex + 1}
                   </p>
-                  {/* {rajah.map((_: any, index: number) => (
-                  ))} */}
                 </section>
               ))}
             </section>

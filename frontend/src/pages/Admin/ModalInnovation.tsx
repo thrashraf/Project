@@ -6,47 +6,59 @@ import useModal from '../../hooks/useModal';
 import Toast from '../../components/Toast';
 import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { addUser, updateUserHandler } from '../../features/admin/Admin';
-import { userSelector } from '../../features/user/User';
+import {
+  addInnovationHandler,
+  editInnovationHandler,
+} from '../../features/Innovation/Innovation';
 import api from '../../utils/api';
+import DropZoneFile from '../../components/DropZoneFile';
+import generateYears from '../../utils/generateYears';
+import { refreshUser } from '../../features/user/User';
+import url from '../../utils/url';
 
 type Props = {
   isShowing: boolean;
   toggle: any;
-  user: any;
+  innovation: any;
   mode: string;
 };
 
 const ModalInnovation = (props: Props) => {
-  const dispatch = useAppDispatch();
+  const Title = useInput('');
+  const Description = useInput('');
+  const Name = useInput('');
+  const Program = useInput('');
+  const Level = useInput('');
+  const Medal = useInput('');
+  const Year = useInput('');
+  const prevImages = useInput('');
+  const prevPdf = useInput('');
 
-  const name = useInput('');
-  const email = useInput('');
-  const role = useInput('');
-  const phone_number = useInput('');
-  const password = useInput('');
-
-  //for toast
   const [status, setStatus] = useState<string>('');
   const [message, setMessage] = useState<string>('');
 
   const toastRef = useRef<any>(null);
 
-  //dropzone State
-  const { isShowing, toggle } = useModal();
-
+  // for images
   const [file, setFile] = useState<any>([]);
 
-  const addFile = (e: any) => {
+  // for PDF
+  const [filePDF, setFilePDF] = useState<any>([]);
+
+  const dispatch = useAppDispatch();
+
+  const { isShowing: showDropzone, toggle: toggleDropzone } = useModal();
+  const { isShowing: showDropFile, toggle: toggleDropFile } = useModal();
+
+  const years = generateYears();
+
+  //for drop file
+  const fileDrop = (e: any) => {
     e.preventDefault();
     const files = e.dataTransfer.files;
     for (let i = 0; i < files.length; i++) {
       if (validateFile(files[i])) {
         setFile([...files]);
-      } else {
-        // setStatus('error');
-        // setMessage('Not support file type');
-        // toastRef.current && toastRef.current.showToast();
       }
     }
   };
@@ -54,15 +66,23 @@ const ModalInnovation = (props: Props) => {
   //for validate file
   const validateFile = (file: any) => {
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-    console.log(validTypes.indexOf(file.type) === -1);
     if (validTypes.indexOf(file.type) === -1) {
       return false;
     }
     return true;
   };
 
+  //to show file size
+  const fileSize = (size: any) => {
+    if (size === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(size) / Math.log(k));
+    return parseFloat((size / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
   //to remove file
-  const deleteFile = (name: any) => {
+  const removeFile = (name: any) => {
     // find the index of the item
     // remove the item from array
     const selectedFileIndex = file.findIndex((e: any) => e.name === name);
@@ -71,36 +91,86 @@ const ModalInnovation = (props: Props) => {
     setFile([...file]);
   };
 
-  const resetFile = () => {
-    setFile([]);
+  //! for pdf functions
+
+  //for drop file
+  const fileDropPDF = (e: any) => {
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+    for (let i = 0; i < files.length; i++) {
+      if (validateFilePDF(files[i])) {
+        setFilePDF([...files]);
+      }
+    }
   };
 
-  const updateUser = (e: any) => {
-    e.preventDefault();
+  //for validate file
+  const validateFilePDF = (file: any) => {
+    const validTypes = ['application/pdf'];
+    if (validTypes.indexOf(file.type) === -1) {
+      return false;
+    }
+    return true;
+  };
+
+
+  //to remove file
+  const removeFilePDF = (name: any) => {
+    // find the index of the item
+    // remove the item from array
+    const selectedFileIndex = file.findIndex((e: any) => e.name === name);
+    filePDF.splice(selectedFileIndex, 1);
+    // update selectedFiles array
+    setFilePDF([...filePDF]);
+  };
+
+  const createInnovation = (e: any) => {
+    if (file.length < 1 || filePDF.length < 1) {
+      setMessage('Please insert all the field');
+      setStatus('error');
+      toastRef.current.showToast();
+      e.preventDefault();
+      return;
+    }
+
     const formData = new FormData();
 
-    formData.append('id', props.user.id);
-    formData.append('name', name.value);
-    formData.append('email', email.value);
-    formData.append('role', role.value);
-    formData.append('phone_number', phone_number.value);
-    formData.append('img_url', props.user.profile_picture);
-    file.forEach((image: any) => formData.append('upload', image));
+    if (file.length < 1 || filePDF.length < 1) {
+      setMessage('Please insert all the field');
+      setStatus('error');
+      toastRef.current.showToast();
+      e.preventDefault();
+      return;
+    }
+
+    formData.append('Title', Title.value);
+    formData.append('Description', Description.value);
+    formData.append('Name', Name.value);
+    formData.append('Program', Program.value);
+    formData.append('Level', Level.value);
+    formData.append('Medal', Medal.value);
+    formData.append('Year', Year.value);
+    file?.forEach((image: any) => formData.append('upload', image));
+    filePDF.forEach((file: any) => formData.append('upload', file));
 
     axios
-      .post('/api/admin/updateUser', formData)
+      .post(`${url}/api/inno/createInnovation`, formData, {
+        withCredentials: true,
+      })
       .then((res: any) => {
         if (res.status === 200) {
-          const newActivities = {
-            id: props.user.id,
-            name: name.value,
-            email: email.value,
-            role: role.value,
-            phone_number: phone_number.value,
-            // banner: res.data.image_url,
+          const newInnovation = {
+            Title: Title.value,
+            Description: Description.value,
+            Name: Name.value,
+            Program: Program.value,
+            Level: Level.value,
+            Medal: Medal.value,
+            Year: Year.value,
+            img_url: res.data.img_url,
           };
-
-          dispatch(updateUserHandler(newActivities));
+          console.log(newInnovation);
+          dispatch(addInnovationHandler(newInnovation));
           props.toggle();
         }
       })
@@ -109,42 +179,82 @@ const ModalInnovation = (props: Props) => {
       });
   };
 
-  const createUser = (e: any) => {
-    e.preventDefault();
-    const newUser = {
-      name: name.value,
-      email: email.value,
-      role: role.value,
-      phone_number: phone_number.value,
-      password: password.value,
-    };
+  const updateCurrentInnovation = (e: any) => {
+    const formData = new FormData();
 
-    api
-      .post('/api/admin/createUser', newUser)
-      .then((res) => {
-        dispatch(addUser(newUser));
-        props.toggle();
+    e.preventDefault();
+
+    formData.append('Title', Title.value);
+    formData.append('Description', Description.value);
+    formData.append('Name', Name.value);
+    formData.append('Program', Program.value);
+    formData.append('Level', Level.value);
+    formData.append('Medal', Medal.value);
+    formData.append('Year', Year.value);
+    formData.append('prevImages', prevImages.value);
+    formData.append('prevPdf', prevPdf.value);
+    file?.forEach((image: any) => formData.append('upload', image));
+    filePDF.forEach((file: any) => formData.append('upload', file));
+
+    const id = props.innovation.id;
+
+    axios
+      .post(`${url}/api/inno/updateInnovation?q=${id}`, formData, {
+        withCredentials: true,
       })
-      .catch((err) => {
-        setMessage(err.response.data.message);
-        toastRef.current.showToast();
+      .then((res: any) => {
+        if (res.status === 200) {
+          const newInnovation = {
+            id: props.innovation.id,
+            Title: Title.value,
+            Description: Description.value,
+            Name: Name.value,
+            Program: Program.value,
+            Level: Level.value,
+            Medal: Medal.value,
+            Year: Year.value,
+            img_url: res.data.image_url
+              ? res.data.image_url
+              : props.innovation.img_url,
+            pdf_url: res.data.pdf_url
+              ? res.data.pdf_url
+              : props.innovation.pdf_url,
+          };
+          setFile([]);
+          setFilePDF([]);
+
+          dispatch(editInnovationHandler(newInnovation));
+          //toggle modal
+          props.toggle();
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
       });
   };
 
   useEffect(() => {
-    if (!props.user) return;
+    if (!props.innovation) return;
     if (props.mode === 'add') {
-      name.setInput('');
-      email.setInput('');
-      role.setInput('');
-      phone_number.setInput('');
+      Title.setInput('');
+      Description.setInput('');
+      Name.setInput('');
+      Program.setInput('');
+      Level.setInput('');
+      Medal.setInput('');
+      Year.setInput('');
     } else {
-      name.setInput(props.user.name);
-      email.setInput(props.user.email);
-      role.setInput(props.user.role);
-      phone_number.setInput(props.user.phone_number);
+      Title.setInput(props.innovation.Title);
+      Description.setInput(props.innovation.Description);
+      Name.setInput(props.innovation.Name);
+      Program.setInput(props.innovation.Program);
+      Level.setInput(props.innovation.Level);
+      Medal.setInput(props.innovation.Medal);
+      Year.setInput(props.innovation.Year);
+      prevImages.setInput(props.innovation.img_url);
+      prevPdf.setInput(props.innovation.pdf_url);
     }
-  }, [props.mode, props.user]);
+  }, [props.mode, props.innovation]);
 
   return (
     <ModalContainer
@@ -152,123 +262,180 @@ const ModalInnovation = (props: Props) => {
       toggle={props.toggle}
       hide={props.toggle}
     >
-      <Toast status='error' message={message} ref={toastRef} />
       <div className='relative mx-auto bg-white max-w-lg rounded-lg shadow z-50 p-5'>
         <form
           onSubmit={
-            props.mode === 'add' ? (e) => createUser(e) : (e) => updateUser(e)
+            props.mode === 'add'
+              ? (e) => createInnovation(e)
+              : (e) => updateCurrentInnovation(e)
           }
         >
           <div>
-            <section className='my-5'>
-              <p className='my-1 text-sm text-gray-400 ml-1'>
-                Name
-                <span className='text-red-500'>*</span>
-              </p>
-              <input
-                type='text'
-                value={name.value}
-                onChange={name.onChange}
-                required
-                className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
-              />
-            </section>
-            <div className='grid grid-cols-2 gap-5'>
-              <section className=''>
+            <section className='my-5 grid grid-cols-2 gap-5'>
+              <section>
                 <p className='my-1 text-sm text-gray-400 ml-1'>
-                  Email
+                  Title
                   <span className='text-red-500'>*</span>
                 </p>
                 <input
-                  type='email'
-                  value={email.value}
+                  type='text'
+                  value={Title.value}
+                  onChange={Title.onChange}
                   required
-                  onChange={email.onChange}
                   className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
                 />
               </section>
               <section className=''>
                 <p className='my-1 text-smactivitiesSlice text-gray-400 ml-1'>
-                  Role
+                  Year
                   <span className='text-red-500'>*</span>
                 </p>
                 <select
-                  onChange={role.onChange}
-                  value={role.value}
+                  onChange={Year.onChange}
+                  value={Year.value}
                   required
                   className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
                 >
-                  <option value='Select'>Select</option>
-                  <option value='staff'>Staff</option>
-                  <option value='admin'>Admin</option>
-                  <option value='hd'>Head Department</option>
+                  {years?.map((item: any, index: number) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  ))}
                 </select>
               </section>
+            </section>
+            <section className=''>
+              <p className='my-1 text-sm text-gray-400 ml-1'>
+                Description
+                <span className='text-red-500'>*</span>
+              </p>
+              <textarea
+                value={Description.value}
+                required
+                onChange={Description.onChange}
+                rows={3}
+                className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
+              />
+            </section>
+            <div className='grid grid-cols-2 gap-5'>
+            <select
+                  onChange={Level.onChange}
+                  value={Level.value}
+                  required
+                  className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
+                >
+                  {['Level','International','National']?.map((item: any, index: number) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
+              <div>
+                <section className=''>
+                <select
+                  onChange={Medal.onChange}
+                  value={Medal.value}
+                  required
+                  className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
+                >
+                  {['Medal','Gold','Silver','Bronze']?.map((item: any, index: number) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
+                </section>
+              </div>
+              <div>
+                <section className=''>
+                  <p className='my-1 text-sm text-gray-400 ml-1'>
+                    Program<span className='text-red-500'>*</span>
+                  </p>
+
+                  <textarea
+                    rows={4}
+                    value={Program.value}
+                    required
+                    onChange={Program.onChange}
+                    className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
+                  />
+                </section>
+              </div>
               <section className=''>
-                <p className='my-1 text-sm text-gray-400 ml-1'>Phone Number</p>
-                <input
-                  type='phone'
-                  value={phone_number.value}
-                  onChange={phone_number.onChange}
+                <p className='my-1 text-sm text-gray-400 ml-1'>
+                  Name<span className='text-red-500'>*</span>
+                </p>
+
+                <textarea
+                  rows={4}
+                  value={Name.value}
+                  required
+                  onChange={Name.onChange}
                   className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
                 />
               </section>
-              <div>
-                {props.mode === 'add' ? (
-                  <section className=''>
-                    <p className='my-1 text-sm text-gray-400 ml-1'>
-                      Password<span className='text-red-500'>*</span>
-                    </p>
-
-                    <input
-                      type='password'
-                      value={password.value}
-                      onChange={password.onChange}
-                      required
-                      className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
-                    />
-                  </section>
-                ) : (
-                  <section>
-                    <p className='my-1 text-sm text-gray-400 ml-1'>
-                      Profile Photo
-                    </p>
-                    <section
-                      className='flex  w-[200px] items-center cursor-pointer 
-              text-slate-400 hover:text-blue-500
-            '
-                      onClick={toggle}
-                    >
-                      <div className='p-5 rounded-md bg-blue-50 '>
-                        <i className='fa-solid fa-images fa-2xl'></i>
-                      </div>
-                      <p className='ml-5 text-sm'>Upload Images</p>
-                    </section>
-                  </section>
-                )}
-              </div>
             </div>
 
-            <section className=' flex justify-end mt-10'>
-              <button
-                className='flex hover:bg-black hover:text-white px-3 py-2  rounded-lg mr-5'
-                onClick={props.toggle}
+            <div className='flex justify-between'>
+              <section
+                className='mt-5 flex  w-[200px] items-center cursor-pointer 
+              text-slate-400 hover:text-blue-500
+            '
+                onClick={toggleDropzone}
               >
-                Cancel
-              </button>
-              <button
-                className='flex bg-blue-500 px-3 py-2 text-white rounded-lg'
-                type='submit'
+                <div className='p-5 rounded-md bg-blue-50 '>
+                  <i className='fa-solid fa-images fa-2xl'></i>
+                </div>
+                <p className='ml-5 text-sm'>Upload Images</p>
+              </section>
+              <section
+                className='mt-5 flex  w-[200px] items-center cursor-pointer 
+              text-slate-400 hover:text-blue-500
+            '
+                onClick={toggleDropFile}
               >
-                {props.mode === 'add' ? 'Create' : 'Update'}
-              </button>
-            </section>
+                <div className='p-5 rounded-md bg-blue-50 '>
+                  <i className='fa-solid fa-file-pdf fa-2xl'></i>
+                </div>
+                <p className='ml-5 text-sm'>Upload File</p>
+              </section>
+            </div>
+            <div className='flex justify-end'>
+              <section className=' flex justify-end mt-10'>
+                <button
+                  className='flex hover:bg-black hover:text-white px-3 py-2  rounded-lg mr-5'
+                  onClick={props.toggle}
+                >
+                  Cancel
+                </button>
+                <button
+                  className='flex bg-blue-500 px-3 py-2 text-white rounded-lg'
+                  type='submit'
+                >
+                  {props.mode === 'add' ? 'Create' : 'Update'}
+                </button>
+              </section>
+            </div>
             <Dropzone
-              isShowing={isShowing}
-              hide={toggle}
-              fileDrop={addFile}
+              isShowing={showDropzone}
+              hide={toggleDropzone}
+              fileDrop={fileDrop}
               files={file}
-              removeFile={deleteFile}
+              content={
+                'Add Cover Image'
+              }
+              removeFile={removeFile}
+            />
+            <DropZoneFile
+              isShowing={showDropFile}
+              hide={toggleDropFile}
+              fileDrop={fileDropPDF}
+              fileSize={fileSize}
+              files={filePDF}
+              content={
+                'Add Innovation Cerificate'
+              }
+              removeFile={removeFilePDF}
             />
             <Toast ref={toastRef} status={status} message={message} />
           </div>

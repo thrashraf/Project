@@ -25,7 +25,7 @@ import {
 const Activities = () => {
   const dispatch = useAppDispatch();
 
-  const { activities, activitiesMonth, query, view } =
+  const { activities, activitiesMonth, query, view }: any =
     useAppSelector(activitiesSelector);
 
   //for activities and filter for list
@@ -72,13 +72,13 @@ const Activities = () => {
 
     if (filterBy === 'All') {
       dispatch(dropdownActivities(activitiesMonth));
-    } else if (filterBy === 'Draft activities') {
+    } else if (filterBy === 'Upcoming Events') {
       const filterActivity = activitiesMonth.filter(
         (item: any) => (new Date(item.end) as any) > new Date()
       );
       console.log(filterActivity);
       dispatch(dropdownActivities(filterActivity));
-    } else if (filterBy === 'Report activities') {
+    } else if (filterBy === 'Events') {
       const filterActivity = activitiesMonth.filter(
         (item: any) => (new Date(item.end) as any) < new Date()
       );
@@ -115,7 +115,7 @@ const Activities = () => {
       }
 
       //? for draft & report
-      if (year && filterBy === 'Draft activities') {
+      if (year && filterBy === 'Upcoming Events') {
         const filterActivity = activitiesMonth.filter(
           (item: any) =>
             (new Date(item.end).getFullYear() as any) === year &&
@@ -124,7 +124,7 @@ const Activities = () => {
         dispatch(dropdownActivities(filterActivity));
       }
 
-      if (year && filterBy === 'Report activities') {
+      if (year && filterBy === 'Events') {
         const filterActivity = activitiesMonth.filter(
           (item: any) =>
             (new Date(item.end).getFullYear() as any) === year &&
@@ -156,7 +156,7 @@ const Activities = () => {
         <section className=' col-span-2'>
           {activities && (
             <div>
-              <Header toggleAdd={toggleAdd} />
+              <Header toggleAdd={toggleAdd} showView={true} />
 
               {view === 'calendar' ? (
                 <div className='mt-10'>
@@ -179,13 +179,12 @@ const Activities = () => {
                         fontSize: '14px',
                       },
                     })}
-                    views={['month']}
+                    views={['month', 'day']}
                   />
                 </div>
               ) : (
                 <List
                   activities={activities}
-                  setFilterData={setFilterData}
                   setFilterItem={setFilterBy}
                   setMonth={setMonth}
                   filterBy={filterBy}

@@ -168,8 +168,8 @@ export default function Users() {
                           <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
                             <img
                               src={
-                                user.profile_picture
-                                  ? `/assets/${user.profile_picture}`
+                                user?.profile_picture
+                                  ? `/file/${user.profile_picture}`
                                   : '/assets/defaultProfile.jpg'
                               }
                               alt=''
@@ -195,13 +195,13 @@ export default function Users() {
                                 <section className='bg-slate-50 absolute -left-32 w-[120px] z-50'>
                                   <ul>
                                     <li
-                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5'
+                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5 text-xs'
                                       onClick={edit}
                                     >
                                       Edit
                                     </li>
                                     <li
-                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5'
+                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5 text-xs'
                                       onClick={() => deleteUserById(user.id)}
                                     >
                                       Delete

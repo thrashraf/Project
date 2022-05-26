@@ -11,7 +11,6 @@ import FooterAdmin from '../../components/Footers/FooterAdmin';
 import Middleware from '../../middleware/Middleware';
 // views
 
-import Dashboard from './Dashboard';
 import Users from './Users';
 import Events from './Events';
 import Publication from './Publication';
@@ -28,8 +27,7 @@ export default function KJ() {
         <div className='px-4 md:px-10 mx-auto bg-blueGray-100 w-full -m-24'>
           <Routes>
             <Route element={<Middleware />}>
-              <Route index element={<Dashboard />} />
-              <Route path='dashboard' element={<Dashboard />} />
+              <Route index element={<Users />} />
               <Route path='users' element={<Users />} />
               <Route path='events' element={<Events />} />
               <Route path='publication' element={<Publication />} />

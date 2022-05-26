@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/Store';
 import api from '../../utils/api';
+import url from '../../utils/url';
 
 export const adminSlice = createSlice({
   name: 'Admin',
@@ -95,12 +96,8 @@ export const getAllUser = createAsyncThunk(
   'admin/getUsers',
   async (query: string, thunkAPI) => {
     try {
-      const response = await api.get(`/api/user/getAllUser?q=${query}`, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
+      const response = await api.get(`${url}/api/user/getAllUser?q=${query}`, {
+        withCredentials: true,
       });
       let data = await response.data;
 
@@ -122,12 +119,8 @@ export const deleteUser = createAsyncThunk(
   '/api/admin/deleteActivities',
   async (id: string, thunkAPI) => {
     try {
-      const response = await api.delete(`/api/admin/deleteUser?q=${id}`, {
-        method: 'DELETE',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
+      const response = await api.delete(`${url}/api/admin/deleteUser?q=${id}`, {
+        withCredentials: true,
       });
       let data = await response.data;
 

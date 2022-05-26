@@ -74,7 +74,7 @@ export default function Navbar(props: any) {
                       className='w-10 h-10 rounded-full object-cover'
                       src={`${
                         user.profile_picture
-                          ? `/assets/${user.profile_picture}`
+                          ? `/file/${user.profile_picture}`
                           : '/assets/dummy_profile.png'
                       }`}
                       alt=''

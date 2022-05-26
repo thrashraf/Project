@@ -4,7 +4,7 @@ import { ImageTemplate } from './ImageTemplate';
 import { Sidebar } from './Sidebar';
 import { PasswordModal } from './PasswordModal';
 import api from '../../utils/api';
-import { useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { userSelector } from '../../features/user/User';
 import { useNavigate } from 'react-router-dom';
 import Toast from '../../components/Toast';
@@ -12,6 +12,7 @@ import useModal from '../../hooks/useModal';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import SignatureModal from './SignatureModal';
+import url from '../../utils/url';
 
 const Report = () => {
   const { user }: any = useAppSelector(userSelector);
@@ -26,6 +27,7 @@ const Report = () => {
   const [programName, setProgramName] = useState<string>('');
   const [organizer, setOrganizer] = useState<string>('');
   const [venue, setVenue] = useState<string>('');
+  const [position, setPosition] = useState<string>('');
   const [isPhoto, setIsPhoto] = useState<boolean>(false);
   const [photo, setPhoto] = useState<any[]>([]);
   const [tentative, setTentative] = useState<any>([]);
@@ -49,6 +51,8 @@ const Report = () => {
   const [status, setStatus] = useState('');
   const navigate = useNavigate();
 
+  const dispatch = useAppDispatch();
+
   //for signatureModal
   const { isShowing: showSignatureModal, toggle: toggleSignature } = useModal();
   const [signature, setSignature] = useState<string>('');
@@ -57,7 +61,9 @@ const Report = () => {
   useEffect(() => {
     const fetchData = async () => {
       await axios
-        .get(`/api/activities/getActivitiesById?q=${id}`)
+        .get(`${url}/api/activities/getActivitiesById?q=${id}`, {
+          withCredentials: true,
+        })
         .then((res) => {
           if (res.data.images) {
             setImages([...res.data.images]);
@@ -70,6 +76,7 @@ const Report = () => {
           setDocumentStatus(res.data.status);
           setContent(res.data.content);
           setAjk([...res.data.committee]);
+          setPosition(res.data.position);
           setTentative([...res.data.tentative]);
         });
     };
@@ -194,6 +201,7 @@ const Report = () => {
     await api
       .post('/api/user/auth', { email, reqPassword })
       .then((res) => {
+        e.preventDefault();
         console.log(res);
         formHandler(e);
       })
@@ -202,6 +210,7 @@ const Report = () => {
         setStatus('error');
         toastRef.current.showToast();
       });
+    e.preventDefault();
   };
 
   const timeConvertor = (time: any) => {
@@ -237,25 +246,26 @@ const Report = () => {
     formData.append('date', date);
     formData.append('organizer', organizer);
     formData.append('venue', venue);
+    formData.append('position', position);
     formData.append('content', content);
     formData.append('signature', signature);
-    formData.append('prevImages', images);
+    // formData.append('prevImages', images);
+    images.forEach((tag: any) => formData.append('prevImages', tag));
     validFiles.forEach((tag: any) => formData.append('upload', tag));
 
     tentative.forEach((tentative: any) =>
       formData.append('tentative', JSON.stringify(tentative))
     );
     ajk.forEach((ajk: any) => formData.append('ajk', JSON.stringify(ajk)));
-
+    e.preventDefault();
     await api
       .post('/api/activities/createReport', formData)
       .then((res) => {
         setMessage('Successful submit report! 🎉');
         setStatus('success');
         toastRef.current.showToast();
-        setTimeout(() => {
-          navigate('/profile/documents');
-        }, 4000);
+        navigate('/profile/documents');
+        e.preventDefault();
       })
       .catch((err) => {
         console.log(err);
@@ -263,6 +273,8 @@ const Report = () => {
         setStatus('error');
         toastRef.current.showToast();
       });
+
+    e.preventDefault();
   };
 
   return (
@@ -300,6 +312,8 @@ const Report = () => {
         validFiles={validFiles}
         fileDrop={addFile}
         removeFile={deleteFile}
+        position={position}
+        setPosition={setPosition}
       />
 
       <SignatureModal
@@ -310,14 +324,6 @@ const Report = () => {
 
       <section className='hidden lg:flex flex-col col-start-3 col-end-[-1] bg-[#525659] '>
         <div className='h-[800px] overflow-y-auto overflow-x-hidden w-[500px] m-auto mt-10 fixed left-[50%]'>
-          {/* <PDFViewer 
-            showToolbar={false}
-            style={{
-              width: '100%',
-              height: '95%',
-            }}>
-
-          </PDFViewer> */}
           <Preview
             title={title}
             content={content}
@@ -326,11 +332,12 @@ const Report = () => {
             date={date}
             venue={venue}
             signature={signature}
+            position={position}
           />
-          {content?.length > 2186 ? (
+          {content?.length > 2100 ? (
             <div className='my-2.5 h-[800px] w-[500px] font-Arimo font-normal m-auto bg-white rounded-sm p-10 flex flex-col text-[12px] relative'>
               {content
-                .slice(2186, content.length)
+                .slice(2101, content.length)
                 .split('\n')
                 .map((text, index) => {
                   console.log(text.length);
@@ -347,14 +354,14 @@ const Report = () => {
               <section
                 className={`mt-10 ${
                   content.length > 2186 ? null : 'hidden'
-                } absolute bottom-10`}
+                } absolute bottom-5`}
               >
                 <p>Disediakan oleh: </p>
                 <div className=' border-b-2 border-dotted border-black w-[80px] mt-2 h-[30px]'>
                   <img
-                    src='/assets/signature.png'
+                    src={user.signature && `/uploads/${user.signature}`}
                     alt='signature'
-                    className='object-cover h-[30px] mx-auto'
+                    className='object-cover h-[50px] mx-auto'
                   />
                 </div>
                 <section className='text-[8px]'>
@@ -378,33 +385,35 @@ const Report = () => {
               <h1 className='font-bold'>TENTATIF PROGRAM</h1>
 
               <div className='ml-10'>
-                <section className='flex flex-row py-[8px] font-bold mt-10'>
-                  <p className='mr-10'>MASA</p>
-                  <p className='absolute left-[200px] max-w-[200px] break-words'>
-                    AKTIVITI
-                  </p>
-                </section>
-                <section>
+                <section className='grid grid-cols-2 py-[8px]  mt-10'>
+                  <section className='font-bold'>
+                    <p className='mr-10'>MASA</p>
+                  </section>
+
+                  <section className='font-bold'>
+                    <p className=' max-w-[200px] break-words'>AKTIVITI</p>
+                  </section>
                   {tentative.map((row: any, index: number) => {
                     return (
-                      <section key={index} className='flex flex-row py-[8px]'>
-                        <p className='mr-10'>{timeConvertor(row.time)}</p>
+                      <>
+                        <p className='mr-10 my-2.5'>
+                          {timeConvertor(row.time)}
+                        </p>
                         <section>
                           {row.activities
                             .split('\n')
                             .map((act: string, num: number) => {
                               return (
-                                //fix absolute
                                 <p
                                   key={num}
-                                  className='max-w-[200px] break-words relative left-[50px]'
+                                  className='max-w-[200px] break-words my-2.5 '
                                 >
                                   {act}
                                 </p>
                               );
                             })}
                         </section>
-                      </section>
+                      </>
                     );
                   })}
                 </section>
@@ -417,24 +426,27 @@ const Report = () => {
               <h1 className='font-bold'>JAWATANKUASA</h1>
 
               <div className='ml-10'>
-                <section className='flex flex-row py-[8px] font-bold mt-10'>
-                  <p>JAWATAN</p>
-                  <p className='absolute left-[200px] '>NAMA</p>
-                </section>
-                <section>
+                <section className='grid grid-cols-2 py-[8px]  mt-10'>
+                  <section className='font-bold'>
+                    <p>JAWATAN</p>
+                  </section>
+
+                  <section className='font-bold'>
+                    <p className=''>NAMA</p>
+                  </section>
                   {ajk.map((row: any, index: number) => {
                     return (
-                      <section key={index} className='flex flex-row py-[8px]'>
-                        <section className='max-w-[110px] break-words'>
+                      <>
+                        <section className='max-w-[110px] break-words my-2.5'>
                           <p>{row.role}</p>
                         </section>
-                        <section className='max-w-[300px] break-words'>
+                        <section className='max-w-[300px] break-words my-2.5'>
                           {row.names
                             .split('\n')
                             .map((act: string, num: number) => {
                               return (
                                 <p
-                                  className='max-w-[200px] break-words relative left-[90px]'
+                                  className='max-w-[200px] break-words '
                                   key={num}
                                 >
                                   {act}
@@ -442,7 +454,7 @@ const Report = () => {
                               );
                             })}
                         </section>
-                      </section>
+                      </>
                     );
                   })}
                 </section>

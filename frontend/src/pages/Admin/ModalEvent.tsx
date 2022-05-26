@@ -13,6 +13,7 @@ import {
 import { userSelector } from '../../features/user/User';
 import { unitArray } from '../../constant/unitArray';
 import api from '../../utils/api';
+import { organizerArray } from '../../constant/organizerArray';
 
 type Props = {
   isShowing: boolean;
@@ -29,6 +30,8 @@ const AddEvent = (props: Props) => {
   const endEvent = useInput('');
   const organizer = useInput('');
   const venue = useInput('');
+  const selectOrganizer = useInput('');
+  const selectVenue = useInput('');
 
   //for toast
   const [status, setStatus] = useState<string>('');
@@ -44,6 +47,51 @@ const AddEvent = (props: Props) => {
       return;
     }
 
+    if (organizer.value === 'select' || venue.value === 'select') {
+      toastRef.current.showToast();
+      setMessage('Please insert all the field!');
+      e.preventDefault();
+      return;
+    }
+
+    if (organizer.value === 'select') {
+      toastRef.current.showToast();
+      setMessage('Please insert all the field!');
+      e.preventDefault();
+      return;
+    }
+
+    if (organizer.value === 'Others' && selectOrganizer.value.length <= 0) {
+      toastRef.current.showToast();
+      setMessage('Please select organizer!');
+      e.preventDefault();
+      return;
+    }
+
+    if (venue.value === 'Others' && selectVenue.value.length <= 0) {
+      toastRef.current.showToast();
+      setMessage('Please select venue!');
+      e.preventDefault();
+      return;
+    }
+
+    if (
+      new Date(startEvent.value) < new Date() ||
+      new Date(endEvent.value) < new Date()
+    ) {
+      toastRef.current.showToast();
+      setMessage('Cannot create past date event ');
+      e.preventDefault();
+      return;
+    }
+
+    if (new Date(endEvent.value) < new Date(startEvent.value)) {
+      setMessage('End date should be greater than start date');
+      toastRef.current.showToast();
+      e.preventDefault();
+      return;
+    }
+
     e.preventDefault();
 
     const formData = new FormData();
@@ -51,8 +99,14 @@ const AddEvent = (props: Props) => {
     formData.append('title', title.value);
     formData.append('start', startEvent.value);
     formData.append('end', endEvent.value);
-    formData.append('venue', venue.value);
-    formData.append('organizer', organizer.value);
+    formData.append(
+      'venue',
+      venue.value !== 'Others' ? venue.value : selectVenue.value
+    );
+    formData.append(
+      'organizer',
+      organizer.value !== 'Others' ? organizer.value : selectOrganizer.value
+    );
     e.preventDefault();
 
     api
@@ -65,8 +119,11 @@ const AddEvent = (props: Props) => {
             title: title.value,
             start: startEvent.value,
             end: endEvent.value,
-            organizer: organizer.value,
-            venue: venue.value,
+            organizer:
+              organizer.value !== 'Others'
+                ? organizer.value
+                : selectOrganizer.value,
+            venue: venue.value !== 'Others' ? venue.value : selectVenue.value,
           };
 
           dispatch(addNewActivities(newActivities));
@@ -79,6 +136,58 @@ const AddEvent = (props: Props) => {
   };
 
   const updateCurrentActivities = (e: any) => {
+    if (organizer.value === 'select' || organizer.value === '') {
+      toastRef.current.showToast();
+      setMessage('Please select organizer!');
+      e.preventDefault();
+      return;
+    }
+
+    if (organizer.value === 'select' || venue.value === 'select') {
+      toastRef.current.showToast();
+      setMessage('Please insert all the field!');
+      e.preventDefault();
+      return;
+    }
+
+    if (organizer.value === 'select') {
+      toastRef.current.showToast();
+      setMessage('Please insert all the field!');
+      e.preventDefault();
+      return;
+    }
+
+    if (organizer.value === 'Others' && selectOrganizer.value.length <= 0) {
+      toastRef.current.showToast();
+      setMessage('Please select organizer!');
+      e.preventDefault();
+      return;
+    }
+
+    if (venue.value === 'Others' && selectVenue.value.length <= 0) {
+      toastRef.current.showToast();
+      setMessage('Please select venue!');
+      e.preventDefault();
+      return;
+    }
+
+    if (
+      new Date(startEvent.value) < new Date() ||
+      new Date(endEvent.value) < new Date()
+    ) {
+      toastRef.current.showToast();
+      setMessage('Cannot create past date event ');
+      e.preventDefault();
+      return;
+    }
+
+    if (new Date(endEvent.value) < new Date(startEvent.value)) {
+      setMessage('End date should be greater than start date');
+      toastRef.current.showToast();
+      e.preventDefault();
+      return;
+    }
+
     const formData = new FormData();
     e.preventDefault();
     formData.append('title', title.value);
@@ -203,17 +312,50 @@ const AddEvent = (props: Props) => {
                 Venue
                 <span className='text-red-500'>*</span>
               </p>
+              <select
+                className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
+                onChange={venue.onChange}
+                value={venue.value}
+              >
+                {organizerArray?.map((item: any, index: number) => (
+                  <option key={index}>{item}</option>
+                ))}
+              </select>
+            </section>
+
+            <section
+              className={`${
+                organizer.value === 'Others' ? 'visible' : 'hidden'
+              }`}
+            >
+              <p className='my-1 text-sm text-gray-400 ml-1'>
+                Others Organizer
+                <span className='text-red-500'>*</span>
+              </p>
               <input
                 type='text'
-                value={venue.value}
-                onChange={venue.onChange}
-                required
+                value={selectOrganizer.value}
+                onChange={selectOrganizer.onChange}
+                className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
+              />
+            </section>
+            <section
+              className={`${venue.value === 'Others' ? 'visible' : 'hidden'}`}
+            >
+              <p className='my-1 text-sm text-gray-400 ml-1'>
+                Others Venue
+                <span className='text-red-500'>*</span>
+              </p>
+              <input
+                type='text'
+                value={selectVenue.value}
+                onChange={selectVenue.onChange}
                 className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
               />
             </section>
           </div>
 
-          <section className=' flex justify-end'>
+          <section className=' flex justify-end my-5 mt-10'>
             <button
               className='flex hover:bg-black hover:text-white px-3 py-2  rounded-lg mr-5'
               onClick={props.toggle}

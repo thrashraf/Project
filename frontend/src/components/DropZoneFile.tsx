@@ -22,7 +22,7 @@ const DropZoneFile = ({ isShowing, hide, ...props}: any) => {
         onDrop={(e) => props.fileDrop(e)}
         >
           <i className="fa-solid fa-file-pdf fa-5x"></i>
-          Drop PDF
+          {props.content}
         </div>
 
         <div className="my-5">

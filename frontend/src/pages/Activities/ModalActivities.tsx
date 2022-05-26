@@ -11,13 +11,16 @@ import {
 } from '../../features/activities/Activities';
 import Spinner from '../../components/Spinner/Spinner';
 import useInput from '../../hooks/useInput';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Dropzone from '../../components/Dropzone';
 import axios from 'axios';
 import { unitArray } from '../../constant/unitArray';
 import { userSelector } from '../../features/user/User';
 import { Link } from 'react-router-dom';
+import url from '../../utils/url';
+import { organizerArray } from '../../constant/organizerArray';
+import Toast from '../../components/Toast';
 
 type Props = {
   showActivity: boolean;
@@ -31,7 +34,7 @@ export const ModalActivities = (props: Props) => {
 
   const dispatch = useDispatch();
 
-  const { detailActivities, editMode, isSuccess } =
+  const { detailActivities, editMode, isSuccess }: any =
     useAppSelector(activitiesSelector);
 
   const { user }: any = useAppSelector(userSelector);
@@ -40,7 +43,15 @@ export const ModalActivities = (props: Props) => {
   const start = useInput('');
   const venue = useInput('');
   const organizer = useInput('');
+  const selectVenue = useInput('');
+  const selectOrganizer = useInput('');
   const [id, setId] = useState<string>('');
+
+  //for toast
+  const [status, setStatus] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+
+  const toastRef = useRef<any>(null);
 
   let isFetching = false;
 
@@ -97,19 +108,45 @@ export const ModalActivities = (props: Props) => {
   };
 
   const updateCurrentActivities = () => {
+    if (
+      organizer.value === 'select' ||
+      (organizer.value === 'Others' && selectOrganizer.value.length <= 0)
+    ) {
+      toastRef.current.showToast();
+      setMessage('Please select organizer!');
+      return;
+    }
+
+    if (
+      venue.value === 'select' ||
+      (venue.value === 'Others' && selectVenue.value.length <= 0)
+    ) {
+      toastRef.current.showToast();
+      setMessage('Please select venue!');
+      return;
+    }
+
     const formData = new FormData();
 
     formData.append('title', title.value);
     formData.append('start', start.value);
-    formData.append('venue', venue.value);
-    formData.append('organizer', organizer.value);
+    formData.append(
+      'venue',
+      venue.value === 'Others' ? selectVenue.value : venue.value
+    );
+    formData.append(
+      'organizer',
+      organizer.value === 'Others' ? selectOrganizer.value : organizer.value
+    );
 
     file.forEach((image: any) => formData.append('upload', image));
 
     isFetching = true;
 
     axios
-      .post(`/api/activities/updateActivities?q=${id}`, formData)
+      .post(`${url}/api/activities/updateActivities?q=${id}`, formData, {
+        withCredentials: true,
+      })
       .then((res: any) => {
         if (res.status === 200) {
           console.log('ok');
@@ -118,15 +155,21 @@ export const ModalActivities = (props: Props) => {
           const newActivities = {
             id: detailActivities.id,
             title: title.value,
-            start: start.value,
-            organizer: organizer.value,
-            venue: venue.value,
+            start: new Date(start.value),
+            end: new Date(detailActivities.end),
+            organizer:
+              organizer.value === 'Others'
+                ? selectOrganizer.value
+                : organizer.value,
+            venue: venue.value === 'Others' ? selectVenue.value : venue.value,
             banner: res.data.image_url
               ? res.data.image_url
               : detailActivities.banner,
+            userId: user.id,
           };
 
           dispatch(editActivitiesHandler(newActivities));
+          dispatch(editModeHandler());
           //toggle modal
           props.setShowActivity(!props.showActivity);
           //toggle more button
@@ -154,7 +197,6 @@ export const ModalActivities = (props: Props) => {
           {/* show when delete and update events */}
           {isFetching && <Spinner />}
           {/* show when delete and update events */}
-          {console.log(detailActivities.userId, user.id)}
           <div className='flex flex-col'>
             <section className='relative'>
               {detailActivities.userId === user?.id && (
@@ -177,11 +219,12 @@ export const ModalActivities = (props: Props) => {
               </button>
             </section>
             <>
+              <Toast ref={toastRef} status={status} message={message} />
               <section className='relative'>
                 <img
                   src={
                     detailActivities.banner
-                      ? `/assets/${detailActivities.banner}`
+                      ? `/file/${detailActivities.banner}`
                       : '/assets/default-placeholder.jpg'
                   }
                   alt={detailActivities.title}
@@ -208,6 +251,7 @@ export const ModalActivities = (props: Props) => {
                 <section className='flex justify-between items-center text-gray-400 text-sm'>
                   <p className={hideEditComp}>
                     {detailActivities.start
+                      .toISOString()
                       .slice(0, 10)
                       .split('-')
                       .reverse()
@@ -220,11 +264,44 @@ export const ModalActivities = (props: Props) => {
                     className={`bg-blue-50 px-3 py-2 rounded-md outline-none w-[150px] text-black ${showEditComp}`}
                   />
                   <p className={hideEditComp}>{detailActivities.venue}</p>
+                  <section className={`${showEditComp}`}>
+                    <select
+                      className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full text-black'
+                      onChange={venue.onChange}
+                      value={venue.value}
+                    >
+                      {organizerArray?.map((item: any, index: number) => (
+                        <option key={index}>{item}</option>
+                      ))}
+                    </select>
+                  </section>
+                </section>
+
+                <section
+                  className={`my-5 justify-between ${
+                    venue.value === 'Others' || organizer.value === 'Others'
+                      ? 'flex'
+                      : 'hidden'
+                  } `}
+                >
                   <input
                     type='text'
-                    onChange={(e) => venue.setInput(e.target.value)}
-                    value={venue.value}
-                    className={`bg-blue-50 px-3 py-2 rounded-md outline-none w-[150px] text-black ${showEditComp}`}
+                    placeholder='others venue'
+                    value={selectVenue.value}
+                    onChange={selectVenue.onChange}
+                    className={`${
+                      venue.value === 'Others' ? 'visible' : 'hidden'
+                    } bg-blue-50 px-3 py-2 rounded-lg outline-none w-[150px]`}
+                  />
+
+                  <input
+                    type='text'
+                    placeholder='others organizer'
+                    value={selectOrganizer.value}
+                    onChange={selectOrganizer.onChange}
+                    className={`${
+                      organizer.value === 'Others' ? 'visible' : 'hidden'
+                    } bg-blue-50 px-3 py-2 rounded-lg outline-none w-[250px]`}
                   />
                 </section>
 

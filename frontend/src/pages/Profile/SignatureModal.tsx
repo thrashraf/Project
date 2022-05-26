@@ -12,6 +12,7 @@ import {
   updateSignature,
   toggleEditSignature,
 } from '../../features/user/User';
+import url from '../../utils/url';
 
 type Props = {
   isShowing: boolean;
@@ -99,7 +100,9 @@ const SignatureModal = (props: Props) => {
     validFiles.forEach((image: any) => formData.append('upload', image));
 
     axios
-      .post('/api/user/uploadSignature', formData)
+      .post(`${url}/api/user/uploadSignature`, formData, {
+        withCredentials: true,
+      })
       .then((res: any) => {
         if (res.status === 200) {
           dispatch(updateSignature(res.data.signature));
@@ -118,7 +121,7 @@ const SignatureModal = (props: Props) => {
       toggle={props.toggle}
       hide={props.toggle}
     >
-      <div className='relative mx-auto bg-white max-w-sm rounded-lg shadow z-50 '>
+      <div className='relative top-52 mx-auto bg-white max-w-sm rounded-lg shadow z-50 '>
         <form
           className='flex flex-col px-5 py-3'
           onSubmit={(e) => formHandler(e)}
