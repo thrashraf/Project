@@ -368,7 +368,7 @@ const ModalPublication = (props: Props) => {
               <div>
                 <section className=''>
                   <p className='my-1 text-sm text-gray-400 ml-1'>
-                    Staff<span className='text-red-500'>*</span>
+                    Author<span className='text-red-500'>*</span>
                   </p>
 
                   <textarea
@@ -425,9 +425,7 @@ const ModalPublication = (props: Props) => {
               hide={toggleDropzone}
               fileDrop={fileDrop}
               files={validFiles}
-              content={
-                'Add cover as the first value and backpage as the second value'
-              }
+              content={'Add Cover Page and Back Cover'}
               removeFile={removeFile}
             />
             <DropZoneFile
@@ -435,6 +433,7 @@ const ModalPublication = (props: Props) => {
               hide={toggleDropFile}
               fileDrop={fileDropPDF}
               fileSize={fileSize}
+              content={'Add full document/book'}
               files={filePDF}
               removeFile={removeFilePDF}
             />

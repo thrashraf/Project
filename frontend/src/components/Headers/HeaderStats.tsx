@@ -53,16 +53,14 @@ export default function HeaderStats() {
         <div className='px-4 md:px-10 mx-auto w-full'>
           <div>
             {/* Card stats */}
-            <div className='flex flex-wrap'>
+            <div className='flex flex-wrap justify-center'>
               <div className='w-full lg:w-6/12 xl:w-3/12 px-4'>
                 <CardStats
                   statSubtitle='Events'
                   statTitle={activities?.length}
-                  statArrow='up'
-                  statPercent='3.48'
+                  kpi={'of 10'}
                   statPercentColor='text-emerald-500'
-                  statDescripiron='Since last month'
-                  statIconName='far fa-chart-bar'
+                  statIconName='fa-solid fa-calendar'
                   statIconColor='bg-red-500'
                 />
               </div>
@@ -70,11 +68,8 @@ export default function HeaderStats() {
                 <CardStats
                   statSubtitle='Publication'
                   statTitle={allPublication?.length}
-                  statArrow=' '
-                  statPercent='3.48'
                   statPercentColor='text-red-500'
-                  statDescripiron='Since last week'
-                  statIconName='fas fa-chart-pie'
+                  statIconName='fa-solid fa-book'
                   statIconColor='bg-orange-500'
                 />
               </div>
@@ -82,26 +77,22 @@ export default function HeaderStats() {
                 <CardStats
                   statSubtitle='Innovation'
                   statTitle={allInnovation?.length}
-                  statArrow='down'
-                  statPercent='1.10'
                   statPercentColor='text-orange-500'
-                  statDescripiron='Since yesterday'
-                  statIconName='fas fa-percent'
+                  statIconName='fa-solid fa-lightbulb'
                   statIconColor='bg-pink-500'
                 />
               </div>
-              <div className='w-full lg:w-6/12 xl:w-3/12 px-4'>
+              {/* <div className='w-full lg:w-6/12 xl:w-3/12 px-4'>
                 <CardStats
                   statSubtitle='Users'
                   statTitle={amount?.value}
                   statArrow='up'
                   statPercent='12'
                   statPercentColor='text-emerald-500'
-                  statDescripiron='Since last month'
                   statIconName='fas fa-users'
                   statIconColor='bg-lightBlue-500'
                 />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

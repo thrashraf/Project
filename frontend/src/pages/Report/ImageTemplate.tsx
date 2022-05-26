@@ -80,7 +80,7 @@ export const ImageTemplate = (props: Props) => {
                     key={index}
                     className='w-[400px] h-[200px] object-cover m-auto'
                   />
-                  <p className='mt-[5px] text-center'>Rajah {index + 1.0}</p>
+                  <p className='mt-[5px] text-center'>Rajah {indexArr + 1.0}</p>
                   {console.log(props.status)}
                 </section>
               ))}

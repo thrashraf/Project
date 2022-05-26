@@ -116,7 +116,7 @@ export default function Innovation() {
               <div className='flex flex-wrap items-center'>
                 <div className='relative w-full px-4 max-w-full flex-grow flex-1'>
                   <h3 className={'font-semibold text-lg text-blueGray-700'}>
-                    Users
+                    List of Innovation
                   </h3>
                 </div>
               </div>
@@ -185,16 +185,16 @@ export default function Innovation() {
                               </button>
 
                               {isShowing && item.id === innovationDetail.id ? (
-                                <section className='bg-slate-50 absolute top-0 -left-16 w-[120px] z-50'>
+                                <section className='bg-slate-50 absolute top-0 -left-10 w-[120px] z-50'>
                                   <ul>
                                     <li
-                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5'
+                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5 text-xs'
                                       onClick={() => edit(item)}
                                     >
                                       Edit
                                     </li>
                                     <li
-                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5'
+                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5 text-xs'
                                       onClick={() =>
                                         deletePublicationById(item.id)
                                       }

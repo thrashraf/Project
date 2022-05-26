@@ -197,7 +197,6 @@ export const ModalActivities = (props: Props) => {
           {/* show when delete and update events */}
           {isFetching && <Spinner />}
           {/* show when delete and update events */}
-          {console.log(detailActivities.userId, user.id)}
           <div className='flex flex-col'>
             <section className='relative'>
               {detailActivities.userId === user?.id && (

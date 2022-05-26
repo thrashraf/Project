@@ -115,7 +115,7 @@ export default function Publication() {
               <div className='flex flex-wrap items-center'>
                 <div className='relative w-full px-4 max-w-full flex-grow flex-1'>
                   <h3 className={'font-semibold text-lg text-blueGray-700'}>
-                    Users
+                    List of publication
                   </h3>
                 </div>
               </div>
@@ -179,13 +179,13 @@ export default function Publication() {
                                 <section className='bg-slate-50 absolute -left-32 w-[120px] z-50'>
                                   <ul>
                                     <li
-                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5'
+                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5 text-xs'
                                       onClick={edit}
                                     >
                                       Edit
                                     </li>
                                     <li
-                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5'
+                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5 text-xs'
                                       onClick={() =>
                                         deletePublicationById(item.id)
                                       }
