@@ -128,6 +128,7 @@ export const signupUser = createAsyncThunk(
 
       if (response.status === 200) {
         console.log('data', data);
+        return data;
       } else {
         return thunkAPI.rejectWithValue(data);
       }
