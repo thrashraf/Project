@@ -230,7 +230,7 @@ export const Template = (props: Props) => {
             <View style={styles.signatureContainer}>
               <Text style={styles.signatureHeader}>Disediakan oleh:</Text>
               <Image
-                src={props.signature && `/file/${props.signature}`}
+                src={props.signature && `/assets/${props.signature}`}
                 style={styles.signatureImage}
               />
               <Text style={styles.name}>({props.staffName})</Text>
@@ -262,7 +262,7 @@ export const Template = (props: Props) => {
                 return (
                   <View style={styles.photoContainer}>
                     <Image
-                      src={`/file/${img}`}
+                      src={`/assets/${img}`}
                       key={index}
                       style={styles.image}
                     />

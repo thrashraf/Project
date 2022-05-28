@@ -69,7 +69,7 @@ export const Preview = (props: Props) => {
             <p>Disediakan oleh: </p>
             <div className=' border-b-2 border-dotted border-black w-[80px] mt-2 h-[30px]'>
               <img
-                src={props.signature && `/file/${props.signature}`}
+                src={props.signature && `/assets/${props.signature}`}
                 alt='signature'
                 className='object-cover h-[50px] mx-auto'
               />

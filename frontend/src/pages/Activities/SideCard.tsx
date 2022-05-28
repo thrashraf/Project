@@ -55,7 +55,7 @@ export const SideCard = (props: Props) => {
               <img
                 src={
                   event.banner
-                    ? `/file/${event.banner}`
+                    ? `/assets/${event.banner}`
                     : '/assets/default-placeholder.jpg'
                 }
                 alt={event.title}

@@ -189,7 +189,7 @@ const ModalInnovation = (props: Props) => {
                 <div className='w-full flex justify-center text-green-400 mb-4'></div>
                 <div>
                   <img
-                    src={`/file/${props.innovation?.img_url}`}
+                    src={`/assets/${props.innovation?.img_url}`}
                     className=' rounded-lg mb-10 w-[400px] h-[200px] object-contain'
                   ></img>
                 </div>
@@ -220,7 +220,7 @@ const ModalInnovation = (props: Props) => {
                     }`}
                   >
                     <a
-                      href={`/file/${props.innovation?.pdf_url}`}
+                      href={`/assets/${props.innovation?.pdf_url}`}
                       target='_blank'
                     >
                       View Details

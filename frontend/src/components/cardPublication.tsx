@@ -25,7 +25,7 @@ export const CardPublication = (props: Props) => {
                 }
               >
                 <img
-                  src={`/file/${publication.img_url[0]}`}
+                  src={`/assets/${publication.img_url[0]}`}
                   alt='/'
                   className='object-cover   h-[150px] w-full'
                 />

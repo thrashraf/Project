@@ -223,7 +223,7 @@ export const ModalActivities = (props: Props) => {
                 <img
                   src={
                     detailActivities.banner
-                      ? `/file/${detailActivities.banner}`
+                      ? `/assets/${detailActivities.banner}`
                       : '/assets/default-placeholder.jpg'
                   }
                   alt={detailActivities.title}
