@@ -9,7 +9,6 @@ import {
   addNewActivities,
   editActivitiesHandler,
 } from '../../features/activities/Activities';
-import { userSelector } from '../../features/user/User';
 import { unitArray } from '../../constant/unitArray';
 import api from '../../utils/api';
 import { organizerArray } from '../../constant/organizerArray';
