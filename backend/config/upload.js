@@ -3,7 +3,7 @@ import path from 'path';
 
 const storage = multer.diskStorage({
   destination: function (req, file, callback) {
-    callback(null, './frontend/public/file');
+    callback(null, './frontend/public/assets');
   },
   filename: (req, file, callBack) => {
     console.log(file);
