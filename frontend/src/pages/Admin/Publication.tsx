@@ -14,8 +14,7 @@ import {
   setFilterHandler,
   deletePublicationHandler,
 } from '../../features/Publication/Publication';
-import axios from 'axios';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
 
 export default function Publication() {
   const dispatch = useAppDispatch();
@@ -37,8 +36,8 @@ export default function Publication() {
   }, []);
 
   const deletePublicationById = (id: string) => {
-    axios
-      .post(`${url}/api/publication/deletePublication?q=${id}`, {
+    axiosInstance
+      .post(`/publication/deletePublication?q=${id}`, {
         withCredentials: true,
       })
       .then((res: any) => {

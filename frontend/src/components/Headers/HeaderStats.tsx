@@ -15,7 +15,6 @@ import {
   publicationSelector,
 } from '../../features/Publication/Publication';
 import useInput from '../../hooks/useInput';
-import url from '../../utils/url';
 
 // components
 
@@ -30,16 +29,6 @@ export default function HeaderStats() {
     dispatch(getAllPublication());
     dispatch(getActivities(''));
     dispatch(getInnovation(''));
-
-    axios
-      .get(`${url}/api/user/amountUser`, { withCredentials: true })
-      .then((res) => {
-        console.log(res);
-        amount.setInput(res.data.amount);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }, []);
 
   const { activities } = useAppSelector(activitiesSelector);

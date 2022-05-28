@@ -12,7 +12,7 @@ import {
   updateSignature,
   toggleEditSignature,
 } from '../../features/user/User';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
 
 type Props = {
   isShowing: boolean;
@@ -99,8 +99,8 @@ const SignatureModal = (props: Props) => {
     formData.append('email', user?.email);
     validFiles.forEach((image: any) => formData.append('upload', image));
 
-    axios
-      .post(`${url}/api/user/uploadSignature`, formData, {
+    axiosInstance
+      .post(`/user/uploadSignature`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {

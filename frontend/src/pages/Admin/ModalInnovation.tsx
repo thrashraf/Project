@@ -4,7 +4,6 @@ import Dropzone from '../../components/Dropzone';
 import useInput from '../../hooks/useInput';
 import useModal from '../../hooks/useModal';
 import Toast from '../../components/Toast';
-import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   addInnovationHandler,
@@ -14,7 +13,7 @@ import api from '../../utils/api';
 import DropZoneFile from '../../components/DropZoneFile';
 import generateYears from '../../utils/generateYears';
 import { refreshUser } from '../../features/user/User';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
 
 type Props = {
   isShowing: boolean;
@@ -113,7 +112,6 @@ const ModalInnovation = (props: Props) => {
     return true;
   };
 
-
   //to remove file
   const removeFilePDF = (name: any) => {
     // find the index of the item
@@ -153,8 +151,8 @@ const ModalInnovation = (props: Props) => {
     file?.forEach((image: any) => formData.append('upload', image));
     filePDF.forEach((file: any) => formData.append('upload', file));
 
-    axios
-      .post(`${url}/api/inno/createInnovation`, formData, {
+    axiosInstance
+      .post(`/inno/createInnovation`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {
@@ -198,8 +196,8 @@ const ModalInnovation = (props: Props) => {
 
     const id = props.innovation.id;
 
-    axios
-      .post(`${url}/api/inno/updateInnovation?q=${id}`, formData, {
+    axiosInstance
+      .post(`/inno/updateInnovation?q=${id}`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {
@@ -318,32 +316,36 @@ const ModalInnovation = (props: Props) => {
               />
             </section>
             <div className='grid grid-cols-2 gap-5'>
-            <select
-                  onChange={Level.onChange}
-                  value={Level.value}
-                  required
-                  className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
-                >
-                  {['Level','International','National']?.map((item: any, index: number) => (
+              <select
+                onChange={Level.onChange}
+                value={Level.value}
+                required
+                className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
+              >
+                {['Level', 'International', 'National']?.map(
+                  (item: any, index: number) => (
                     <option key={index} value={item}>
                       {item}
                     </option>
-                  ))}
-                </select>
+                  )
+                )}
+              </select>
               <div>
                 <section className=''>
-                <select
-                  onChange={Medal.onChange}
-                  value={Medal.value}
-                  required
-                  className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
-                >
-                  {['Medal','Gold','Silver','Bronze']?.map((item: any, index: number) => (
-                    <option key={index} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
+                  <select
+                    onChange={Medal.onChange}
+                    value={Medal.value}
+                    required
+                    className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
+                  >
+                    {['Medal', 'Gold', 'Silver', 'Bronze']?.map(
+                      (item: any, index: number) => (
+                        <option key={index} value={item}>
+                          {item}
+                        </option>
+                      )
+                    )}
+                  </select>
                 </section>
               </div>
               <div>
@@ -421,9 +423,7 @@ const ModalInnovation = (props: Props) => {
               hide={toggleDropzone}
               fileDrop={fileDrop}
               files={file}
-              content={
-                'Add Cover Image'
-              }
+              content={'Add Cover Image'}
               removeFile={removeFile}
             />
             <DropZoneFile
@@ -432,9 +432,7 @@ const ModalInnovation = (props: Props) => {
               fileDrop={fileDropPDF}
               fileSize={fileSize}
               files={filePDF}
-              content={
-                'Add Innovation Cerificate'
-              }
+              content={'Add Innovation Cerificate'}
               removeFile={removeFilePDF}
             />
             <Toast ref={toastRef} status={status} message={message} />

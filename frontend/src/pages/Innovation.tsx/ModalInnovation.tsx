@@ -14,8 +14,7 @@ import {
   deletePublicationHandler,
 } from '../../features/Publication/Publication';
 import Dropzone from '../../components/Dropzone';
-import axios from 'axios';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
 
 type Props = {
   show: boolean;
@@ -111,8 +110,8 @@ const ModalInnovation = (props: Props) => {
 
     const id = publication.id;
 
-    axios
-      .post(`${url}/api/publication/updatePublication?q=${id}`, formData, {
+    axiosInstance
+      .post(`/publication/updatePublication?q=${id}`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {
@@ -147,8 +146,8 @@ const ModalInnovation = (props: Props) => {
 
   const deletePublication = () => {
     const id = publication.id;
-    axios
-      .post(`${url}/api/publication/deletePublication?q=${id}`, {
+    axiosInstance
+      .post(`/publication/deletePublication?q=${id}`, {
         withCredentials: true,
       })
       .then((res: any) => {

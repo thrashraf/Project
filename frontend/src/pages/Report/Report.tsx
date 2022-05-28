@@ -10,9 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import Toast from '../../components/Toast';
 import useModal from '../../hooks/useModal';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import SignatureModal from './SignatureModal';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
 
 const Report = () => {
   const { user }: any = useAppSelector(userSelector);
@@ -60,8 +59,8 @@ const Report = () => {
   //get specific activities and put in state
   useEffect(() => {
     const fetchData = async () => {
-      await axios
-        .get(`${url}/api/activities/getActivitiesById?q=${id}`, {
+      await axiosInstance
+        .get(`/activities/getActivitiesById?q=${id}`, {
           withCredentials: true,
         })
         .then((res) => {
@@ -199,7 +198,7 @@ const Report = () => {
     const reqPassword = password;
 
     await api
-      .post('/api/user/auth', { email, reqPassword })
+      .post('/user/auth', { email, reqPassword })
       .then((res) => {
         e.preventDefault();
         console.log(res);
@@ -258,8 +257,8 @@ const Report = () => {
     );
     ajk.forEach((ajk: any) => formData.append('ajk', JSON.stringify(ajk)));
     e.preventDefault();
-    await api
-      .post('/api/activities/createReport', formData)
+    await axiosInstance
+      .post('/activities/createReport', formData)
       .then((res) => {
         setMessage('Successful submit report! 🎉');
         setStatus('success');

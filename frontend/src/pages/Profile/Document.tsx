@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
 import { userSelector } from '../../features/user/User';
 import api from '../../utils/api';
+import axiosInstance from '../../utils/axiosInstance';
 import { Template } from '../Report/Template';
 
 export const Document = () => {
@@ -16,8 +17,8 @@ export const Document = () => {
   useEffect(() => {
     if (!user) return;
 
-    api
-      .get(`/api/activities/getReportUser?q=${user.id}`)
+    axiosInstance
+      .get(`/activities/getReportUser?q=${user.id}`)
       .then((res) => {
         setAllDocuments(res.data);
 

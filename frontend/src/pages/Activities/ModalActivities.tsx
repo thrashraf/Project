@@ -14,13 +14,12 @@ import useInput from '../../hooks/useInput';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Dropzone from '../../components/Dropzone';
-import axios from 'axios';
 import { unitArray } from '../../constant/unitArray';
 import { userSelector } from '../../features/user/User';
 import { Link } from 'react-router-dom';
-import url from '../../utils/url';
 import { organizerArray } from '../../constant/organizerArray';
 import Toast from '../../components/Toast';
+import axiosInstance from '../../utils/axiosInstance';
 
 type Props = {
   showActivity: boolean;
@@ -143,8 +142,8 @@ export const ModalActivities = (props: Props) => {
 
     isFetching = true;
 
-    axios
-      .post(`${url}/api/activities/updateActivities?q=${id}`, formData, {
+    axiosInstance
+      .post(`/activities/updateActivities?q=${id}`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {

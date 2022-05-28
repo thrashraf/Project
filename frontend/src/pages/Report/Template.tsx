@@ -43,6 +43,8 @@ export const Template = (props: Props) => {
       backgroundColor: 'white',
       fontSize: 12,
       fontFamily: 'Arimo',
+      width: '100%',
+      height: '50vh', //As per your page layout
     },
 
     logo: {
@@ -224,6 +226,7 @@ export const Template = (props: Props) => {
               );
             })}
 
+            {/* signature problem */}
             <View style={styles.signatureContainer}>
               <Text style={styles.signatureHeader}>Disediakan oleh:</Text>
               <Image
@@ -248,8 +251,8 @@ export const Template = (props: Props) => {
               </View>
             ) : null}
           </View>
-          console.log(props.photo)
-          {props.photo ? (
+
+          {props.photo && props.photo.length > 0 ? (
             <View break>
               <Text style={styles.aboutProgram}>
                 GAMBAR-GAMBAR SEPANJANG AKTIVITI

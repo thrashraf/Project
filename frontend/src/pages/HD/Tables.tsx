@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import DeclineModal from './DeclineModal';
 import Toast from '../../components/Toast';
@@ -12,6 +11,7 @@ import { userSelector } from '../../features/user/User';
 import api from '../../utils/api';
 import useInput from '../../hooks/useInput';
 import SignatureModal from '../Report/SignatureModal';
+import axiosInstance from '../../utils/axiosInstance';
 
 export default function Tables() {
   const { user }: any = useAppSelector(userSelector);
@@ -47,7 +47,7 @@ export default function Tables() {
     const kjSignature = user.signature;
     const kjName = user.name;
     api
-      .post('/api/activities/verifyReport', {
+      .post('/activities/verifyReport', {
         status,
         report,
         message,
@@ -81,7 +81,9 @@ export default function Tables() {
 
   useEffect(() => {
     const fetch = async () => {
-      const data = await api.get(`/api/activities/getAllActivities?q=${''}`);
+      const data = await axiosInstance.get(
+        `/activities/getAllActivities?q=${''}`
+      );
       const report = data.data.filter((item: any) => item.content);
       setAllReport([...report]);
     };
@@ -94,7 +96,7 @@ export default function Tables() {
     const reqPassword = password;
 
     await api
-      .post('/api/user/auth', { email, reqPassword })
+      .post('/user/auth', { email, reqPassword })
       .then((res) => {
         //console.log(res);
         verifyReport(status.value, report);
