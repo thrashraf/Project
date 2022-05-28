@@ -1,11 +1,9 @@
-import url from '../../utils/url';
 import React, { useEffect, useRef, useState } from 'react';
 import ModalContainer from '../../components/ModalContainer';
 import Dropzone from '../../components/Dropzone';
 import useInput from '../../hooks/useInput';
 import useModal from '../../hooks/useModal';
 import Toast from '../../components/Toast';
-import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   addInnovationHandler,
@@ -15,6 +13,7 @@ import api from '../../utils/api';
 import DropZoneFile from '../../components/DropZoneFile';
 import generateYears from '../../utils/generateYears';
 import ModalUser from '../../components/ModalUser';
+import axiosInstance from '../../utils/axiosInstance';
 
 type Props = {
   isShowing: boolean;
@@ -157,8 +156,8 @@ const AddInnovation = (props: Props) => {
     formData.append('Year', Year.value);
     file?.forEach((image: any) => formData.append('upload', image));
 
-    axios
-      .post(`${url}/api/inno/createInnovation`, formData, {
+    axiosInstance
+      .post(`/inno/createInnovation`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {
@@ -202,8 +201,8 @@ const AddInnovation = (props: Props) => {
 
     const id = props.innovation.id;
 
-    axios
-      .post(`/api/inno/updateInnovation?q=${id}`, formData)
+    axiosInstance
+      .post(`/inno/updateInnovation?q=${id}`, formData)
       .then((res: any) => {
         if (res.status === 200) {
           console.log('ok');

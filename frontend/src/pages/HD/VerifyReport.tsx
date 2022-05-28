@@ -19,7 +19,6 @@ const VerifyReport = () => {
       {report !== null ? (
         <div className='w-full h-full bg-black'>
           <PDFViewer
-            showToolbar={true}
             style={{
               width: '100%',
               height: '100%',

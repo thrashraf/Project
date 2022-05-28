@@ -4,13 +4,12 @@ import Dropzone from '../../components/Dropzone';
 import useInput from '../../hooks/useInput';
 import useModal from '../../hooks/useModal';
 import Toast from '../../components/Toast';
-import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { addNewActivities } from '../../features/activities/Activities';
 import { userSelector } from '../../features/user/User';
 import { unitArray } from '../../constant/unitArray';
 import { organizerArray } from '../../constant/organizerArray';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
 
 type Props = {
   isShowing: boolean;
@@ -146,8 +145,8 @@ const AddEvent = (props: Props) => {
     file.forEach((image: any) => formData.append('upload', image));
     e.preventDefault();
 
-    axios
-      .post(`${url}/api/activities/createActivities`, formData, {
+    axiosInstance
+      .post(`/activities/createActivities`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {

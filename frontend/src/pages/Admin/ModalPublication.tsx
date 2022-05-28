@@ -4,7 +4,6 @@ import Dropzone from '../../components/Dropzone';
 import useInput from '../../hooks/useInput';
 import useModal from '../../hooks/useModal';
 import Toast from '../../components/Toast';
-import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   addPublication,
@@ -14,7 +13,7 @@ import { userSelector } from '../../features/user/User';
 import api from '../../utils/api';
 import DropZoneFile from '../../components/DropZoneFile';
 import generateYears from '../../utils/generateYears';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
 
 type Props = {
   isShowing: boolean;
@@ -189,8 +188,8 @@ const ModalPublication = (props: Props) => {
     file.forEach((image: any) => formData.append('upload', image));
     filePDF.forEach((file: any) => formData.append('upload', file));
 
-    axios
-      .post(`${url}/api/publication/createPublication`, formData, {
+    axiosInstance
+      .post(`/publication/createPublication`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {
@@ -237,8 +236,8 @@ const ModalPublication = (props: Props) => {
 
     const id = props.publication.id;
 
-    axios
-      .post(`${url}/api/publication/updatePublication?q=${id}`, formData, {
+    axiosInstance
+      .post(`/publication/updatePublication?q=${id}`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {

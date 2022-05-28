@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/Store';
 import api from '../../utils/api';
-import url from '../../utils/url';
 
 export const adminSlice = createSlice({
   name: 'Admin',
@@ -96,7 +95,7 @@ export const getAllUser = createAsyncThunk(
   'admin/getUsers',
   async (query: string, thunkAPI) => {
     try {
-      const response = await api.get(`${url}/api/user/getAllUser?q=${query}`, {
+      const response = await api.get(`/user/getAllUser?q=${query}`, {
         withCredentials: true,
       });
       let data = await response.data;
@@ -119,7 +118,7 @@ export const deleteUser = createAsyncThunk(
   '/api/admin/deleteActivities',
   async (id: string, thunkAPI) => {
     try {
-      const response = await api.delete(`${url}/api/admin/deleteUser?q=${id}`, {
+      const response = await api.delete(`/admin/deleteUser?q=${id}`, {
         withCredentials: true,
       });
       let data = await response.data;

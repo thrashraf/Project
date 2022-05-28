@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import ModalUser from '../../components/ModalUser';
 import useModal from '../../hooks/useModal';
 import useInput from '../../hooks/useInput';
-import axios from 'axios';
 import { useAppDispatch } from '../../app/hooks';
 import {
   addPublication,
@@ -10,8 +9,8 @@ import {
 } from '../../features/Publication/Publication';
 import Dropzone from '../../components/Dropzone';
 import DropZoneFile from '../../components/DropZoneFile';
-import url from '../../utils/url';
 import Toast from '../../components/Toast';
+import axiosInstance from '../../utils/axiosInstance';
 
 const AddPublication = ({ isShowing, toggle }: any) => {
   const title = useInput('');
@@ -167,8 +166,8 @@ const AddPublication = ({ isShowing, toggle }: any) => {
     file.forEach((image: any) => formData.append('upload', image));
     filePDF.forEach((file: any) => formData.append('upload', file));
 
-    axios
-      .post(`${url}/api/publication/createPublication`, formData, {
+    axiosInstance
+      .post(`/publication/createPublication`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {

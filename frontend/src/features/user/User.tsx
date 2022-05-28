@@ -3,7 +3,6 @@ import { RootState } from '../../app/Store';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 import api from '../../utils/api';
-import url from '../../utils/url';
 
 import axiosInstance from '../../utils/axiosInstance';
 
@@ -192,7 +191,7 @@ export const updateUserInformation = createAsyncThunk(
   async ({ id, name, email, position, phoneNumber }: any, thunkAPI: any) => {
     try {
       const response = await api.post(
-        `${url}/api/user/updateInformation`,
+        `/user/updateInformation`,
         {
           id,
           name,

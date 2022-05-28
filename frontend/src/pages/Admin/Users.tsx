@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import Toast from '../../components/Toast';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
