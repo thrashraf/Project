@@ -52,7 +52,7 @@ export const PasswordModal = (props: Props) => {
                   <img
                     src={
                       user?.profile_picture
-                        ? `/file/${user.profile_picture}`
+                        ? `/assets/${user.profile_picture}`
                         : '/assets/dummy_profile.png'
                     }
                     className='w-[50px] h-[50px] rounded-full object-cover mt-5 mb-7'
