@@ -54,13 +54,13 @@ export const updateUser = async (req, res) => {
         email,
         role,
         phone_number,
-        req.file.filename
+        req.file.key
       );
 
       return updateResult.affectedRows === 1
         ? res.status(200).json({
             message: 'successfully update user!',
-            img_url: req.file.filename,
+            img_url: req.file.key,
           })
         : res.status(400).json({
             message: 'something went wrong...',

@@ -37,7 +37,7 @@ export const createInnovation = async (req, res) => {
         ? files.filter((images) => images.mimetype.slice(0, 5) === 'image')
         : null;
 
-    const images = filterImages.map((item) => item.filename);
+    const images = filterImages.map((item) => item.key);
     console.log(images);
 
     //filter pdf
@@ -59,13 +59,11 @@ export const createInnovation = async (req, res) => {
       Medal,
       Year,
       images[0],
-      pdf[0].filename
+      pdf[0].key
     );
-    console.log(images[0]?.filename);
+    console.log(images[0]?.key);
 
-    res
-      .status(200)
-      .json({ message: 'successful', img_url: images[0]?.filename });
+    res.status(200).json({ message: 'successful', img_url: images[0]?.key });
   } catch (error) {
     console.log(error);
     res.status(400).json({
@@ -99,7 +97,7 @@ export const updatedInnovation = async (req, res) => {
         ? files.filter((images) => images.mimetype.slice(0, 5) === 'image')
         : null;
 
-    const images = filterImages.map((item) => item.filename);
+    const images = filterImages.map((item) => item.key);
     console.log(prevImages, images);
 
     //filter pdf
@@ -110,7 +108,7 @@ export const updatedInnovation = async (req, res) => {
     console.log(pdf);
 
     console.log(prevPdf, pdf);
-console.log(prevImages)
+    console.log(prevImages);
     if (files.length > 0) {
       const [updatedPublication] = await inno.updateInnovationWithImages(
         q,
@@ -122,7 +120,7 @@ console.log(prevImages)
         Medal,
         Year,
         images.length > 0 ? images[0] : prevImages,
-        pdf.length > 0 ? pdf[0].filename : prevPdf
+        pdf.length > 0 ? pdf[0].key : prevPdf
       );
 
       if (updatedPublication.affectedRows !== 1) {
@@ -141,7 +139,6 @@ console.log(prevImages)
       Level,
       Medal,
       Year
-      
     );
 
     if (updatedPublication.affectedRows !== 1) {
@@ -153,7 +150,7 @@ console.log(prevImages)
     res.status(200).json({
       message: 'successful',
       image_url: images.length > 0 ? images : null,
-      pdf_url: pdf.length > 0 ? pdf[0].filename : null,
+      pdf_url: pdf.length > 0 ? pdf[0].key : null,
     });
   } catch (error) {
     console.log(error);
