@@ -8,7 +8,7 @@ type Props = {};
 
 const Publication = (props: Props) => {
   const background = {
-    backgroundImage: 'url(' + '/assets/bookshelves.jpg' + ')',
+    backgroundImage: 'url(' + '/assets/wood.jpg' + ')',
   };
 
   const dispatch = useAppDispatch();

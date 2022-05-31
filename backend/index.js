@@ -16,8 +16,8 @@ import usersRoute from './router/usersRoute.js';
 import adminRoute from './router/adminRoute.js';
 import innoRoute from './router/innoRoute.js';
 import publicationRoute from './router/publicationRoute.js';
-import reportRoute from './router/reportRoute.js';
 import activitiesRoute from './router/activitiesRoute.js';
+import kpiRoute from './router/kpiRoute.js';
 
 const app = express();
 app.use(express.static('./public'));
@@ -36,8 +36,8 @@ app.use(
   adminRoute,
   innoRoute,
   publicationRoute,
-  reportRoute,
-  activitiesRoute
+  activitiesRoute,
+  kpiRoute
 );
 
 const __filename = fileURLToPath(import.meta.url);

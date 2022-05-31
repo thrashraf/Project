@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import useModal from '../hooks/useModal';
 
 import DropDown from './Dropdown';
@@ -10,9 +11,13 @@ import {
   setFilterHandler,
   setFilterInnovation,
 } from '../features/Innovation/Innovation';
+
 import generateYears from '../utils/generateYears';
+
 import { medal } from '../utils/medal';
+
 import ModalInnovation from '../pages/Innovation.tsx/ModalInnovation';
+
 import { userSelector } from '../features/user/User';
 
 export const Table = ({
@@ -34,7 +39,6 @@ export const Table = ({
   const [medalFilter, setMedalFilter] = useState<string>('');
   const [year, setYear] = useState<string>('');
 
-  const { isShowing: openFilter, toggle: toggleFilter } = useModal();
   const { isShowing: openYear, toggle: toggleYear } = useModal();
   const { isShowing: openMonth, toggle: toggleMonth } = useModal();
   const { isShowing: openModal, toggle: toggleModal } = useModal();
@@ -102,19 +106,19 @@ export const Table = ({
               +
             </button>
           )}
-          <section className=' bg-blue-50 rounded-lg flex'>
+          <section className=' bg-blue-50 rounded-lg flex justify-center items-center'>
             <span className='p-2 ml-3 text-gray-400'>
               <i className='fa-solid fa-magnifying-glass' />
             </span>
             <input
               type='text'
               placeholder='search by title'
-              className='text-lg px-4 py-2 bg-blue-50 rounded-t-lg rounded-b-lg  w-[400px] focus:outline-none'
+              className='text-lg px-4 py-3 bg-blue-50 rounded-t-lg rounded-b-lg  w-[400px] focus:outline-none'
               onChange={(e) => dispatch(handleFilter(e.target.value))}
               value={query}
             />
             {filterData.slice(0, 15).length !== 0 && showFilter && (
-              <div className='bg-blue-50 absolute  shadow-md no-scrollbar overflow-hidden z-10 h-[200px] w-[450px] top-60 rounded-lg px-4 py-2 overflow-y-auto'>
+              <div className='bg-white absolute shadow-md no-scrollbar overflow-hidden z-20 h-[200px] w-[440px] top-40 rounded-lg px-4 py-2 overflow-y-auto'>
                 {filterData?.map((item: any, index: number) => (
                   <p
                     className='p-3 cursor-pointer hover:bg-slate-100'
@@ -156,129 +160,103 @@ export const Table = ({
       </div>
 
       <div className='h-full w-full mb-[150px] '>
-        <div className='mx-auto container bg-white dark:bg-gray-800 shadow rounded'>
-          {/* <div className="flex flex-col lg:flex-row p-4 lg:p-8 justify-between items-start lg:items-stretch w-full">
-          
-        </div> */}
-        </div>
+        <div className='mx-auto container bg-white dark:bg-gray-800 shadow rounded'></div>
         <div className='w-full lg:overflow-x-hidden h-full'>
-          <table className='w-full bg-white '>
+          <table className='items-center w-full bg-transparent border-collapse'>
             <thead>
-              <tr className='w-full h-16 border-gray-300 dark:border-gray-200 border-b py-8'>
-                <th className='text-gray-600 pr-4 dark:text-gray-400 font-normal  text-center text-sm tracking-normal '>
-                  No.
-                </th>
-
-                <th className='text-gray-600 dark:text-gray-400 font-normal pl-10  text-left  text-sm tracking-normal '>
-                  Innovasion Title
-                </th>
-                <th className='text-gray-600 dark:text-gray-400 font-normal  text-center text-sm  tracking-normal leading-4'>
-                  Name
-                </th>
-                <th className='text-gray-600 dark:text-gray-400 font-normal  text-center text-sm  tracking-normal leading-4'>
-                  Program
-                </th>
-                <th className='text-gray-600 dark:text-gray-400 font-normal  text-center text-sm  tracking-normal leading-4'>
-                  Level
-                </th>
-                <th className='text-gray-600 dark:text-gray-400 font-normal  text-center text-sm  tracking-normal leading-4'>
-                  Medal
-                </th>
-                <th className='text-gray-600 dark:text-gray-400 font-normal  text-center text-sm  tracking-normal leading-4'>
-                  Years
-                </th>
-                {user && (
-                  <th className='text-gray-600 dark:text-gray-400 font-normal  text-center text-sm  tracking-normal leading-4'>
-                    Actions
-                  </th>
+              <tr>
+                {['Title', 'Name', 'Program', 'Level', 'Medal', 'Years'].map(
+                  (item: any, index: number) => (
+                    <th
+                      key={index}
+                      className={
+                        'px-6 align-middle border border-solid py-3 uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center g-blueGray-50 text-blueGray-500 border-blueGray-100'
+                      }
+                    >
+                      {item}
+                    </th>
+                  )
                 )}
               </tr>
             </thead>
-
-            <tbody className=''>
-              {allInnovation?.map((inno: any, index: number) => {
-                return (
-                  <>
-                    <div className='fixed top-0 z-10'>
+            <tbody>
+              {allInnovation && allInnovation.length > 0 ? (
+                allInnovation?.map((inno: any, index: number) => {
+                  return (
+                    <>
                       <ModalInnovation
                         show={openModal}
                         setShow={toggleModal}
                         innovation={detailInnovation}
                         role={user?.role}
                       />
-                    </div>
-                    <tr
-                      className='h-24   border-gray-300 dark:border-gray-200 border-b'
-                      key={index}
-                    >
-                      <td className='text-md pr-5 text-center whitespace-no-wrap text-gray-800  tracking-normal leading-4'>
-                        {index + 1}
-                      </td>
-                      <td className=' whitespace-pre-line max-w-[100px]'>
-                        <div className='flex items-center'>
-                          <p
-                            className=' text-gray-800 text-left hover:underline hover:cursor-pointer hover:text-blue-500 tracking-normal leading-4 text-md'
-                            onClick={() => showModal(inno)}
-                          >
-                            {inno.Title}
-                          </p>
-                        </div>
-                      </td>
-                      <td className='text-md whitespace-pre-line max-w-[200px] text-center text-gray-800  tracking-normal leading-4'>
-                        {inno.Name}
-                      </td>
-                      <td className='text-md whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4'>
-                        {inno.Program}
-                      </td>
-                      <td className='text-md whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4'>
-                        {inno.Level}
-                      </td>{' '}
-                      <td className='text-md whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4'>
-                        {inno.Medal}
-                      </td>
-                      <td className='text-md whitespace-no-wrap text-center text-gray-800  tracking-normal leading-4'>
-                        {inno.Year}
-                      </td>
-                      {user && (
-                        <td className='right-[90px]'>
-                          <section className='relative'>
-                            <button
-                              className='top-2 left-10  text-black bg-transparent hover:bg-slate-100 z-10 rounded-lg text-sm py-5 px-3 ml-auto inline-flex items-center focus:outline-none '
-                              onClick={() => toggleAction(inno)}
-                            >
-                              <i className='fa-solid fa-ellipsis-vertical fa-xl ' />
-                            </button>
-
-                            {isShowing &&
-                            innovationDetail &&
-                            inno.id === innovationDetail.id ? (
-                              <section className='bg-slate-50 absolute top-0 -left-16 w-[120px] z-50'>
-                                <ul>
-                                  <li
-                                    className='cursor-pointer hover:bg-slate-200 py-1 px-5'
-                                    onClick={() => edit(inno)}
-                                  >
-                                    Edit
-                                  </li>
-                                  <li
-                                    className='cursor-pointer hover:bg-slate-200 py-1 px-5'
-                                    onClick={() =>
-                                      deletePublicationById(inno.id)
-                                    }
-                                  >
-                                    Delete
-                                  </li>
-                                </ul>
-                              </section>
-                            ) : null}
-                          </section>
+                      <tr key={index} className='text-center relative'>
+                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4 text-blue-500 hover:underline cursor-pointer'>
+                          <p onClick={() => showModal(inno)}>{inno.Title}</p>
                         </td>
-                      )}
-                      <div className={`z-[10px] inset-0 `} />
-                    </tr>
-                  </>
-                );
-              })}
+                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4'>
+                          {inno.Name}
+                        </td>
+                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4'>
+                          <p>{inno.Program}</p>
+                        </td>
+                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4'>
+                          {inno.Level}
+                        </td>
+                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4'>
+                          {inno.Medal}
+                        </td>
+                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4'>
+                          {inno.Year}
+                        </td>
+                        {user && (
+                          <td className='right-[90px]'>
+                            <section className='relative'>
+                              <button
+                                className='top-2 left-10  text-black bg-transparent hover:bg-slate-100 z-10 rounded-lg text-sm py-5 px-3 ml-auto inline-flex items-center focus:outline-none '
+                                onClick={() => toggleAction(inno)}
+                              >
+                                <i className='fa-solid fa-ellipsis-vertical fa-xl ' />
+                              </button>
+
+                              {isShowing &&
+                              innovationDetail &&
+                              inno.id === innovationDetail.id ? (
+                                <section className='bg-slate-50 absolute top-0 -left-16 w-[120px] z-50'>
+                                  <ul>
+                                    <li
+                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5'
+                                      onClick={() => edit(inno)}
+                                    >
+                                      Edit
+                                    </li>
+                                    <li
+                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5'
+                                      onClick={() =>
+                                        deletePublicationById(inno.id)
+                                      }
+                                    >
+                                      Delete
+                                    </li>
+                                  </ul>
+                                </section>
+                              ) : null}
+                            </section>
+                          </td>
+                        )}
+                      </tr>
+                    </>
+                  );
+                })
+              ) : (
+                <tr className='text-center flex'>
+                  <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4'>
+                    <span className='font-bold uppercase text-blue-500 hover:underline cursor-pointer'>
+                      No item
+                    </span>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

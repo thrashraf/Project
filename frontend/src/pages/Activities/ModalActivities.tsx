@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom';
 import { organizerArray } from '../../constant/organizerArray';
 import Toast from '../../components/Toast';
 import axiosInstance from '../../utils/axiosInstance';
+import imgUrl from '../../utils/imgUrl';
 
 type Props = {
   showActivity: boolean;
@@ -223,7 +224,7 @@ export const ModalActivities = (props: Props) => {
                 <img
                   src={
                     detailActivities.banner
-                      ? `/assets/${detailActivities.banner}`
+                      ? `${imgUrl}${detailActivities.banner}`
                       : '/assets/default-placeholder.jpg'
                   }
                   alt={detailActivities.title}

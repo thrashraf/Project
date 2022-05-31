@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { publicationSelector } from '../features/Publication/Publication';
+import imgUrl from '../utils/imgUrl';
 
 type Props = {
   viewPublicationHandler: any;
@@ -25,7 +26,7 @@ export const CardPublication = (props: Props) => {
                 }
               >
                 <img
-                  src={`/assets/${publication.img_url[0]}`}
+                  src={`${imgUrl}${publication.img_url[0]}`}
                   alt='/'
                   className='object-cover   h-[150px] w-full'
                 />

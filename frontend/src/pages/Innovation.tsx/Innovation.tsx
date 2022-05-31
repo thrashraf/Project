@@ -9,7 +9,6 @@ import useInput from '../../hooks/useInput';
 import useModal from '../../hooks/useModal';
 import api from '../../utils/api';
 import ModalInnovation from '../Admin/ModalInnovation';
-import AddInnovation from './AddInnovation';
 
 export const Innovation = (props: any) => {
   const { isShowing, toggle } = useModal();
@@ -39,7 +38,7 @@ export const Innovation = (props: any) => {
 
   const deletePublicationById = (id: string) => {
     api
-      .delete(`/api/inno/deleteInnovation?q=${id}`)
+      .delete(`/inno/deleteInnovation?q=${id}`)
       .then((res: any) => {
         if (res.status === 200) {
           console.log('ok');
@@ -56,7 +55,7 @@ export const Innovation = (props: any) => {
     <>
       <Navbar />
 
-      <div className=' max-w-7xl mx-auto'>
+      <div className=' max-w-7xl mx-auto relative'>
         <Table
           isShowing={isShowing}
           toggle={toggle}

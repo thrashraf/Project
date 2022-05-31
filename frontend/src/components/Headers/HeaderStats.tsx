@@ -46,7 +46,13 @@ export default function HeaderStats() {
               <div className='w-full lg:w-6/12 xl:w-3/12 px-4'>
                 <CardStats
                   statSubtitle='Events'
-                  statTitle={activities?.length}
+                  statTitle={
+                    activities?.filter(
+                      (item: any) =>
+                        new Date(item.end).getFullYear() ===
+                        new Date().getFullYear()
+                    ).length
+                  }
                   kpi={'of 10'}
                   statPercentColor='text-emerald-500'
                   statIconName='fa-solid fa-calendar'
@@ -56,7 +62,13 @@ export default function HeaderStats() {
               <div className='w-full lg:w-6/12 xl:w-3/12 px-4'>
                 <CardStats
                   statSubtitle='Publication'
-                  statTitle={allPublication?.length}
+                  statTitle={
+                    allPublication?.filter(
+                      (item: any) =>
+                        new Date(item.year).getFullYear() ===
+                        new Date().getFullYear()
+                    ).length
+                  }
                   statPercentColor='text-red-500'
                   statIconName='fa-solid fa-book'
                   statIconColor='bg-orange-500'
@@ -65,7 +77,13 @@ export default function HeaderStats() {
               <div className='w-full lg:w-6/12 xl:w-3/12 px-4'>
                 <CardStats
                   statSubtitle='Innovation'
-                  statTitle={allInnovation?.length}
+                  statTitle={
+                    allInnovation?.filter(
+                      (item: any) =>
+                        new Date(item.Year).getFullYear() ===
+                        new Date().getFullYear()
+                    ).length
+                  }
                   statPercentColor='text-orange-500'
                   statIconName='fa-solid fa-lightbulb'
                   statIconColor='bg-pink-500'

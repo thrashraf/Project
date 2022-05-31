@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import imgUrl from '../../utils/imgUrl';
 
 type Props = {
   isPhoto: boolean;
@@ -75,7 +76,7 @@ export const ImageTemplate = (props: Props) => {
                     <i className='fa-solid fa-xmark fa-2xl' />
                   </section>
                   <img
-                    src={`/assets/${image}`}
+                    src={`${imgUrl}${image}`}
                     alt='pho'
                     key={index}
                     className='w-[400px] h-[200px] object-cover m-auto'

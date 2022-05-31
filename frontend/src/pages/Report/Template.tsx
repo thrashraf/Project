@@ -9,6 +9,7 @@ import {
 } from '@react-pdf/renderer';
 import regular from '../../assets/Arimo-Regular.ttf';
 import bold from '../../assets/Arimo-Bold.ttf';
+import imgUrl from '../../utils/imgUrl';
 
 type Props = {
   title: string;
@@ -230,7 +231,7 @@ export const Template = (props: Props) => {
             <View style={styles.signatureContainer}>
               <Text style={styles.signatureHeader}>Disediakan oleh:</Text>
               <Image
-                src={props.signature && `/assets/${props.signature}`}
+                src={props.signature && `${imgUrl}${props.signature}`}
                 style={styles.signatureImage}
               />
               <Text style={styles.name}>({props.staffName})</Text>
@@ -262,7 +263,7 @@ export const Template = (props: Props) => {
                 return (
                   <View style={styles.photoContainer}>
                     <Image
-                      src={`/assets/${img}`}
+                      src={`${imgUrl}${img}`}
                       key={index}
                       style={styles.image}
                     />

@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { clearState, userSelector } from '../../features/user/User';
 import { createPopper } from '@popperjs/core';
 import axiosInstance from '../../utils/axiosInstance';
+import imgUrl from '../../utils/imgUrl';
 
 const UserDropdown = () => {
   // dropdown props
@@ -63,7 +64,7 @@ const UserDropdown = () => {
               className='w-full rounded-full align-middle border-none shadow-lg'
               src={
                 user?.profile_picture
-                  ? `/assets/${user.profile_picture}`
+                  ? `${imgUrl}${user.profile_picture}`
                   : '/assets/dummy_profile.png'
               }
             />
