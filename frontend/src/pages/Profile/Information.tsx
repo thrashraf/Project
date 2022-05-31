@@ -13,6 +13,7 @@ import useModal from '../../hooks/useModal';
 import Dropzone from '../../components/Dropzone';
 import ProfileModal from './ProfileModal';
 import SignatureModal from './SignatureModal';
+import imgUrl from '../../utils/imgUrl';
 
 type Props = {};
 
@@ -87,7 +88,7 @@ export const Information = (props: Props) => {
               className='w-[100px] h-[100px] rounded-full  absolute top-32 left-5 object-cover'
               src={`${
                 user && user.profile_picture
-                  ? `/assets/${user?.profile_picture}`
+                  ? `${imgUrl}${user?.profile_picture}`
                   : '/assets/dummy_profile.png'
               }`}
               alt=''
@@ -205,7 +206,7 @@ export const Information = (props: Props) => {
             }`}
           >
             <img
-              src={user && `/assets/${user.signature}`}
+              src={user && `${imgUrl}${user.signature}`}
               className={`${
                 editSignature && 'hidden'
               } w-[150px] h-[100px] object-cover`}

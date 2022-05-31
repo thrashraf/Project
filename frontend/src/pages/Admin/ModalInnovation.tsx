@@ -123,7 +123,13 @@ const ModalInnovation = (props: Props) => {
   };
 
   const createInnovation = (e: any) => {
-    if (file.length < 1 || filePDF.length < 1) {
+    if (
+      file.length < 1 ||
+      filePDF.length < 1 ||
+      !Year.value ||
+      !Level.value ||
+      !Medal.value
+    ) {
       setMessage('Please insert all the field');
       setStatus('error');
       toastRef.current.showToast();

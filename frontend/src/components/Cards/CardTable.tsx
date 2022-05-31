@@ -137,11 +137,6 @@ export default function CardTable(props: Props, { color }: any) {
                       </td>
                       <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
                         <div className='flex items-center justify-around'>
-                          {/* <img
-                          src={report.profile_picture !== 'null' ? report.profile_picture : '/assets/dummy_profile.png'}
-                          alt="..."
-                          className="w-10 h-10 rounded-full border-2 border-blueGray-50 shadow"
-                        ></img> */}
                           <p>{report.owner}</p>
                         </div>
                       </td>

@@ -17,6 +17,7 @@ import { userSelector } from '../../features/user/User';
 import More from '../../components/More';
 import Modal from './Modal';
 import useInput from '../../hooks/useInput';
+import imgUrl from '../../utils/imgUrl';
 
 export default function Users() {
   const {
@@ -168,7 +169,7 @@ export default function Users() {
                             <img
                               src={
                                 user?.profile_picture
-                                  ? `/assets/${user.profile_picture}`
+                                  ? `${imgUrl}${user.profile_picture}`
                                   : '/assets/defaultProfile.jpg'
                               }
                               alt=''

@@ -10,6 +10,7 @@ import { userSelector } from '../../features/user/User';
 import { unitArray } from '../../constant/unitArray';
 import { organizerArray } from '../../constant/organizerArray';
 import axiosInstance from '../../utils/axiosInstance';
+import axios from 'axios';
 
 type Props = {
   isShowing: boolean;
@@ -79,14 +80,7 @@ const AddEvent = (props: Props) => {
   };
 
   const formHandler = (e: any) => {
-    if (organizer.value === 'select' || venue.value === 'select') {
-      toastRef.current.showToast();
-      setMessage('Please insert all the field!');
-      e.preventDefault();
-      return;
-    }
-
-    if (organizer.value === 'select') {
+    if (!organizer.value || !venue.value) {
       toastRef.current.showToast();
       setMessage('Please insert all the field!');
       e.preventDefault();
@@ -317,6 +311,7 @@ const AddEvent = (props: Props) => {
             isShowing={isShowing}
             hide={toggle}
             fileDrop={addFile}
+            content='Accept PNG/JPG/JPEG'
             files={file}
             removeFile={deleteFile}
           />

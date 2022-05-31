@@ -5,6 +5,7 @@ import More from '../../components/More';
 import { activitiesSelector } from '../../features/activities/Activities';
 import { userSelector } from '../../features/user/User';
 import useModal from '../../hooks/useModal';
+import imgUrl from '../../utils/imgUrl';
 
 type Props = {
   activities: any;
@@ -55,7 +56,7 @@ export const SideCard = (props: Props) => {
               <img
                 src={
                   event.banner
-                    ? `/assets/${event.banner}`
+                    ? `${imgUrl}${event.banner}`
                     : '/assets/default-placeholder.jpg'
                 }
                 alt={event.title}

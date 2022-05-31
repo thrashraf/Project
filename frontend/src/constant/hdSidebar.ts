@@ -1,5 +1,9 @@
 export const hdSidebar = [
-   
+    {
+        icon: 'fa-solid fa-file  mr-2 text-sm',
+        link: '/kj/dashboard',
+        name: 'Dashboard'
+    },
     {
         icon: 'fa-solid fa-file  mr-2 text-sm',
         link: '/kj/report',
