@@ -41,14 +41,14 @@ export const createActivities = async (req, res) => {
       end,
       organizer,
       venue,
-      files.length > 0 ? files[0].filename : '',
+      files.length > 0 ? files[0].key : '',
       username,
       email,
       userId
     );
     res.status(200).json({
       message: 'successful',
-      image_url: files.length > 0 ? files[0].filename : '',
+      image_url: files.length > 0 ? files[0].key : '',
       id,
     });
   } catch (error) {
@@ -92,7 +92,7 @@ export const updateActivities = async (req, res) => {
         start,
         organizer,
         venue,
-        files[0].filename
+        files[0].key
       );
 
       if (updatedActivities.affectedRows !== 1) {
@@ -120,7 +120,7 @@ export const updateActivities = async (req, res) => {
 
     res.status(200).json({
       message: 'successful',
-      image_url: files.length > 0 ? files[0].filename : null,
+      image_url: files.length > 0 ? files[0].key : null,
     });
   } catch (error) {
     console.log(error);
@@ -163,8 +163,7 @@ export const createReport = async (req, res, next) => {
       prevImages,
     } = req.body;
 
-    const images =
-      files.length >= 0 ? files.map((images) => images.filename) : null;
+    const images = files.length >= 0 ? files.map((images) => images.key) : null;
 
     const updateImage = images && prevImages && images.concat(prevImages);
     console.log(prevImages);
