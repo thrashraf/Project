@@ -91,7 +91,7 @@ export const Table = ({
     toggleModal();
   };
   return (
-    <div className='mt-20  pb-10' id='Inno'>
+    <div className='mt-20  pb-10 relative' id='Inno'>
       <h1 className=' font-extrabold lg:text-5xl mb-8 text-center rounded-2xl border-gray-800 border-2 w-[50%] mx-auto p-2'>
         Innovation
       </h1>
@@ -179,7 +179,7 @@ export const Table = ({
                 )}
               </tr>
             </thead>
-            <tbody>
+            <tbody className=' overflow-y-hidden'>
               {allInnovation && allInnovation.length > 0 ? (
                 allInnovation?.map((inno: any, index: number) => {
                   return (
@@ -190,7 +190,7 @@ export const Table = ({
                         innovation={detailInnovation}
                         role={user?.role}
                       />
-                      <tr key={index} className='text-center relative'>
+                      <tr key={index} className='text-center '>
                         <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4 text-blue-500 hover:underline cursor-pointer'>
                           <p onClick={() => showModal(inno)}>{inno.Title}</p>
                         </td>
@@ -210,8 +210,8 @@ export const Table = ({
                           {inno.Year}
                         </td>
                         {user && (
-                          <td className='right-[90px]'>
-                            <section className='relative'>
+                          <td className='right-[90px relative '>
+                            <section className=''>
                               <button
                                 className='top-2 left-10  text-black bg-transparent hover:bg-slate-100 z-10 rounded-lg text-sm py-5 px-3 ml-auto inline-flex items-center focus:outline-none '
                                 onClick={() => toggleAction(inno)}
@@ -222,7 +222,7 @@ export const Table = ({
                               {isShowing &&
                               innovationDetail &&
                               inno.id === innovationDetail.id ? (
-                                <section className='bg-slate-50 absolute top-0 -left-16 w-[120px] z-50'>
+                                <section className='bg-slate-50 absolute -top-2 -left-28 w-[120px] z-10'>
                                   <ul>
                                     <li
                                       className='cursor-pointer hover:bg-slate-200 py-1 px-5'

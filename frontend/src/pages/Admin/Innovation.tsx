@@ -55,7 +55,7 @@ export default function Innovation() {
   console.log(innovationDetail);
   const deletePublicationById = (id: string) => {
     api
-      .delete(`/api/inno/deleteInnovation?q=${id}`)
+      .delete(`/inno/deleteInnovation?q=${id}`)
       .then((res: any) => {
         if (res.status === 200) {
           console.log('ok');

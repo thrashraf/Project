@@ -5,6 +5,7 @@ import Toast from '../../components/Toast';
 import { userSelector } from '../../features/user/User';
 import useInput from '../../hooks/useInput';
 import api from '../../utils/api';
+import axiosInstance from '../../utils/axiosInstance';
 
 type Props = {};
 
@@ -27,8 +28,8 @@ export const Privacy = (props: Props) => {
       newPassword: newPassword.value,
     };
 
-    api
-      .post('/api/user/updatePassword', passwordDetail)
+    axiosInstance
+      .post('/user/updatePassword', passwordDetail)
       .then((res) => {
         toastStatus.setInput('success');
         toastMessage.setInput('Successful update password');

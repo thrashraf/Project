@@ -20,12 +20,19 @@ export default function CardStats({
               <h5 className='text-blueGray-400 uppercase font-bold text-lg'>
                 {statSubtitle}
               </h5>
+              {console.log(parseInt(statTitle), parseInt(kpi))}
               <section className=''>
-                <span className='font-semibold text-2xl text-blueGray-700'>
+                <span
+                  className={`font-semibold text-2xl  ${
+                    parseInt(statTitle) > parseInt(kpi)
+                      ? 'text-green-500'
+                      : 'text-red-500'
+                  }`}
+                >
                   {statTitle}
                 </span>
 
-                <span className='text-lg text-slate-400 ml-2'>{kpi}</span>
+                <span className='text-lg text-slate-400 ml-2'>of {kpi}</span>
               </section>
             </div>
             <div className='relative w-auto pl-4 flex-initial'>
@@ -40,18 +47,9 @@ export default function CardStats({
             </div>
           </div>
           <p className='text-sm text-blueGray-400 mt-4'>
-            <span className={statPercentColor + ' mr-2'}>
-              <i
-                className={
-                  statArrow === 'up'
-                    ? 'fas fa-arrow-up'
-                    : statArrow === 'down'
-                    ? 'fas fa-arrow-down'
-                    : ''
-                }
-              ></i>{' '}
+            <span className={`font-semibold text-green-500 `}>
+              {parseInt(statTitle) > parseInt(kpi) ? 'Completed' : null}
             </span>
-            <span className='whitespace-nowrap'>{statDescripiron}</span>
           </p>
         </div>
       </div>

@@ -30,6 +30,7 @@ const storage = multerS3({
     const fileName = path.parse(file.originalname);
     cb(null, fileName.name.split(' ').join('_') + Date.now() + fileName.ext);
   },
+  contentType: multerS3.AUTO_CONTENT_TYPE,
 });
 
 export const upload = multer({ storage: storage });

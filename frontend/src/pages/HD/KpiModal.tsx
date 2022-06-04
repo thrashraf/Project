@@ -1,33 +1,43 @@
+import axios from 'axios';
 import { useEffect, useRef } from 'react';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import ModalContainer from '../../components/ModalContainer';
 import Toast from '../../components/Toast';
+import {
+  adminSelector,
+  getKpi,
+  updateNewKpi,
+} from '../../features/admin/Admin';
 import useInput from '../../hooks/useInput';
 import axiosInstance from '../../utils/axiosInstance';
 
 const KpiModal = ({ isShowing, toggle }: any) => {
-  const eventsKpi = useInput('');
-  const publicationKpi = useInput('');
-  const innovationKpi = useInput('');
+  const event = useInput('');
+  const publication = useInput('');
+  const innovation = useInput('');
+
+  const dispatch = useAppDispatch();
+  const { eventKpi, publicationKpi, innovationKpi } =
+    useAppSelector(adminSelector);
 
   const toastRef = useRef<any>(null);
   const status = useInput('');
   const message = useInput('');
 
+  console.log(eventKpi, publicationKpi, innovationKpi);
+
   useEffect(() => {
-    axiosInstance
-      .get('/kpi/getKpi')
-      .then((res) => {
-        eventsKpi.setInput(res.data.event);
-        publicationKpi.setInput(res.data.publication);
-        innovationKpi.setInput(res.data.innovation);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    dispatch(getKpi());
+
+    if (!eventKpi || !publicationKpi || !innovationKpi) return;
+
+    event.setInput(eventKpi);
+    publication.setInput(publicationKpi);
+    innovation.setInput(innovationKpi);
+  }, [eventKpi, publicationKpi, innovationKpi]);
 
   const updateKpi = () => {
-    if (!eventsKpi.value || !publicationKpi.value || !innovationKpi.value) {
+    if (!event.value || !publication.value || !innovation.value) {
       message.setInput('Please insert all the field!');
       status.setInput('error');
       toastRef.current.showToast();
@@ -36,9 +46,9 @@ const KpiModal = ({ isShowing, toggle }: any) => {
     }
 
     const values = {
-      event: eventsKpi.value,
-      publication: publicationKpi.value,
-      innovation: innovationKpi.value,
+      event: event.value,
+      publication: publication.value,
+      innovation: innovation.value,
     };
 
     axiosInstance
@@ -48,6 +58,7 @@ const KpiModal = ({ isShowing, toggle }: any) => {
         status.setInput('success');
         toastRef.current.showToast();
 
+        dispatch(updateNewKpi(values));
         toggle();
       })
       .catch((err) => {
@@ -70,8 +81,8 @@ const KpiModal = ({ isShowing, toggle }: any) => {
             </p>
             <input
               type='number'
-              value={eventsKpi.value}
-              onChange={eventsKpi.onChange}
+              value={event.value}
+              onChange={event.onChange}
               required
               className='bg-blue-50 px-3 py-3 rounded-lg outline-none w-full'
             />
@@ -84,8 +95,8 @@ const KpiModal = ({ isShowing, toggle }: any) => {
             </p>
             <input
               type='number'
-              value={publicationKpi.value}
-              onChange={publicationKpi.onChange}
+              value={publication.value}
+              onChange={publication.onChange}
               required
               className='bg-blue-50 px-3 py-3 rounded-lg outline-none w-full'
             />
@@ -98,8 +109,8 @@ const KpiModal = ({ isShowing, toggle }: any) => {
             </p>
             <input
               type='number'
-              value={innovationKpi.value}
-              onChange={innovationKpi.onChange}
+              value={innovation.value}
+              onChange={innovation.onChange}
               required
               className='bg-blue-50 px-3 py-3 rounded-lg outline-none w-full'
             />

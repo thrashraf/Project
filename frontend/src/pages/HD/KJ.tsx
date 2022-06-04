@@ -27,7 +27,7 @@ export default function KJ() {
       <Sidebar sidebar={hdSidebar} />
 
       <div
-        className='absolute left-7 top-[320px] text-sm z-50 flex w-20 justify-between font-semibold text-blueGray-600 cursor-pointer hover:text-blueGray-500'
+        className='fixed left-7 top-[320px] text-sm z-50 flex w-20 justify-between font-semibold text-blueGray-600 cursor-pointer hover:text-blueGray-500'
         onClick={toggle}
       >
         <i className='fa-solid fa-chart-line'></i>

@@ -8,7 +8,7 @@ const Register = () => {
       <Image />
 
       {/* form */}
-      <section className='lg:px-[20%] py-[10%]'>
+      <section className='lg:px-[20%] py-[15%]'>
         <h1 className='text-3xl font-semibold'>Welcome Back</h1>
         <p className='text-gray-400'>let's continue with us</p>
 

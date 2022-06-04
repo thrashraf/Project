@@ -31,6 +31,8 @@ export const createInnovation = async (req, res) => {
 
     const id = crypto.randomBytes(16).toString('hex');
 
+    //console.log(files);
+
     //filter images
     const filterImages =
       files.length > 0
@@ -38,16 +40,16 @@ export const createInnovation = async (req, res) => {
         : null;
 
     const images = filterImages.map((item) => item.key);
-    console.log(images);
+    //console.log(images);
 
     //filter pdf
     const pdf =
       files.length >= 0
         ? files.filter((images) => images.mimetype.slice(0, 5) !== 'image')
         : null;
-    console.log(pdf);
+    //console.log(pdf);
 
-    console.log(Title, Description, Name, Program, Level, Medal, Year);
+    //console.log(Title, Description, Name, Program, Level, Medal, Year);
 
     const [activitiesCreated] = await inno.createInnovation(
       id,
@@ -58,12 +60,13 @@ export const createInnovation = async (req, res) => {
       Level,
       Medal,
       Year,
-      images[0],
+      images[0].key,
       pdf[0].key
     );
-    console.log(images[0]?.key);
+    console.log('images : ' + images[0]);
+    console.log('pdf : ' + pdf[0]?.key);
 
-    res.status(200).json({ message: 'successful', img_url: images[0]?.key });
+    res.status(200).json({ message: 'successful', img_url: images[0] });
   } catch (error) {
     console.log(error);
     res.status(400).json({
@@ -119,7 +122,7 @@ export const updatedInnovation = async (req, res) => {
         Level,
         Medal,
         Year,
-        images.length > 0 ? images[0] : prevImages,
+        images.length > 0 ? images[0].key : prevImages,
         pdf.length > 0 ? pdf[0].key : prevPdf
       );
 

@@ -2,9 +2,9 @@ import kpi from '../model/kpi.js';
 
 export const getKpiValue = async (req, res) => {
   try {
-    const [kpi] = await kpi.showKpi();
+    const [allKpi] = await kpi.showKpi();
 
-    res.status(200).send(kpi);
+    res.status(200).send(allKpi);
   } catch (error) {
     console.log(error);
     res.status(400).json({
@@ -16,7 +16,7 @@ export const getKpiValue = async (req, res) => {
 export const updateKpiValue = async (req, res) => {
   try {
     const { event, publication, innovation } = req.body;
-    const [kpi] = await kpi.updateKpi(event, publication, innovation);
+    const [updatedKpi] = await kpi.updateKpi(event, publication, innovation);
 
     res.status(200).send({ message: 'successful' });
   } catch (error) {
