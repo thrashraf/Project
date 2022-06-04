@@ -163,8 +163,8 @@ const ModalInnovation = (props: Props) => {
     file?.forEach((image: any) => formData.append('upload', image));
     filePDF.forEach((file: any) => formData.append('upload', file));
 
-    axios
-      .post(`http://localhost:5000/api/inno/createInnovation`, formData, {
+    axiosInstance
+      .post(`/inno/createInnovation`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {
@@ -271,6 +271,8 @@ const ModalInnovation = (props: Props) => {
 
   useEffect(() => {
     if (!props.innovation) return;
+
+    console.log(props.innovation);
     if (props.mode === 'add') {
       Title.setInput('');
       Description.setInput('');
