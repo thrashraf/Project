@@ -35,7 +35,6 @@ export const createPublication = async (req, res) => {
       files.length >= 0
         ? files.filter((images) => images.mimetype.slice(0, 5) !== 'image')
         : null;
-    console.log(pdf);
 
     const [activitiesCreated] = await publication.createPublication(
       id,
@@ -50,6 +49,7 @@ export const createPublication = async (req, res) => {
 
     return res.status(200).json({
       message: 'successful',
+      id: id,
       image_url: files.length > 0 ? images : null,
       pdf_url: pdf[0]?.key,
       id,

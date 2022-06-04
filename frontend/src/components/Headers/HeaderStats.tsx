@@ -6,6 +6,7 @@ import {
   activitiesSelector,
   getActivities,
 } from '../../features/activities/Activities';
+import { adminSelector } from '../../features/admin/Admin';
 import {
   getInnovation,
   innovationSelector,
@@ -31,6 +32,9 @@ export default function HeaderStats() {
     dispatch(getInnovation(''));
   }, []);
 
+  const { eventKpi, publicationKpi, innovationKpi }: any =
+    useAppSelector(adminSelector);
+
   const { activities } = useAppSelector(activitiesSelector);
   const { allPublication } = useAppSelector(publicationSelector);
   const { allInnovation } = useAppSelector(innovationSelector);
@@ -53,7 +57,7 @@ export default function HeaderStats() {
                         new Date().getFullYear()
                     ).length
                   }
-                  kpi={'of 10'}
+                  kpi={eventKpi}
                   statPercentColor='text-emerald-500'
                   statIconName='fa-solid fa-calendar'
                   statIconColor='bg-red-500'
@@ -69,6 +73,7 @@ export default function HeaderStats() {
                         new Date().getFullYear()
                     ).length
                   }
+                  kpi={publicationKpi}
                   statPercentColor='text-red-500'
                   statIconName='fa-solid fa-book'
                   statIconColor='bg-orange-500'
@@ -84,6 +89,7 @@ export default function HeaderStats() {
                         new Date().getFullYear()
                     ).length
                   }
+                  kpi={innovationKpi}
                   statPercentColor='text-orange-500'
                   statIconName='fa-solid fa-lightbulb'
                   statIconColor='bg-pink-500'

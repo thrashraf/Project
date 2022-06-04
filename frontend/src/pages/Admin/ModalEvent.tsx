@@ -12,6 +12,7 @@ import {
 import { unitArray } from '../../constant/unitArray';
 import api from '../../utils/api';
 import { organizerArray } from '../../constant/organizerArray';
+import axiosInstance from '../../utils/axiosInstance';
 
 type Props = {
   isShowing: boolean;
@@ -107,8 +108,8 @@ const AddEvent = (props: Props) => {
     );
     e.preventDefault();
 
-    api
-      .post('/api/activities/createActivities', formData)
+    axiosInstance
+      .post('/activities/createActivities', formData)
       .then((res: any) => {
         console.log(res);
         if (res.status === 200) {
@@ -193,11 +194,8 @@ const AddEvent = (props: Props) => {
     formData.append('venue', venue.value);
     formData.append('organizer', organizer.value);
 
-    api
-      .post(
-        `/api/activities/updateActivities?q=${props.activities.id}`,
-        formData
-      )
+    axiosInstance
+      .post(`/activities/updateActivities?q=${props.activities.id}`, formData)
       .then((res: any) => {
         if (res.status === 200) {
           console.log('ok');

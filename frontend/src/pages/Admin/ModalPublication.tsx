@@ -14,6 +14,8 @@ import api from '../../utils/api';
 import DropZoneFile from '../../components/DropZoneFile';
 import generateYears from '../../utils/generateYears';
 import axiosInstance from '../../utils/axiosInstance';
+import Spinner from '../../components/Spinner/Spinner';
+import axios from 'axios';
 
 type Props = {
   isShowing: boolean;
@@ -33,6 +35,8 @@ const ModalPublication = (props: Props) => {
   const isbn = useInput('');
   const staff = useInput('');
   const year = useInput('');
+
+  const isFetching = useInput(false);
 
   //for toast
   const [status, setStatus] = useState<string>('');
@@ -177,6 +181,8 @@ const ModalPublication = (props: Props) => {
     }
     e.preventDefault();
 
+    isFetching.setInput(true);
+
     const formData = new FormData();
 
     formData.append('title', title.value);
@@ -195,6 +201,7 @@ const ModalPublication = (props: Props) => {
       .then((res: any) => {
         if (res.status === 200) {
           const newPublication = {
+            id: res.data.id,
             Title: title.value,
             Description: description.value,
             isbn: isbn.value,
@@ -205,6 +212,7 @@ const ModalPublication = (props: Props) => {
           };
 
           dispatch(addPublication(newPublication));
+          isFetching.setInput(false);
           props.toggle();
         }
       })
@@ -224,6 +232,7 @@ const ModalPublication = (props: Props) => {
 
     e.preventDefault();
 
+    isFetching.setInput(true);
     formData.append('title', title.value);
     formData.append('description', description.value);
     formData.append('isbn', isbn.value);
@@ -259,6 +268,7 @@ const ModalPublication = (props: Props) => {
           };
           dispatch(editPublicationHandler(newActivities));
           //toggle modal
+          isFetching.setInput(false);
           props.toggle();
           // //toggle more button
         }
@@ -307,6 +317,7 @@ const ModalPublication = (props: Props) => {
           <div>
             <section className='my-5 grid grid-cols-2 gap-5'>
               <section>
+                {isFetching.value && <Spinner />}
                 <p className='my-1 text-sm text-gray-400 ml-1'>
                   Title
                   <span className='text-red-500'>*</span>

@@ -1,11 +1,11 @@
 export const Image = () => {
   return (
-    <div className='hidden lg:flex'>
+    <div className='hidden lg:flex bg-blue-100 col-span-2 relative'>
       <img
-        src='https://images.unsplash.com/photo-1607608879766-56659d03ea0a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1888&q=80'
+        src='/assets/loginAssets.png'
         alt=''
-        className=' object-cover'
-      ></img>
+        className='absolute -left-60 w-[650px] h-[650px]'
+      />
     </div>
-  );
+  ); 
 };

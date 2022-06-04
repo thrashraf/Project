@@ -139,8 +139,8 @@ const AddEvent = (props: Props) => {
     file.forEach((image: any) => formData.append('upload', image));
     e.preventDefault();
 
-    axios
-      .post(`http://localhost:5000/api/activities/createActivities`, formData, {
+    axiosInstance
+      .post(`/activities/createActivities`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {
