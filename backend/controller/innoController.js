@@ -122,7 +122,7 @@ export const updatedInnovation = async (req, res) => {
         Level,
         Medal,
         Year,
-        images.length > 0 ? images[0].key : prevImages,
+        images.length > 0 ? images[0] : prevImages,
         pdf.length > 0 ? pdf[0].key : prevPdf
       );
 
