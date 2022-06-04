@@ -11,6 +11,7 @@ import { unitArray } from '../../constant/unitArray';
 import { organizerArray } from '../../constant/organizerArray';
 import axiosInstance from '../../utils/axiosInstance';
 import axios from 'axios';
+import Spinner from '../../components/Spinner/Spinner';
 
 type Props = {
   isShowing: boolean;
@@ -29,6 +30,8 @@ const AddEvent = (props: Props) => {
   const venue = useInput('');
   const selectOrganizer = useInput('');
   const selectVenue = useInput('');
+
+  const isFetching = useInput(false);
 
   //for toast
   const [status, setStatus] = useState<string>('');
@@ -120,6 +123,8 @@ const AddEvent = (props: Props) => {
 
     e.preventDefault();
 
+    isFetching.setInput(true);
+
     const formData = new FormData();
 
     formData.append('title', title.value);
@@ -159,6 +164,8 @@ const AddEvent = (props: Props) => {
             userId: user.id,
           };
 
+          isFetching.setInput(false);
+
           dispatch(addNewActivities(newActivities));
           props.toggle();
         }
@@ -174,8 +181,9 @@ const AddEvent = (props: Props) => {
       toggle={props.toggle}
       hide={props.toggle}
     >
+      {isFetching.value && <Spinner />}
       <Toast status='error' message={message} ref={toastRef} />
-      <div className='relative mx-auto top-20 bg-white max-w-lg rounded-lg shadow z-50 '>
+      <div className='relative mx-auto top-20 bg-white max-w-lg rounded-lg shadow z-20 '>
         <form
           className='flex flex-col px-5 py-3'
           onSubmit={(e) => formHandler(e)}

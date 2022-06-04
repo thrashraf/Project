@@ -242,7 +242,7 @@ export const Template = (props: Props) => {
               <View style={styles.kjContainer}>
                 <Text style={styles.signatureHeader}>Disahkan oleh:</Text>
                 <Image
-                  src={props.kjSignature && `/uploads/${props.kjSignature}`}
+                  src={props.kjSignature && `${imgUrl}${props.kjSignature}`}
                   style={styles.signatureImage}
                 />
                 <Text style={styles.name}>({props.kjName})</Text>
