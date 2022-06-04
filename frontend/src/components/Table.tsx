@@ -184,12 +184,14 @@ export const Table = ({
                 allInnovation?.map((inno: any, index: number) => {
                   return (
                     <>
-                      <ModalInnovation
-                        show={openModal}
-                        setShow={toggleModal}
-                        innovation={detailInnovation}
-                        role={user?.role}
-                      />
+                      <div className='absolute top-0'>
+                        <ModalInnovation
+                          show={openModal}
+                          setShow={toggleModal}
+                          innovation={detailInnovation}
+                          role={user?.role}
+                        />
+                      </div>
                       <tr key={index} className='text-center '>
                         <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4 text-blue-500 hover:underline cursor-pointer'>
                           <p onClick={() => showModal(inno)}>{inno.Title}</p>
