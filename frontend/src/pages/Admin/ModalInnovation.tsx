@@ -170,6 +170,7 @@ const ModalInnovation = (props: Props) => {
       .then((res: any) => {
         if (res.status === 200) {
           const newInnovation = {
+            id: res.data.id,
             Title: Title.value,
             Description: Description.value,
             Name: Name.value,
@@ -471,6 +472,7 @@ const ModalInnovation = (props: Props) => {
             content={'Add Innovation Cerificate'}
             removeFile={removeFilePDF}
           />
+
           <Toast ref={toastRef} status={status} message={message} />
         </div>
       </div>

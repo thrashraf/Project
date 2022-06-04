@@ -60,13 +60,13 @@ export const createInnovation = async (req, res) => {
       Level,
       Medal,
       Year,
-      images[0].key,
+      images[0],
       pdf[0].key
     );
     console.log('images : ' + images[0]);
     console.log('pdf : ' + pdf[0]?.key);
 
-    res.status(200).json({ message: 'successful', img_url: images[0] });
+    res.status(200).json({ message: 'successful', img_url: images[0], id: id });
   } catch (error) {
     console.log(error);
     res.status(400).json({

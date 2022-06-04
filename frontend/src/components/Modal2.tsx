@@ -19,6 +19,7 @@ import DropZoneFile from './DropZoneFile';
 import Toast from './Toast';
 import axiosInstance from '../utils/axiosInstance';
 import imgUrl from '../utils/imgUrl';
+import { userSelector } from '../features/user/User';
 
 type Props = {
   show: boolean;
@@ -62,6 +63,8 @@ const Modal2 = (props: Props) => {
   const prevPdf = useInput('');
 
   const toastRef = useRef<any>(null);
+
+  const { user } = useAppSelector(userSelector);
 
   const toggleEditMode = () => dispatch(editModeHandler());
 
@@ -446,11 +449,14 @@ const Modal2 = (props: Props) => {
                 </div>
                 <div className='cursor-pointer absolute top-0 left-3 mt-4 mr-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-500 transition duration-150 ease-in-out'>
                   <section className='fixed w-10'>
-                    <More
-                      isShowing={isShowing}
-                      toggle={toggle}
-                      deleteItem={deletePublication}
-                    />
+                    {user ? (
+                      <More
+                        isShowing={isShowing}
+                        toggle={toggle}
+                        deleteItem={deletePublication}
+                      />
+                    ) : null}
+
                     <DropZoneFile
                       isShowing={showDropFile}
                       hide={toggleDropFile}
