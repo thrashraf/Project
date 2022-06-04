@@ -12,6 +12,7 @@ import api from '../../utils/api';
 import useInput from '../../hooks/useInput';
 import SignatureModal from '../Report/SignatureModal';
 import axiosInstance from '../../utils/axiosInstance';
+import Spinner from '../../components/Spinner/Spinner';
 
 export default function Tables() {
   const { user }: any = useAppSelector(userSelector);
@@ -21,6 +22,8 @@ export default function Tables() {
   const [report, setReport] = useState<any>();
 
   const [password, setPassword] = useState<any>('');
+
+  const isFetching = useInput('');
 
   const { isShowing, toggle } = useModal();
   const { isShowing: showSignatureModal, toggle: toggleSignature } = useModal();
@@ -46,7 +49,10 @@ export default function Tables() {
   const verifyReport = (status: string, id: any) => {
     const kjSignature = user.signature;
     const kjName = user.name;
-    api
+
+    isFetching.setInput(true);
+
+    axiosInstance
       .post('/activities/verifyReport', {
         status,
         report,
@@ -66,6 +72,9 @@ export default function Tables() {
         toastStatus.setInput('success');
         setAllReport(tempArr);
         toastHandler();
+
+        isFetching.setInput(false);
+
         toggle();
       })
       .catch((err) => {
@@ -128,6 +137,7 @@ export default function Tables() {
       <SignatureModal isShowing={showSignatureModal} toggle={toggleSignature} />
 
       <div className='flex flex-wrap mt-4'>
+        {isFetching.value && <Spinner />}
         <div className='w-full mb-12 px-4'>
           <CardTable
             reports={allReport}

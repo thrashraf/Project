@@ -12,6 +12,7 @@ import useModal from '../../hooks/useModal';
 import { useParams } from 'react-router-dom';
 import SignatureModal from './SignatureModal';
 import axiosInstance from '../../utils/axiosInstance';
+import imgUrl from '../../utils/imgUrl';
 
 const Report = () => {
   const { user }: any = useAppSelector(userSelector);
@@ -358,7 +359,7 @@ const Report = () => {
                 <p>Disediakan oleh: </p>
                 <div className=' border-b-2 border-dotted border-black w-[80px] mt-2 h-[30px]'>
                   <img
-                    src={user.signature && `/uploads/${user.signature}`}
+                    src={user.signature && `${imgUrl}${user.signature}`}
                     alt='signature'
                     className='object-cover h-[50px] mx-auto'
                   />

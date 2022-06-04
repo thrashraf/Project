@@ -20,6 +20,7 @@ import Toast from './Toast';
 import axiosInstance from '../utils/axiosInstance';
 import imgUrl from '../utils/imgUrl';
 import { userSelector } from '../features/user/User';
+import Spinner from './Spinner/Spinner';
 
 type Props = {
   show: boolean;
@@ -65,6 +66,8 @@ const Modal2 = (props: Props) => {
   const toastRef = useRef<any>(null);
 
   const { user } = useAppSelector(userSelector);
+
+  const isFetching = useInput(false);
 
   const toggleEditMode = () => dispatch(editModeHandler());
 
@@ -180,7 +183,7 @@ const Modal2 = (props: Props) => {
     }
 
     console.log(validFiles.length);
-
+    isFetching.setInput(true);
     const formData = new FormData();
 
     formData.append('title', title.value);
@@ -216,6 +219,8 @@ const Modal2 = (props: Props) => {
               ? res.data.pdf_url
               : props.publication.pdf_url,
           };
+
+          isFetching.setInput(false);
 
           dispatch(editPublicationHandler(newActivities));
 
@@ -265,6 +270,7 @@ const Modal2 = (props: Props) => {
             className='py-12 transition duration-150 ease-in-out z-10 absolute top-0  bottom-0 right-0 left-0 text-center'
             id='modal'
           >
+            {isFetching.value && <Spinner />}
             <div
               className='bg-[#00000055] fixed z-10 inset-0 '
               onClick={closeModal}

@@ -121,12 +121,14 @@ export const Information = (props: Props) => {
                 content={name.value}
                 editMode={editMode}
                 title='Name'
+                type={'text'}
                 onChange={name.onChange}
               />
               <DynamicInput
                 content={position.value}
                 editMode={editMode}
                 title='Position'
+                type={'text'}
                 onChange={position.onChange}
               />
 
@@ -134,12 +136,14 @@ export const Information = (props: Props) => {
                 content={email.value}
                 editMode={editMode}
                 title='Email'
+                type={'text'}
                 onChange={email.onChange}
               />
 
               <DynamicInput
                 content={phoneNumber.value}
                 editMode={editMode}
+                type={'number'}
                 title='Phone Number'
                 onChange={phoneNumber.onChange}
               />

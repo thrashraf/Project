@@ -228,11 +228,9 @@ const ModalPublication = (props: Props) => {
       return;
     }
 
+    isFetching.setInput(true);
     const formData = new FormData();
 
-    e.preventDefault();
-
-    isFetching.setInput(true);
     formData.append('title', title.value);
     formData.append('description', description.value);
     formData.append('isbn', isbn.value);
@@ -277,6 +275,8 @@ const ModalPublication = (props: Props) => {
         console.log(err);
       });
   };
+
+  console.log(isFetching.value);
 
   useEffect(() => {
     if (!props.publication) return;
