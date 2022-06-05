@@ -155,6 +155,7 @@ export const Document = () => {
                                 signature={item.signature}
                                 kjSignature={item.kjSignature}
                                 kjName={item.kjName}
+                                position={item.position}
                               />
                             }
                             fileName={item.title}

@@ -38,6 +38,7 @@ const VerifyReport = () => {
               signature={report.signature}
               kjSignature={report.kjSignature}
               kjName={report.kjName}
+              position={report.position}
             />
           </PDFViewer>
         </div>
