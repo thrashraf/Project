@@ -319,7 +319,6 @@ const AddEvent = (props: Props) => {
             isShowing={isShowing}
             hide={toggle}
             fileDrop={addFile}
-            content='Accept PNG/JPG/JPEG'
             files={file}
             removeFile={deleteFile}
           />

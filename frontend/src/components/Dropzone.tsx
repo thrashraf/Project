@@ -50,7 +50,8 @@ const Dropzone = ({ isShowing, hide, ...props }: any) => {
           }}
         >
           <i className='fa-solid fa-images fa-5x mb-5' />
-          {props.content}
+          <p>Accept PNG/JPG/JPEG</p>
+          <p>{props.content}</p>
         </div>
 
         <div className='my-5'>
