@@ -276,7 +276,6 @@ export const Sidebar = (props: Props) => {
         <Dropzone
           isShowing={isShowing}
           hide={toggle}
-          content={'Accept PNG, JPEG, JPG'}
           fileDrop={props.fileDrop}
           files={props.files}
           removeFile={props.removeFile}

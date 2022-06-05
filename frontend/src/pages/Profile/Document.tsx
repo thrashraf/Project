@@ -138,7 +138,7 @@ export const Document = () => {
                         }`}
                       >
                         {console.log(item.images)}
-                        <button>
+                        <button className='bg-blue-500 rounded-lg px-5 py-2 text-white'>
                           <PDFDownloadLink
                             document={
                               <Template
