@@ -25,6 +25,7 @@ type Props = {
   signature: string;
   kjSignature: string;
   kjName: string;
+  position: string;
 };
 
 export const Template = (props: Props) => {
@@ -235,7 +236,7 @@ export const Template = (props: Props) => {
                 style={styles.signatureImage}
               />
               <Text style={styles.name}>({props.staffName})</Text>
-              <Text style={styles.signatureContainer}>(Jawatan)</Text>
+              <Text style={styles.signatureContainer}>({props.position})</Text>
             </View>
 
             {props.kjSignature && props.kjName ? (
