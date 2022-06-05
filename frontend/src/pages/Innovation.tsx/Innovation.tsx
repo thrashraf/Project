@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useAppDispatch } from '../../app/hooks';
-import Categories from '../../components/Categories';
 import Footer from '../../components/Footer';
 import Navbar from '../../components/Navbar';
 import { Table } from '../../components/Table';

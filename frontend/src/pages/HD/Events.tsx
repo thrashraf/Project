@@ -5,7 +5,6 @@ import { PasswordModal } from '../Report/PasswordModal';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 // components
 
-import CardTable from '../../components/Cards/CardTable';
 import useModal from '../../hooks/useModal';
 import { userSelector } from '../../features/user/User';
 import api from '../../utils/api';

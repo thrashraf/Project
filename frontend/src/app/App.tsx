@@ -14,7 +14,6 @@ import KJ from '../pages/HD/KJ';
 import VerifyReport from '../pages/HD/VerifyReport';
 import { Profile } from '../pages/Profile/Profile';
 import Activities from '../pages/Activities/Activities';
-import PdfViewer from '../components/pdfViewer';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -39,7 +38,6 @@ function App() {
           {/* protected route */}
           <Route element={<Middleware />}>
             <Route path='/create-report/:id' element={<Report />} />
-            <Route path='/documents/:id' element={<PdfViewer />} />
             <Route path='/admin/*' element={<Admin />} />
             <Route path='/verify-report/:id' element={<VerifyReport />} />
             <Route path='/kj/*' element={<KJ />} />
