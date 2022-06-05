@@ -11,7 +11,6 @@ import {
 } from '../../features/admin/Admin';
 // components
 
-import CardTable from '../../components/Cards/CardTable';
 import useModal from '../../hooks/useModal';
 import { userSelector } from '../../features/user/User';
 import More from '../../components/More';
