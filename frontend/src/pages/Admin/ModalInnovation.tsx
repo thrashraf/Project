@@ -350,21 +350,31 @@ const ModalInnovation = (props: Props) => {
             />
           </section>
           <div className='grid grid-cols-2 gap-5'>
-            <select
-              onChange={Level.onChange}
-              value={Level.value}
-              required
-              className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
-            >
-              {['Level', 'International', 'National']?.map(
-                (item: any, index: number) => (
-                  <option key={index} value={item}>
-                    {item}
-                  </option>
-                )
-              )}
-            </select>
             <div>
+              <p className='my-5 text-sm text-gray-400 ml-1'>
+                Level
+                <span className='text-red-500'>*</span>
+              </p>
+              <select
+                onChange={Level.onChange}
+                value={Level.value}
+                required
+                className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
+              >
+                {['Level', 'International', 'National']?.map(
+                  (item: any, index: number) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  )
+                )}
+              </select>
+            </div>
+            <div>
+              <p className='my-5 text-sm text-gray-400 ml-1'>
+                Medal
+                <span className='text-red-500'>*</span>
+              </p>
               <section className=''>
                 <select
                   onChange={Medal.onChange}

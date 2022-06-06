@@ -13,6 +13,7 @@ import { useParams } from 'react-router-dom';
 import SignatureModal from './SignatureModal';
 import axiosInstance from '../../utils/axiosInstance';
 import imgUrl from '../../utils/imgUrl';
+import axios from 'axios';
 
 const Report = () => {
   const { user }: any = useAppSelector(userSelector);
@@ -206,7 +207,7 @@ const Report = () => {
         formHandler(e);
       })
       .catch((e) => {
-        setMessage(e.response.data.message);
+        setMessage('Please try again');
         setStatus('error');
         toastRef.current.showToast();
       });

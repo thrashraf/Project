@@ -90,7 +90,7 @@ export const List = (props: Props) => {
               {['Title', 'Date', 'Organizer', 'Venue'].map((item: any) => (
                 <th
                   className={
-                    'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-pre-wrap font-semibold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                   }
                 >
                   {item}
@@ -101,12 +101,12 @@ export const List = (props: Props) => {
           <tbody className='shadow-md last:rounded-b-lg'>
             {props.activities?.map((item: any, index: number) => (
               <tr key={index}>
-                <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
                   <span className='font-bold uppercase text-blue-500 hover:underline cursor-pointer'>
                     {item.title}
                   </span>
                 </td>
-                <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
                   {new Date(item.start)
                     .toISOString()
                     .slice(0, 10)
@@ -114,10 +114,10 @@ export const List = (props: Props) => {
                     .reverse()
                     .join('/')}
                 </td>
-                <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
                   {item.organizer}
                 </td>
-                <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
                   {item.venue}
                 </td>
               </tr>

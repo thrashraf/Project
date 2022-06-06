@@ -45,7 +45,7 @@ export default function CardTable(props: Props, { color }: any) {
               <tr>
                 <th
                   className={
-                    'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center ' +
+                    'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-pre-wrap font-semibold text-center ' +
                     (color !== 'light'
                       ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                       : 'bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700')
@@ -55,7 +55,7 @@ export default function CardTable(props: Props, { color }: any) {
                 </th>
                 <th
                   className={
-                    'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center ' +
+                    'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-pre-wrap font-semibold text-center ' +
                     (color !== 'light'
                       ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                       : 'bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700')
@@ -65,7 +65,7 @@ export default function CardTable(props: Props, { color }: any) {
                 </th>
                 <th
                   className={
-                    'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center ' +
+                    'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-pre-wrap font-semibold text-center ' +
                     (color !== 'light'
                       ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                       : 'bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700')
@@ -75,7 +75,7 @@ export default function CardTable(props: Props, { color }: any) {
                 </th>
                 <th
                   className={
-                    'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center ' +
+                    'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-pre-wrap font-semibold text-center ' +
                     (color !== 'light'
                       ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                       : 'bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700')
@@ -85,7 +85,7 @@ export default function CardTable(props: Props, { color }: any) {
                 </th>
                 <th
                   className={
-                    'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center ' +
+                    'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-pre-wrap font-semibold text-center ' +
                     (color !== 'light'
                       ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                       : 'bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700')
@@ -95,7 +95,7 @@ export default function CardTable(props: Props, { color }: any) {
                 </th>
                 <th
                   className={
-                    'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center ' +
+                    'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-pre-wrap font-semibold text-center ' +
                     (color !== 'light'
                       ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                       : 'bg-lightBlue-800 text-lightBlue-300 border-lightBlue-700')
@@ -108,7 +108,7 @@ export default function CardTable(props: Props, { color }: any) {
                 props.reports?.map((report: any, index: number) => {
                   return (
                     <tr key={index} className='text-center'>
-                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
                         <span
                           className='font-bold uppercase text-blue-500 hover:underline cursor-pointer'
                           onClick={() =>
@@ -120,10 +120,10 @@ export default function CardTable(props: Props, { color }: any) {
                           {report.title}
                         </span>
                       </td>
-                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
                         {report.start.split('-').reverse().join('/')}
                       </td>
-                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
                         <i
                           className={`fas fa-circle ${
                             report.status === 'verified'
@@ -135,12 +135,12 @@ export default function CardTable(props: Props, { color }: any) {
                         ></i>{' '}
                         {report.status}
                       </td>
-                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
                         <div className='flex items-center justify-around'>
                           <p>{report.owner}</p>
                         </div>
                       </td>
-                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
                         <div className='flex items-center justify-around max-w-[300px]'>
                           <button
                             type='submit'
@@ -171,7 +171,7 @@ export default function CardTable(props: Props, { color }: any) {
                 })
               ) : (
                 <tr className='text-center flex w-full'>
-                  <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                  <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
                     <span className='font-bold uppercase text-blue-500 hover:underline flex text-center'>
                       No item
                     </span>

@@ -193,22 +193,22 @@ export const Table = ({
                         />
                       </div>
                       <tr key={index} className='text-center '>
-                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4 text-blue-500 hover:underline cursor-pointer'>
+                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-pre-wrap p-4 text-blue-500 hover:underline cursor-pointer'>
                           <p onClick={() => showModal(inno)}>{inno.Title}</p>
                         </td>
-                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4'>
+                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-pre-wrap p-4'>
                           {inno.Name}
                         </td>
-                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4'>
+                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-pre-wrap p-4'>
                           <p>{inno.Program}</p>
                         </td>
-                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4'>
+                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-pre-wrap p-4'>
                           {inno.Level}
                         </td>
-                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4'>
+                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-pre-wrap p-4'>
                           {inno.Medal}
                         </td>
-                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4'>
+                        <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-pre-wrap p-4'>
                           {inno.Year}
                         </td>
                         {user && (
