@@ -13,6 +13,7 @@ import { useParams } from 'react-router-dom';
 import SignatureModal from './SignatureModal';
 import axiosInstance from '../../utils/axiosInstance';
 import imgUrl from '../../utils/imgUrl';
+import axios from 'axios';
 
 const Report = () => {
   const { user }: any = useAppSelector(userSelector);
@@ -206,7 +207,7 @@ const Report = () => {
         formHandler(e);
       })
       .catch((e) => {
-        setMessage(e.response.data.message);
+        setMessage('Please try again');
         setStatus('error');
         toastRef.current.showToast();
       });
@@ -258,8 +259,8 @@ const Report = () => {
     );
     ajk.forEach((ajk: any) => formData.append('ajk', JSON.stringify(ajk)));
     e.preventDefault();
-    await axiosInstance
-      .post('/activities/createReport', formData)
+    await axios
+      .post('http://localhost:5000/api/activities/createReport', formData)
       .then((res) => {
         setMessage('Successful submit report! 🎉');
         setStatus('success');

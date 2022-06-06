@@ -96,7 +96,7 @@ export const Document = () => {
                     <th
                       key={index}
                       className={
-                        'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                        'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-pre-wrap font-semibold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100'
                       }
                     >
                       {item}
@@ -109,15 +109,15 @@ export const Document = () => {
               {document
                 ? document.map((item: any, index: number) => (
                     <tr key={index}>
-                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
                         <span className='font-bold uppercase text-blue-500 hover:underline cursor-pointer'>
                           {item.title}
                         </span>
                       </td>
-                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
                         {item.start.split('-').reverse().join('/')}
                       </td>
-                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
                         <i
                           className={`fas fa-circle ${
                             item.status === 'verified'
@@ -129,11 +129,11 @@ export const Document = () => {
                         ></i>{' '}
                         {item.status}
                       </td>
-                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
                         {item.submitOn}
                       </td>
                       <td
-                        className={`border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ${
+                        className={`border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4 ${
                           tabs === 1 ? 'visible' : 'hidden'
                         }`}
                       >
@@ -167,7 +167,7 @@ export const Document = () => {
                         </button>
                       </td>
                       <td
-                        className={`border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 ${
+                        className={`border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4 ${
                           tabs === 2 ? 'visible' : 'hidden'
                         }`}
                       >
