@@ -24,7 +24,8 @@ app.use(express.static('./public'));
 app.use('/uploads', express.static('uploads'));
 
 //enable cors
-app.use(cors({ credentials: true, origin: 'http://jtmk-sams.com/' }));
+//allow OPTIONS on all resources
+app.use(cors({ credentials: true, origin: 'http://sams-jtmk.com' }));
 
 //support parsing of application/x-www-form-urlencoded post data
 app.use(bodyParser.urlencoded({ extended: true }));
