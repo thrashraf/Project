@@ -259,8 +259,8 @@ const Report = () => {
     );
     ajk.forEach((ajk: any) => formData.append('ajk', JSON.stringify(ajk)));
     e.preventDefault();
-    await axios
-      .post('http://localhost:5000/api/activities/createReport', formData)
+    await axiosInstance
+      .post('/activities/createReport', formData)
       .then((res) => {
         setMessage('Successful submit report! 🎉');
         setStatus('success');
