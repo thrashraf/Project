@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.83286217.css",
+    "main.js": "/static/js/main.94d1bd0f.js",
+    "static/js/787.28cb0dcd.chunk.js": "/static/js/787.28cb0dcd.chunk.js",
+    "static/media/Arimo-Bold.ttf": "/static/media/Arimo-Bold.d8e7ed0afab2e491f174.ttf",
+    "static/media/Arimo-Regular.ttf": "/static/media/Arimo-Regular.d39eacce219de9e28917.ttf",
+    "index.html": "/index.html",
+    "main.83286217.css.map": "/static/css/main.83286217.css.map",
+    "main.94d1bd0f.js.map": "/static/js/main.94d1bd0f.js.map",
+    "787.28cb0dcd.chunk.js.map": "/static/js/787.28cb0dcd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.83286217.css",
+    "static/js/main.94d1bd0f.js"
+  ]
+}
