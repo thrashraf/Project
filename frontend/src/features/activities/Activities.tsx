@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 import { RootState } from '../../app/Store';
 import api from '../../utils/api';
+import axiosInstance from '../../utils/axiosInstance';
 
 interface interfaceState {
   [key: string]: any;
@@ -205,7 +207,7 @@ export const getActivities = createAsyncThunk(
   'activities/getAllUser',
   async (query: any, thunkAPI) => {
     try {
-      const response = await api.get(
+      const response = await axiosInstance.get(
         `/activities/getAllActivities?q=${query}`,
         {
           withCredentials: true,
