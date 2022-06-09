@@ -14,6 +14,7 @@ import { adminSelector } from '../../features/admin/Admin';
 import { innovationSelector } from '../../features/Innovation/Innovation';
 import { publicationSelector } from '../../features/Publication/Publication';
 import { useAppSelector } from '../../app/hooks';
+import { useEffect, useState } from 'react';
 
 ChartJS.register(
   CategoryScale,
@@ -32,20 +33,28 @@ export default function CardLineChart() {
   const { allPublication } = useAppSelector(publicationSelector);
   const { allInnovation } = useAppSelector(innovationSelector);
 
-  const actual = [
-    allPublication?.filter(
-      (item: any) =>
-        new Date(item.year).getFullYear() === new Date().getFullYear()
-    ).length,
-    allInnovation?.filter(
-      (item: any) =>
-        new Date(item.year).getFullYear() === new Date().getFullYear()
-    ).length,
-    activities?.filter(
-      (item: any) =>
-        new Date(item.year).getFullYear() === new Date().getFullYear()
-    ).length,
-  ];
+  const [actual, setActual] = useState<any>(null);
+
+  useEffect(() => {
+    if (activities && allPublication && allInnovation) {
+      setActual([
+        activities?.filter(
+          (item: any) =>
+            new Date(item.end).getFullYear() === new Date().getFullYear()
+        ).length,
+        allPublication?.filter(
+          (item: any) =>
+            new Date(item.year).getFullYear() === new Date().getFullYear()
+        ).length,
+        allInnovation?.filter(
+          (item: any) =>
+            new Date(item.Year).getFullYear() === new Date().getFullYear()
+        ).length,
+      ]);
+    }
+  }, [activities, allInnovation, allPublication]);
+
+  console.log(actual);
 
   const target = [eventKpi, publicationKpi, innovationKpi];
   return (

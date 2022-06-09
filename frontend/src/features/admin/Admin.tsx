@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 import { RootState } from '../../app/Store';
 import api from '../../utils/api';
 import axiosInstance from '../../utils/axiosInstance';
@@ -120,7 +121,7 @@ export const getAllUser = createAsyncThunk(
   'admin/getUsers',
   async (query: string, thunkAPI) => {
     try {
-      const response = await api.get(`/user/getAllUser?q=${query}`, {
+      const response = await axiosInstance.get(`/user/getAllUser?q=${query}`, {
         withCredentials: true,
       });
       let data = await response.data;

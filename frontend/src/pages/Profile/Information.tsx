@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { DynamicInput } from '../../components/DynamicInput';
 import useInput from '../../hooks/useInput';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
@@ -14,6 +14,7 @@ import Dropzone from '../../components/Dropzone';
 import ProfileModal from './ProfileModal';
 import SignatureModal from './SignatureModal';
 import imgUrl from '../../utils/imgUrl';
+import Toast from '../../components/Toast';
 
 type Props = {};
 
@@ -28,14 +29,17 @@ export const Information = (props: Props) => {
   const email = useInput('');
   const phoneNumber = useInput('');
 
+  const message = useInput('');
+  const status = useInput('');
+
+  const toastRef = useRef<any>(null);
+
   // const { isShowing: showUploadSignature, toggle: toggleUploadSignature } =
   //   useModal();
   const { isShowing, toggle } = useModal();
 
   const { isShowing: showSignatureModal, toggle: toggleSignature }: any =
     useModal();
-
-  console.log(showSignatureModal);
 
   const [show, setShow] = useState<boolean>(false);
 
@@ -49,6 +53,14 @@ export const Information = (props: Props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+
+  const validatePhoneNumber = (e: any) => {
+    if (!e.key.match(new RegExp(/[0-9]/g))) {
+      message.setInput('Please insert number only!');
+      status.setInput('error');
+      toastRef.current.showToast();
+    }
+  };
 
   const updateUser = () => {
     const data = {
@@ -67,6 +79,7 @@ export const Information = (props: Props) => {
   return (
     <div>
       <Draw modal={show} setModal={setShow} />
+      <Toast message={message.value} status={status.value} ref={toastRef} />
       <section className='w-full mt-5'>
         <section className='relative'>
           <div className='text-white'>
@@ -146,6 +159,7 @@ export const Information = (props: Props) => {
                 type={'number'}
                 title='Phone Number'
                 onChange={phoneNumber.onChange}
+                validatePhoneNum={validatePhoneNumber}
               />
             </section>
           </div>
@@ -213,7 +227,7 @@ export const Information = (props: Props) => {
               src={user && `${imgUrl}${user.signature}`}
               className={`${
                 editSignature && 'hidden'
-              } w-[150px] h-[100px] object-cover`}
+              } w-[200px] h-[200px] object-cover`}
             />
 
             <button

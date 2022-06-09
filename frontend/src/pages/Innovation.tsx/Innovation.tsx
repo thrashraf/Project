@@ -7,6 +7,7 @@ import { deleteInnovationHandler } from '../../features/Innovation/Innovation';
 import useInput from '../../hooks/useInput';
 import useModal from '../../hooks/useModal';
 import api from '../../utils/api';
+import axiosInstance from '../../utils/axiosInstance';
 import ModalInnovation from '../Admin/ModalInnovation';
 
 export const Innovation = (props: any) => {
@@ -36,7 +37,7 @@ export const Innovation = (props: any) => {
   };
 
   const deletePublicationById = (id: string) => {
-    api
+    axiosInstance
       .delete(`/inno/deleteInnovation?q=${id}`)
       .then((res: any) => {
         if (res.status === 200) {

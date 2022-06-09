@@ -69,7 +69,6 @@ export const List = (props: Props) => {
             );
           }}
           content={() => tableRef.current}
-          documentTitle='Events'
           pageStyle='print'
         />
       </div>
@@ -81,49 +80,51 @@ export const List = (props: Props) => {
             </div>
           </div>
         </div>
-        <table
-          className='items-center w-full bg-transparent border-collapse text-center '
-          ref={tableRef}
-        >
-          <thead>
-            <tr>
-              {['Title', 'Date', 'Organizer', 'Venue'].map((item: any) => (
-                <th
-                  className={
-                    'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-pre-wrap font-semibold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-                  }
-                >
-                  {item}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className='shadow-md last:rounded-b-lg'>
-            {props.activities?.map((item: any, index: number) => (
-              <tr key={index}>
-                <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
-                  <span className='font-bold uppercase text-blue-500 hover:underline cursor-pointer'>
-                    {item.title}
-                  </span>
-                </td>
-                <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
-                  {new Date(item.start)
-                    .toISOString()
-                    .slice(0, 10)
-                    .split('-')
-                    .reverse()
-                    .join('/')}
-                </td>
-                <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
-                  {item.organizer}
-                </td>
-                <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
-                  {item.venue}
-                </td>
+        <div ref={tableRef}>
+          <h1 className='text-xl text-center hidden print:block mb-10'>
+            List of Events
+          </h1>
+          <table className='items-center w-full bg-transparent border-collapse text-center '>
+            <thead>
+              <tr>
+                {['Title', 'Date', 'Organizer', 'Venue'].map((item: any) => (
+                  <th
+                    className={
+                      'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-pre-wrap font-semibold text-center bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+                    }
+                  >
+                    {item}
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className='shadow-md last:rounded-b-lg'>
+              {props.activities?.map((item: any, index: number) => (
+                <tr key={index} className='odd:bg-slate-50'>
+                  <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
+                    <span className='font-bold uppercase text-blue-500 hover:underline cursor-pointer'>
+                      {item.title}
+                    </span>
+                  </td>
+                  <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
+                    {new Date(item.start)
+                      .toISOString()
+                      .slice(0, 10)
+                      .split('-')
+                      .reverse()
+                      .join('/')}
+                  </td>
+                  <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
+                    {item.organizer}
+                  </td>
+                  <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
+                    {item.venue}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );

@@ -39,20 +39,6 @@ export const SideCard = (props: Props) => {
               className='shadow-md mt-10 rounded-lg bg-white relative'
               key={index}
             >
-              {/* <section
-                className='absolute right-2 w-10 h-10 flex justify-end'
-                onMouseEnter={toggleTooltip}
-                onMouseLeave={toggleTooltip}
-              >
-                <div
-                  className={`${
-                    showTooltip ? 'visible' : 'hidden'
-                  } px-3 py-1 bg-slate-600 rounded-lg absolute -top-10 -left-2 w-16 text-white`}
-                >
-                  Edit
-                </div>
-                <More toggle={toggle} isShowing={isShowing} />
-              </section> */}
               <img
                 src={
                   event.banner
