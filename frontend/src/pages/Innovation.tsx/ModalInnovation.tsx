@@ -179,7 +179,7 @@ const ModalInnovation = (props: Props) => {
             id='modal'
           >
             <div
-              className=' bg-opacity-[0.01] bg-black fixed inset-0 '
+              className=' bg-opacity-10 bg-black fixed inset-0 '
               onClick={closeModal}
             />
             <div
