@@ -220,19 +220,19 @@ export const Table = ({
                         <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-pre-wrap p-4 text-blue-500 hover:underline cursor-pointer'>
                           <p onClick={() => showModal(inno)}>{inno.Title}</p>
                         </td>
-                        <td className='border-t-0 px-6 text-justify border-l-0 border-r-0 whitespace-pre-wrap p-4'>
+                        <td className='border-t-0 px-6 text-left border-l-0 border-r-0 whitespace-pre-wrap p-4'>
                           {inno.Description}
                         </td>
-                        <td className='border-t-0 px-6 text-left border-l-0 border-r-0 whitespace-nowrap p-4'>
+                        <td className='border-t-0 px-6 text-left border-l-0 border-r-0 whitespace-pre p-4'>
                           {inno.Name.split('\n').map(
-                            (n: any, index: number) => (
+                            (item: any, index: number) => (
                               <p>
-                                {index + 1}) {n}
+                                {index + 1}) {item}
                               </p>
                             )
                           )}
                         </td>
-                        <td className='border-t-0 px-6 text-left border-l-0 border-r-0 whitespace-pre-wrap p-4'>
+                        <td className='border-t-0 px-6 text-left border-l-0 border-r-0 whitespace-pre p-4'>
                           <p>{inno.Program}</p>
                         </td>
                         <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-pre-wrap p-4'>
