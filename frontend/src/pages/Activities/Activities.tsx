@@ -137,7 +137,7 @@ const Activities = () => {
   }, [filterBy, monthFil, year]);
 
   return (
-    <div className='h-full bg-slate-50'>
+    <div className='h-full '>
       <Navbar />
 
       <section className='h-[400px] absolute inset-0 bg-lightBlue-600' />
