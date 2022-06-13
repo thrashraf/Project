@@ -3,7 +3,8 @@ import { RootState } from '../../app/Store';
 import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 import api from '../../utils/api';
-import url from '../../utils/url';
+
+import axiosInstance from '../../utils/axiosInstance';
 
 interface loginInterface {
   email: string;
@@ -112,23 +113,21 @@ export const signupUser = createAsyncThunk(
   'users/signupUser',
   async ({ userName, userEmail, userPassword }: any, thunkAPI) => {
     try {
-      console.log(userName, userEmail, userPassword);
-      const response = await fetch('/api/user/register', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      // console.log(userName, userEmail, userPassword);
+      const response = await axiosInstance.post(
+        '/user/register',
+        {
           userName,
           userEmail,
           userPassword,
-        }),
-      });
-      let data = await response.json();
+        },
+        { withCredentials: true }
+      );
+      let data = await response.data;
 
       if (response.status === 200) {
         console.log('data', data);
+        return data;
       } else {
         return thunkAPI.rejectWithValue(data);
       }
@@ -143,8 +142,8 @@ export const loginUser = createAsyncThunk(
   'users/login',
   async ({ email, password }: loginInterface, thunkAPI) => {
     try {
-      const response = await axios.post(
-        `${url}/api/user/login`,
+      const response = await axiosInstance.post(
+        `/user/login`,
         {
           email,
           password,
@@ -169,7 +168,7 @@ export const refreshUser = createAsyncThunk(
   'users/token',
   async (_, thunkAPI: any) => {
     try {
-      const response = await axios.get(`${url}/api/user/token`, {
+      const response = await axiosInstance.get(`/user/token`, {
         withCredentials: true,
       });
       let data = await response.data;
@@ -192,7 +191,7 @@ export const updateUserInformation = createAsyncThunk(
   async ({ id, name, email, position, phoneNumber }: any, thunkAPI: any) => {
     try {
       const response = await api.post(
-        `${url}/api/user/updateInformation`,
+        `/user/updateInformation`,
         {
           id,
           name,

@@ -15,9 +15,12 @@ import {
 } from '../features/Publication/Publication';
 import Dropzone from './Dropzone';
 import axios from 'axios';
-import url from '../utils/url';
 import DropZoneFile from './DropZoneFile';
 import Toast from './Toast';
+import axiosInstance from '../utils/axiosInstance';
+import imgUrl from '../utils/imgUrl';
+import { userSelector } from '../features/user/User';
+import Spinner from './Spinner/Spinner';
 
 type Props = {
   show: boolean;
@@ -61,6 +64,10 @@ const Modal2 = (props: Props) => {
   const prevPdf = useInput('');
 
   const toastRef = useRef<any>(null);
+
+  const { user } = useAppSelector(userSelector);
+
+  const isFetching = useInput(false);
 
   const toggleEditMode = () => dispatch(editModeHandler());
 
@@ -176,7 +183,7 @@ const Modal2 = (props: Props) => {
     }
 
     console.log(validFiles.length);
-
+    isFetching.setInput(true);
     const formData = new FormData();
 
     formData.append('title', title.value);
@@ -190,8 +197,8 @@ const Modal2 = (props: Props) => {
     filePDF.forEach((file: any) => formData.append('upload', file));
 
     const id = publication.id;
-    axios
-      .post(`${url}/api/publication/updatePublication?q=${id}`, formData, {
+    axiosInstance
+      .post(`/publication/updatePublication?q=${id}`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {
@@ -213,6 +220,8 @@ const Modal2 = (props: Props) => {
               : props.publication.pdf_url,
           };
 
+          isFetching.setInput(false);
+
           dispatch(editPublicationHandler(newActivities));
 
           //toggle modal
@@ -230,8 +239,8 @@ const Modal2 = (props: Props) => {
   const deletePublication = () => {
     const id = publication.id;
 
-    axios
-      .post(`${url}/api/publication/deletePublication?q=${id}`, {
+    axiosInstance
+      .post(`/publication/deletePublication?q=${id}`, {
         withCredentials: true,
       })
       .then((res: any) => {
@@ -261,6 +270,7 @@ const Modal2 = (props: Props) => {
             className='py-12 transition duration-150 ease-in-out z-10 absolute top-0  bottom-0 right-0 left-0 text-center'
             id='modal'
           >
+            {isFetching.value && <Spinner />}
             <div
               className='bg-[#00000055] fixed z-10 inset-0 '
               onClick={closeModal}
@@ -273,7 +283,7 @@ const Modal2 = (props: Props) => {
                 <div className='w-full flex justify-center text-green-400 mb-4'></div>
                 <div className='relative'>
                   <img
-                    src={`/file/${publication?.img_url[imageIndex]}`}
+                    src={`${imgUrl}${publication?.img_url[imageIndex]}`}
                     className=' rounded-lg mb-10 w-[400px] h-[200px] object-contain'
                   ></img>
                   <div className='w-full absolute top-20 flex justify-between'>
@@ -397,7 +407,10 @@ const Modal2 = (props: Props) => {
                   className={`flex items-center mr-3 justify-center w-full ${hideEditComp}`}
                 >
                   <button className='focus:outline-none transition duration-150 ease-in-out hover:bg-indigo-600 bg-blue-500 rounded text-white px-4 sm:px-8 py-2 text-xs sm:text-sm'>
-                    <a href={`/file/${publication?.pdf_url}`} target='_blank'>
+                    <a
+                      href={`${imgUrl}${publication?.pdf_url}`}
+                      target='_blank'
+                    >
                       View Details
                     </a>
                   </button>
@@ -442,11 +455,14 @@ const Modal2 = (props: Props) => {
                 </div>
                 <div className='cursor-pointer absolute top-0 left-3 mt-4 mr-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-500 transition duration-150 ease-in-out'>
                   <section className='fixed w-10'>
-                    <More
-                      isShowing={isShowing}
-                      toggle={toggle}
-                      deleteItem={deletePublication}
-                    />
+                    {user ? (
+                      <More
+                        isShowing={isShowing}
+                        toggle={toggle}
+                        deleteItem={deletePublication}
+                      />
+                    ) : null}
+
                     <DropZoneFile
                       isShowing={showDropFile}
                       hide={toggleDropFile}

@@ -52,9 +52,7 @@ const Sidebar = ({ sidebar }: any) => {
                   <Link
                     className='md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0'
                     to='/'
-                  >
-                    Notus React
-                  </Link>
+                  ></Link>
                 </div>
                 <div className='w-6/12 flex justify-end'>
                   <button
@@ -73,7 +71,7 @@ const Sidebar = ({ sidebar }: any) => {
                 <input
                   type='text'
                   placeholder='Search'
-                  className='border-0 px-3 py-2 h-12 border border-solid  border-blueGray-500 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-base leading-snug shadow-none outline-none focus:outline-none w-full font-normal'
+                  className='border-0 px-3 py-2 h-12  border-solid  border-blueGray-500 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-base leading-snug shadow-none outline-none focus:outline-none w-full font-normal'
                 />
               </div>
             </form>

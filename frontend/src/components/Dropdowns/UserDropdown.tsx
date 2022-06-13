@@ -4,7 +4,8 @@ import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { clearState, userSelector } from '../../features/user/User';
 import { createPopper } from '@popperjs/core';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
+import imgUrl from '../../utils/imgUrl';
 
 const UserDropdown = () => {
   // dropdown props
@@ -33,8 +34,8 @@ const UserDropdown = () => {
   const { user }: any = useAppSelector(userSelector);
 
   const logoutHandler = () => {
-    axios
-      .delete(`${url}/api/user/logout`, { withCredentials: true })
+    axiosInstance
+      .delete(`/user/logout`, { withCredentials: true })
       .then((res) => {
         console.log(res);
         dispatch(clearState());
@@ -63,7 +64,7 @@ const UserDropdown = () => {
               className='w-full rounded-full align-middle border-none shadow-lg'
               src={
                 user?.profile_picture
-                  ? `/file/${user.profile_picture}`
+                  ? `${imgUrl}${user.profile_picture}`
                   : '/assets/dummy_profile.png'
               }
             />
@@ -91,7 +92,7 @@ const UserDropdown = () => {
         </Link>
         <a
           className={
-            'text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700'
+            'text-sm py-2 px-4 cursor-pointer font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700'
           }
           onClick={(e) => navigate('/profile/account')}
         >

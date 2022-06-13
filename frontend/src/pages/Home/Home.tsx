@@ -19,22 +19,20 @@ export const Home = () => {
   }, [user]);
 
   const background = {
-    backgroundImage: "url(" + "/assets/bg.jpg" + ")",
+    backgroundImage: 'url(' + '/assets/bg.jpg' + ')',
   };
   return (
     <>
       <Navbar fixed />
-       <section className=" pt-16 items-center bg-cover overflow-x-hidden flex h-screen w-full"
-       style={background}>
-        
-         
-        <div className="container mx-auto items-center flex flex-wrap"
-        // style={background}
-        >
-          <div className="w-full md:w-8/12 lg:ml-[100px] lg:w-6/12 xl:w-6/12 px-4">
-            <div className="pt-32 sm:pt-0">
-              <h2 className="font-semibold z-10 text-4xl text-[#4c4c4c]">
-                Staff Activity Management System 
+      <section
+        className=' pt-16 items-center bg-cover overflow-x-hidden flex h-full w-full'
+        style={background}
+      >
+        <div className='container mx-auto items-center flex flex-wrap'>
+          <div className='w-full md:w-8/12 lg:ml-[100px] lg:w-6/12 xl:w-6/12 px-4'>
+            <div className=''>
+              <h2 className='font-semibold z-10 text-4xl text-[#4c4c4c]'>
+                Staff Activity Management System
               </h2>
               <p className='mt-4 text-lg leading-relaxed text-[#a7adba]'>
                 We simplify the reporting process for staff and make it easier
@@ -53,16 +51,9 @@ export const Home = () => {
             </div>
           </div>
         </div>
-
-        
-        {/* <img
-          className="absolute object-cover top-0 b-auto right-0 pt-16  -mt-48 sm:mt-0 w-full h-screen"
-          src="/assets/bg.jpg"
-          alt="..."
-        /> */}
       </section>
 
-      <section className='mt-48 md:mt-40 pb-40 relative bg-[#d5deea]'>
+      <section className='pb-40 relative bg-[#d5deea]'>
         <div
           className='-mt-20 top-0 bottom-auto left-0 right-0 w-full absolute h-20'
           style={{ transform: 'translateZ(0)' }}
@@ -85,7 +76,7 @@ export const Home = () => {
         <div className='container mx-auto'>
           <div className='flex flex-wrap items-center'>
             <div className='w-10/12 md:w-6/12 lg:w-4/12 px-12 md:px-4 mr-auto ml-auto -mt-32'>
-              <div className='relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg bg-blue-500'>
+              <div className='relative flex flex-col min-w-0 break-words  w-full mb-6 shadow-lg rounded-lg bg-blue-500'>
                 <img
                   alt='...'
                   src='https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80'
@@ -233,15 +224,15 @@ export const Home = () => {
                       </a>
                     </div>
                     <div className='bg-emerald-500 shadow-lg rounded-lg text-center p-8 mt-8'>
-                    <a href='/activities' target='_blank'>
-                      <img
-                        alt='...'
-                        className='shadow-md rounded-full max-w-full w-16 mx-auto p-2 bg-white'
-                        src='/assets/planner.png'
-                      />
-                      <p className='text-lg text-white mt-4 font-semibold'>
-                        Events
-                      </p>
+                      <a href='/activities' target='_blank'>
+                        <img
+                          alt='...'
+                          className='shadow-md rounded-full max-w-full w-16 mx-auto p-2 bg-white'
+                          src='/assets/planner.png'
+                        />
+                        <p className='text-lg text-white mt-4 font-semibold'>
+                          Events
+                        </p>
                       </a>
                     </div>
                   </a>
@@ -344,61 +335,6 @@ export const Home = () => {
                 }}
                 src='/assets/diges_psmza.png'
               />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className='block relative  bg-[#B5D1EA]'>
-        <div className='container mx-auto'>
-          <div className='justify-center flex flex-wrap'>
-            <div className='w-full lg:mb-[30px] lg:w-12/12 px-4  -mt-24'>
-              <div className='flex flex-wrap'>
-                <div className='w-full lg:w-4/12 px-4'>
-                  <h5 className='text-xl font-semibold pb-4 text-center'>
-                    Login Page
-                  </h5>
-                  <Link to='/login'>
-                    <div className=' hover:scale-110 relative flex flex-col min-w-0 break-words bg-white w-full mb-2 shadow-lg rounded-lg ease-linear transition-all duration-150'>
-                      <img
-                        alt='...'
-                        className='align-middle border-none max-w-full h-auto rounded-lg'
-                        src='/assets/login1.png'
-                      />
-                    </div>
-                  </Link>
-                </div>
-
-                <div className='w-full lg:w-4/12 px-4'>
-                  <h5 className='text-xl font-semibold pb-4 text-center'>
-                    Events
-                  </h5>
-                  <Link to='/activities'>
-                    <div className='hover:scale-110 relative flex flex-col min-w-0 break-words bg-white w-full mb-2 shadow-lg rounded-lg ease-linear transition-all duration-150'>
-                      <img
-                        alt='...'
-                        className='align-middle border-none max-w-full h-auto rounded-lg'
-                        src='/assets/events.png'
-                      />
-                    </div>
-                  </Link>
-                </div>
-
-                <div className='w-full lg:w-4/12 px-4'>
-                  <h5 className='text-xl font-semibold pb-4 text-center'>
-                    HomePage
-                  </h5>
-                  <Link to='/'>
-                    <div className='hover:scale-110 relative flex flex-col min-w-0 break-words bg-white w-full mb-2 shadow-lg rounded-lg ease-linear transition-all duration-150'>
-                      <img
-                        alt='...'
-                        className='align-middle border-none max-w-full h-auto rounded-lg'
-                        src='assets/Homepage.png'
-                      />
-                    </div>
-                  </Link>
-                </div>
-              </div>
             </div>
           </div>
         </div>

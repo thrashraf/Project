@@ -4,7 +4,7 @@ import { createPopper } from '@popperjs/core';
 import axios from 'axios';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { userSelector, clearState } from '../features/user/User';
-import url from '../utils/url';
+import axiosInstance from '../utils/axiosInstance';
 
 const IndexDropdown = () => {
   // dropdown props
@@ -28,8 +28,8 @@ const IndexDropdown = () => {
   };
 
   const logoutHandler = () => {
-    axios
-      .delete(`${url}/api/user/logout`, { withCredentials: true })
+    axiosInstance
+      .delete(`/user/logout`, { withCredentials: true })
       .then((res) => {
         console.log(res);
         dispatch(clearState());

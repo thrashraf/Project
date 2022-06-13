@@ -8,7 +8,7 @@ type Props = {};
 
 const Publication = (props: Props) => {
   const background = {
-    backgroundImage: 'url(' + '/assets/bookshelves.jpg' + ')',
+    backgroundImage: 'url(' + '/assets/wood.jpg' + ')',
   };
 
   const dispatch = useAppDispatch();
@@ -28,9 +28,10 @@ const Publication = (props: Props) => {
   };
   return (
     <div
-      className=' px-20 pb-16 pt-6 right-0 left-0 lg:h-full w-full bg-no-repeat bg-cover absolute'
+      className=' px-20 pb-16 pt-6 right-0 left-0 h-screen w-full bg-no-repeat bg-cover absolute'
       style={background}
     >
+      <h1 className=' text-2xl text-bold text-white '>Publication</h1>
       <CardPublication viewPublicationHandler={viewPublicationHandler} />
 
       {/* <AddPublication isShowing={eShow} toggle={setEShow} /> */}

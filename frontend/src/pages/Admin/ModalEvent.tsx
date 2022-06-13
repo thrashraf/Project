@@ -4,16 +4,15 @@ import Dropzone from '../../components/Dropzone';
 import useInput from '../../hooks/useInput';
 import useModal from '../../hooks/useModal';
 import Toast from '../../components/Toast';
-import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   addNewActivities,
   editActivitiesHandler,
 } from '../../features/activities/Activities';
-import { userSelector } from '../../features/user/User';
 import { unitArray } from '../../constant/unitArray';
 import api from '../../utils/api';
 import { organizerArray } from '../../constant/organizerArray';
+import axiosInstance from '../../utils/axiosInstance';
 
 type Props = {
   isShowing: boolean;
@@ -109,8 +108,8 @@ const AddEvent = (props: Props) => {
     );
     e.preventDefault();
 
-    api
-      .post('/api/activities/createActivities', formData)
+    axiosInstance
+      .post('/activities/createActivities', formData)
       .then((res: any) => {
         console.log(res);
         if (res.status === 200) {
@@ -195,11 +194,8 @@ const AddEvent = (props: Props) => {
     formData.append('venue', venue.value);
     formData.append('organizer', organizer.value);
 
-    api
-      .post(
-        `/api/activities/updateActivities?q=${props.activities.id}`,
-        formData
-      )
+    axiosInstance
+      .post(`/activities/updateActivities?q=${props.activities.id}`, formData)
       .then((res: any) => {
         if (res.status === 200) {
           console.log('ok');
@@ -240,7 +236,7 @@ const AddEvent = (props: Props) => {
   }, [props.mode, props.activities]);
 
   return (
-    <ModalContainer isShowing={props.isShowing} toggle={props.toggle}>
+    <ModalContainer isShowing={props.isShowing} hide={props.toggle}>
       <Toast status='error' message={message} ref={toastRef} />
       <div className='relative mx-auto bg-white max-w-lg rounded-lg shadow z-50 '>
         <form

@@ -4,7 +4,6 @@ import Dropzone from '../../components/Dropzone';
 import useInput from '../../hooks/useInput';
 import useModal from '../../hooks/useModal';
 import Toast from '../../components/Toast';
-import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   addPublication,
@@ -14,7 +13,9 @@ import { userSelector } from '../../features/user/User';
 import api from '../../utils/api';
 import DropZoneFile from '../../components/DropZoneFile';
 import generateYears from '../../utils/generateYears';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
+import Spinner from '../../components/Spinner/Spinner';
+import axios from 'axios';
 
 type Props = {
   isShowing: boolean;
@@ -34,6 +35,8 @@ const ModalPublication = (props: Props) => {
   const isbn = useInput('');
   const staff = useInput('');
   const year = useInput('');
+
+  const isFetching = useInput(false);
 
   //for toast
   const [status, setStatus] = useState<string>('');
@@ -80,6 +83,9 @@ const ModalPublication = (props: Props) => {
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
     console.log(validTypes.indexOf(file.type) === -1);
     if (validTypes.indexOf(file.type) === -1) {
+      setMessage('only accept JPEG, JPG & PNG');
+      setStatus('error');
+      toastRef.current.showToast();
       return false;
     }
     return true;
@@ -125,6 +131,9 @@ const ModalPublication = (props: Props) => {
     const validTypes = ['application/pdf'];
     console.log(validTypes.indexOf(file.type) === -1);
     if (validTypes.indexOf(file.type) === -1) {
+      setMessage('only accept PDF');
+      setStatus('error');
+      toastRef.current.showToast();
       return false;
     }
     return true;
@@ -178,6 +187,8 @@ const ModalPublication = (props: Props) => {
     }
     e.preventDefault();
 
+    isFetching.setInput(true);
+
     const formData = new FormData();
 
     formData.append('title', title.value);
@@ -189,13 +200,14 @@ const ModalPublication = (props: Props) => {
     file.forEach((image: any) => formData.append('upload', image));
     filePDF.forEach((file: any) => formData.append('upload', file));
 
-    axios
-      .post(`${url}/api/publication/createPublication`, formData, {
+    axiosInstance
+      .post(`/publication/createPublication`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {
         if (res.status === 200) {
           const newPublication = {
+            id: res.data.id,
             Title: title.value,
             Description: description.value,
             isbn: isbn.value,
@@ -206,6 +218,7 @@ const ModalPublication = (props: Props) => {
           };
 
           dispatch(addPublication(newPublication));
+          isFetching.setInput(false);
           props.toggle();
         }
       })
@@ -221,9 +234,8 @@ const ModalPublication = (props: Props) => {
       return;
     }
 
+    isFetching.setInput(true);
     const formData = new FormData();
-
-    e.preventDefault();
 
     formData.append('title', title.value);
     formData.append('description', description.value);
@@ -237,8 +249,8 @@ const ModalPublication = (props: Props) => {
 
     const id = props.publication.id;
 
-    axios
-      .post(`${url}/api/publication/updatePublication?q=${id}`, formData, {
+    axiosInstance
+      .post(`/publication/updatePublication?q=${id}`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {
@@ -260,6 +272,7 @@ const ModalPublication = (props: Props) => {
           };
           dispatch(editPublicationHandler(newActivities));
           //toggle modal
+          isFetching.setInput(false);
           props.toggle();
           // //toggle more button
         }
@@ -268,6 +281,8 @@ const ModalPublication = (props: Props) => {
         console.log(err);
       });
   };
+
+  console.log(isFetching.value);
 
   useEffect(() => {
     if (!props.publication) return;
@@ -308,6 +323,7 @@ const ModalPublication = (props: Props) => {
           <div>
             <section className='my-5 grid grid-cols-2 gap-5'>
               <section>
+                {isFetching.value && <Spinner />}
                 <p className='my-1 text-sm text-gray-400 ml-1'>
                   Title
                   <span className='text-red-500'>*</span>
@@ -368,7 +384,7 @@ const ModalPublication = (props: Props) => {
               <div>
                 <section className=''>
                   <p className='my-1 text-sm text-gray-400 ml-1'>
-                    Staff<span className='text-red-500'>*</span>
+                    Author<span className='text-red-500'>*</span>
                   </p>
 
                   <textarea
@@ -425,9 +441,7 @@ const ModalPublication = (props: Props) => {
               hide={toggleDropzone}
               fileDrop={fileDrop}
               files={validFiles}
-              content={
-                'Add cover as the first value and backpage as the second value'
-              }
+              content={'Add Cover Page and Back Cover'}
               removeFile={removeFile}
             />
             <DropZoneFile
@@ -435,6 +449,7 @@ const ModalPublication = (props: Props) => {
               hide={toggleDropFile}
               fileDrop={fileDropPDF}
               fileSize={fileSize}
+              content={'Add full document/book'}
               files={filePDF}
               removeFile={removeFilePDF}
             />

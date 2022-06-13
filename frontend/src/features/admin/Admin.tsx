@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 import { RootState } from '../../app/Store';
 import api from '../../utils/api';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
 
 export const adminSlice = createSlice({
   name: 'Admin',
@@ -17,6 +18,9 @@ export const adminSlice = createSlice({
     //? - this to filter the array data
     queryUser: '',
     filterDataUser: [],
+    eventKpi: 0,
+    publicationKpi: 0,
+    innovationKpi: 0,
   },
   reducers: {
     addUser: (state: any, action: any) => {
@@ -64,6 +68,13 @@ export const adminSlice = createSlice({
       state.queryUser = action.payload;
       state.showFilterUser = !state.showFilterUser;
     },
+
+    updateNewKpi: (state: any, action: any) => {
+      console.log(action.payload);
+      state.eventKpi = action.payload.event;
+      state.publicationKpi = action.payload.publication;
+      state.innovationKpi = action.payload.innovation;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllUser.fulfilled, (state, { payload }: any) => {
@@ -75,6 +86,20 @@ export const adminSlice = createSlice({
       state.isFetching = true;
     });
     builder.addCase(getAllUser.rejected, (state, { payload }: any) => {
+      state.isFetching = false;
+      state.isError = true;
+    });
+    builder.addCase(getKpi.fulfilled, (state, { payload }: any) => {
+      state.isFetching = false;
+      state.isSuccess = true;
+      state.eventKpi = payload[0].event;
+      state.publicationKpi = payload[0].publication;
+      state.innovationKpi = payload[0].innovation;
+    });
+    builder.addCase(getKpi.pending, (state) => {
+      state.isFetching = true;
+    });
+    builder.addCase(getKpi.rejected, (state, { payload }: any) => {
       state.isFetching = false;
       state.isError = true;
     });
@@ -96,7 +121,7 @@ export const getAllUser = createAsyncThunk(
   'admin/getUsers',
   async (query: string, thunkAPI) => {
     try {
-      const response = await api.get(`${url}/api/user/getAllUser?q=${query}`, {
+      const response = await axiosInstance.get(`/user/getAllUser?q=${query}`, {
         withCredentials: true,
       });
       let data = await response.data;
@@ -115,11 +140,31 @@ export const getAllUser = createAsyncThunk(
   }
 );
 
+export const getKpi = createAsyncThunk('admin/getKpi', async (_, thunkAPI) => {
+  try {
+    const response = await axiosInstance.get(`/kpi/getKpi`, {
+      withCredentials: true,
+    });
+    let data = await response.data;
+
+    if (response.status === 200) {
+      console.log(data, response);
+      return data;
+    } else {
+      return thunkAPI.rejectWithValue(data);
+    }
+  } catch (e: any) {
+    console.log(e);
+    console.log('Error', e.response.data);
+    return thunkAPI.rejectWithValue(e.response.data);
+  }
+});
+
 export const deleteUser = createAsyncThunk(
   '/api/admin/deleteActivities',
   async (id: string, thunkAPI) => {
     try {
-      const response = await api.delete(`${url}/api/admin/deleteUser?q=${id}`, {
+      const response = await api.delete(`/admin/deleteUser?q=${id}`, {
         withCredentials: true,
       });
       let data = await response.data;
@@ -143,6 +188,7 @@ export const {
   handleFilter,
   setFilterHandler,
   addUser,
+  updateNewKpi,
 } = adminSlice.actions;
 export const adminSelector = (state: RootState) => state.admin;
 export default adminSlice.reducer;

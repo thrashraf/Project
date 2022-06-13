@@ -42,9 +42,7 @@ export const PersonalSideBar = () => {
       </aside>
 
       <aside
-        className={`  my-5  ${
-          role && role.value !== 'staff' ? 'hidden' : 'lg:flex'
-        }   border border-gray-300 rounded-xl px-3 py-3 cursor-pointer ${
+        className={`  my-5 hidden lg:flex border border-gray-300 rounded-xl px-3 py-3 cursor-pointer ${
           location.pathname === '/profile/documents'
             ? 'bg-[#eff6ff] border-[1.5px] border-solid border-[#0079fe]'
             : null

@@ -6,6 +6,7 @@ import {
   activitiesSelector,
   getActivities,
 } from '../../features/activities/Activities';
+import { adminSelector } from '../../features/admin/Admin';
 import {
   getInnovation,
   innovationSelector,
@@ -15,10 +16,8 @@ import {
   publicationSelector,
 } from '../../features/Publication/Publication';
 import useInput from '../../hooks/useInput';
-import url from '../../utils/url';
 
 // components
-
 import CardStats from '../Cards/CardStats';
 
 export default function HeaderStats() {
@@ -30,17 +29,10 @@ export default function HeaderStats() {
     dispatch(getAllPublication());
     dispatch(getActivities(''));
     dispatch(getInnovation(''));
-
-    axios
-      .get(`${url}/api/user/amountUser`, { withCredentials: true })
-      .then((res) => {
-        console.log(res);
-        amount.setInput(res.data.amount);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }, []);
+
+  const { eventKpi, publicationKpi, innovationKpi }: any =
+    useAppSelector(adminSelector);
 
   const { activities } = useAppSelector(activitiesSelector);
   const { allPublication } = useAppSelector(publicationSelector);
@@ -53,55 +45,66 @@ export default function HeaderStats() {
         <div className='px-4 md:px-10 mx-auto w-full'>
           <div>
             {/* Card stats */}
-            <div className='flex flex-wrap'>
+            <div className='flex flex-wrap justify-center'>
               <div className='w-full lg:w-6/12 xl:w-3/12 px-4'>
                 <CardStats
                   statSubtitle='Events'
-                  statTitle={activities?.length}
-                  statArrow='up'
-                  statPercent='3.48'
+                  statTitle={
+                    activities?.filter(
+                      (item: any) =>
+                        new Date(item.end).getFullYear() ===
+                        new Date().getFullYear()
+                    ).length
+                  }
+                  kpi={eventKpi}
                   statPercentColor='text-emerald-500'
-                  statDescripiron='Since last month'
-                  statIconName='far fa-chart-bar'
+                  statIconName='fa-solid fa-calendar'
                   statIconColor='bg-red-500'
                 />
               </div>
               <div className='w-full lg:w-6/12 xl:w-3/12 px-4'>
                 <CardStats
                   statSubtitle='Publication'
-                  statTitle={allPublication?.length}
-                  statArrow=' '
-                  statPercent='3.48'
+                  statTitle={
+                    allPublication?.filter(
+                      (item: any) =>
+                        new Date(item.year).getFullYear() ===
+                        new Date().getFullYear()
+                    ).length
+                  }
+                  kpi={publicationKpi}
                   statPercentColor='text-red-500'
-                  statDescripiron='Since last week'
-                  statIconName='fas fa-chart-pie'
+                  statIconName='fa-solid fa-book'
                   statIconColor='bg-orange-500'
                 />
               </div>
               <div className='w-full lg:w-6/12 xl:w-3/12 px-4'>
                 <CardStats
                   statSubtitle='Innovation'
-                  statTitle={allInnovation?.length}
-                  statArrow='down'
-                  statPercent='1.10'
+                  statTitle={
+                    allInnovation?.filter(
+                      (item: any) =>
+                        new Date(item.Year).getFullYear() ===
+                        new Date().getFullYear()
+                    ).length
+                  }
+                  kpi={innovationKpi}
                   statPercentColor='text-orange-500'
-                  statDescripiron='Since yesterday'
-                  statIconName='fas fa-percent'
+                  statIconName='fa-solid fa-lightbulb'
                   statIconColor='bg-pink-500'
                 />
               </div>
-              <div className='w-full lg:w-6/12 xl:w-3/12 px-4'>
+              {/* <div className='w-full lg:w-6/12 xl:w-3/12 px-4'>
                 <CardStats
                   statSubtitle='Users'
                   statTitle={amount?.value}
                   statArrow='up'
                   statPercent='12'
                   statPercentColor='text-emerald-500'
-                  statDescripiron='Since last month'
                   statIconName='fas fa-users'
                   statIconColor='bg-lightBlue-500'
                 />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

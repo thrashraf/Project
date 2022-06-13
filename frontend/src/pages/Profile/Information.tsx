@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { DynamicInput } from '../../components/DynamicInput';
 import useInput from '../../hooks/useInput';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
@@ -13,6 +13,8 @@ import useModal from '../../hooks/useModal';
 import Dropzone from '../../components/Dropzone';
 import ProfileModal from './ProfileModal';
 import SignatureModal from './SignatureModal';
+import imgUrl from '../../utils/imgUrl';
+import Toast from '../../components/Toast';
 
 type Props = {};
 
@@ -27,14 +29,17 @@ export const Information = (props: Props) => {
   const email = useInput('');
   const phoneNumber = useInput('');
 
+  const message = useInput('');
+  const status = useInput('');
+
+  const toastRef = useRef<any>(null);
+
   // const { isShowing: showUploadSignature, toggle: toggleUploadSignature } =
   //   useModal();
   const { isShowing, toggle } = useModal();
 
   const { isShowing: showSignatureModal, toggle: toggleSignature }: any =
     useModal();
-
-  console.log(showSignatureModal);
 
   const [show, setShow] = useState<boolean>(false);
 
@@ -48,6 +53,14 @@ export const Information = (props: Props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+
+  const validatePhoneNumber = (e: any) => {
+    if (!e.key.match(new RegExp(/[0-9]/g))) {
+      message.setInput('Please insert number only!');
+      status.setInput('error');
+      toastRef.current.showToast();
+    }
+  };
 
   const updateUser = () => {
     const data = {
@@ -66,6 +79,7 @@ export const Information = (props: Props) => {
   return (
     <div>
       <Draw modal={show} setModal={setShow} />
+      <Toast message={message.value} status={status.value} ref={toastRef} />
       <section className='w-full mt-5'>
         <section className='relative'>
           <div className='text-white'>
@@ -87,7 +101,7 @@ export const Information = (props: Props) => {
               className='w-[100px] h-[100px] rounded-full  absolute top-32 left-5 object-cover'
               src={`${
                 user && user.profile_picture
-                  ? `/file/${user?.profile_picture}`
+                  ? `${imgUrl}${user?.profile_picture}`
                   : '/assets/dummy_profile.png'
               }`}
               alt=''
@@ -120,12 +134,14 @@ export const Information = (props: Props) => {
                 content={name.value}
                 editMode={editMode}
                 title='Name'
+                type={'text'}
                 onChange={name.onChange}
               />
               <DynamicInput
                 content={position.value}
                 editMode={editMode}
                 title='Position'
+                type={'text'}
                 onChange={position.onChange}
               />
 
@@ -133,14 +149,17 @@ export const Information = (props: Props) => {
                 content={email.value}
                 editMode={editMode}
                 title='Email'
+                type={'text'}
                 onChange={email.onChange}
               />
 
               <DynamicInput
                 content={phoneNumber.value}
                 editMode={editMode}
+                type={'number'}
                 title='Phone Number'
                 onChange={phoneNumber.onChange}
+                validatePhoneNum={validatePhoneNumber}
               />
             </section>
           </div>
@@ -205,10 +224,10 @@ export const Information = (props: Props) => {
             }`}
           >
             <img
-              src={user && `/file/${user.signature}`}
+              src={user && `${imgUrl}${user.signature}`}
               className={`${
                 editSignature && 'hidden'
-              } w-[150px] h-[100px] object-cover`}
+              } w-[200px] h-[200px] object-cover`}
             />
 
             <button

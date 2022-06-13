@@ -3,14 +3,13 @@ import ModalContainer from '../../components/ModalContainer';
 import Dropzone from '../../components/Dropzone';
 import useModal from '../../hooks/useModal';
 import Toast from '../../components/Toast';
-import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   userSelector,
   updateProfile,
   refreshUser,
 } from '../../features/user/User';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
 
 type Props = {
   isShowing: boolean;
@@ -97,8 +96,8 @@ const AddEvent = (props: Props) => {
     formData.append('email', user?.email);
     validFiles.forEach((image: any) => formData.append('upload', image));
 
-    axios
-      .post(`${url}/api/user/uploadProfile`, formData, {
+    axiosInstance
+      .post(`/user/uploadProfile`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {

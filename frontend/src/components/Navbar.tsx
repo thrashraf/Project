@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import NavDrop from '../components/NavDrop';
 import { useNavigate } from 'react-router-dom';
 import UserDropdown from './Dropdowns/UserDropdown';
+import imgUrl from '../utils/imgUrl';
 
 type Props = {};
 
@@ -74,7 +75,7 @@ export default function Navbar(props: any) {
                       className='w-10 h-10 rounded-full object-cover'
                       src={`${
                         user.profile_picture
-                          ? `/file/${user.profile_picture}`
+                          ? `${imgUrl}${user.profile_picture}`
                           : '/assets/dummy_profile.png'
                       }`}
                       alt=''

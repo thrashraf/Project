@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../app/Store';
 import api from '../../utils/api';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
 
 interface interfaceState {
   [key: string]: any;
@@ -29,7 +29,7 @@ export const publicationSlice = createSlice({
   initialState,
   reducers: {
     addPublication: (state: any, action: any) => {
-      console.log(action.payload)
+      console.log(action.payload);
       state.allPublication = [...state.allPublication, action.payload];
     },
 
@@ -100,8 +100,8 @@ export const getAllPublication = createAsyncThunk(
   '/api/Publication/getAllPublication',
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get(
-        `${url}/api/publication/getAllPublication`,
+      const response = await axiosInstance.get(
+        `/publication/getAllPublication`,
         {
           withCredentials: true,
         }

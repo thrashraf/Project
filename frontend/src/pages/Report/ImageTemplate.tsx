@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import imgUrl from '../../utils/imgUrl';
 
 type Props = {
   isPhoto: boolean;
@@ -75,12 +76,12 @@ export const ImageTemplate = (props: Props) => {
                     <i className='fa-solid fa-xmark fa-2xl' />
                   </section>
                   <img
-                    src={`/file/${image}`}
+                    src={`${imgUrl}${image}`}
                     alt='pho'
                     key={index}
                     className='w-[400px] h-[200px] object-cover m-auto'
                   />
-                  <p className='mt-[5px] text-center'>Rajah {index + 1.0}</p>
+                  <p className='mt-[5px] text-center'>Rajah {indexArr + 1.0}</p>
                   {console.log(props.status)}
                 </section>
               ))}

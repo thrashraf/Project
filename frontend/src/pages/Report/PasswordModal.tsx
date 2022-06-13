@@ -2,6 +2,7 @@ import React from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { userSelector } from '../../features/user/User';
 import ModalContainer from '../../components/ModalContainer';
+import imgUrl from '../../utils/imgUrl';
 
 type Props = {
   showModal: boolean;
@@ -52,7 +53,7 @@ export const PasswordModal = (props: Props) => {
                   <img
                     src={
                       user?.profile_picture
-                        ? `/file/${user.profile_picture}`
+                        ? `${imgUrl}${user.profile_picture}`
                         : '/assets/dummy_profile.png'
                     }
                     className='w-[50px] h-[50px] rounded-full object-cover mt-5 mb-7'

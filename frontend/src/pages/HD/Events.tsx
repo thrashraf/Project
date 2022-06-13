@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import DeclineModal from './DeclineModal';
 import Toast from '../../components/Toast';
@@ -6,7 +5,6 @@ import { PasswordModal } from '../Report/PasswordModal';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 // components
 
-import CardTable from '../../components/Cards/CardTable';
 import useModal from '../../hooks/useModal';
 import { userSelector } from '../../features/user/User';
 import api from '../../utils/api';

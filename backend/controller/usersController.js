@@ -118,7 +118,7 @@ export const loginUser = async (req, res) => {
     if (userInfo.role === 'admin') {
       route = '/admin/users';
     } else if (userInfo.role === 'hd') {
-      route = '/kj/report';
+      route = '/kj/dashboard';
     } else {
       route = '/';
     }
@@ -223,11 +223,11 @@ export const uploadImage = async (req, res) => {
     const files = req.file;
     console.log(files);
 
-    const [updateUser] = await user.updateSignature(files.filename, email);
+    const [updateUser] = await user.updateSignature(files.key, email);
 
     res.status(200).json({
       message: 'Successful update',
-      signature: files.filename,
+      signature: files.key,
     });
   } catch (error) {
     console.log(error);
@@ -263,7 +263,7 @@ export const uploadProfilePicture = async (req, res) => {
     const files = req.file;
     console.log(files);
 
-    const [updateUser] = await user.updatePicture(files.filename, email);
+    const [updateUser] = await user.updatePicture(files.key, email);
 
     console.log(updateUser);
     res.status(200).json({

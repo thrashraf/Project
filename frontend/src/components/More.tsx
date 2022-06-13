@@ -5,6 +5,8 @@ import {
   editModeHandler,
 } from '../features/activities/Activities';
 import { activitiesSelector } from '../features/activities/Activities';
+import useModal from '../hooks/useModal';
+import DeleteModal from './DeleteModal';
 
 const More = ({
   isShowing,
@@ -18,6 +20,8 @@ const More = ({
   const dispatch = useAppDispatch();
 
   const { isSuccess } = useAppSelector(activitiesSelector);
+
+  const { isShowing: deleteModal, toggle: toggleDelete } = useModal();
 
   const deleteEvents = () => {
     // dispatch(deleteActivities(id));
@@ -52,9 +56,14 @@ const More = ({
             </li>
             <li
               className='cursor-pointer hover:bg-slate-200 py-1 px-5'
-              onClick={() => deleteEvents()}
+              onClick={toggleDelete}
             >
               Delete
+              <DeleteModal
+                isShowing={deleteModal}
+                hide={toggleDelete}
+                deleteItem={() => deleteEvents()}
+              />
             </li>
           </ul>
         </section>

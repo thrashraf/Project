@@ -5,6 +5,7 @@ import More from '../../components/More';
 import { activitiesSelector } from '../../features/activities/Activities';
 import { userSelector } from '../../features/user/User';
 import useModal from '../../hooks/useModal';
+import imgUrl from '../../utils/imgUrl';
 
 type Props = {
   activities: any;
@@ -38,24 +39,10 @@ export const SideCard = (props: Props) => {
               className='shadow-md mt-10 rounded-lg bg-white relative'
               key={index}
             >
-              {/* <section
-                className='absolute right-2 w-10 h-10 flex justify-end'
-                onMouseEnter={toggleTooltip}
-                onMouseLeave={toggleTooltip}
-              >
-                <div
-                  className={`${
-                    showTooltip ? 'visible' : 'hidden'
-                  } px-3 py-1 bg-slate-600 rounded-lg absolute -top-10 -left-2 w-16 text-white`}
-                >
-                  Edit
-                </div>
-                <More toggle={toggle} isShowing={isShowing} />
-              </section> */}
               <img
                 src={
                   event.banner
-                    ? `/file/${event.banner}`
+                    ? `${imgUrl}${event.banner}`
                     : '/assets/default-placeholder.jpg'
                 }
                 alt={event.title}
@@ -81,18 +68,19 @@ export const SideCard = (props: Props) => {
                     <span className='bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800'>
                       {event.organizer}
                     </span>
-                    {new Date().toISOString().slice(0, 10) >= event.end && (
-                      <Link to={`/create-report/${event.id}`}>
-                        <button
-                          className={`items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-500 rounded-lg focus:outline-none focus:ring-blue-300 ${
-                            user ? 'visible' : 'hidden'
-                          } `}
-                        >
-                          Create Report
-                          <i className='ml-2 fa-solid fa-arrow-right-long' />
-                        </button>
-                      </Link>
-                    )}
+                    {new Date().toISOString().slice(0, 10) >= event.end &&
+                      !event.content && (
+                        <Link to={`/create-report/${event.id}`}>
+                          <button
+                            className={`items-center py-2 px-3 text-sm font-medium text-center text-white bg-blue-500 rounded-lg focus:outline-none focus:ring-blue-300 ${
+                              user ? 'visible' : 'hidden'
+                            } `}
+                          >
+                            Create Report
+                            <i className='ml-2 fa-solid fa-arrow-right-long' />
+                          </button>
+                        </Link>
+                      )}
                   </section>
                 </section>
               </section>

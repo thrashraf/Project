@@ -10,9 +10,10 @@ import { useNavigate } from 'react-router-dom';
 import Toast from '../../components/Toast';
 import useModal from '../../hooks/useModal';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import SignatureModal from './SignatureModal';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
+import imgUrl from '../../utils/imgUrl';
+import axios from 'axios';
 
 const Report = () => {
   const { user }: any = useAppSelector(userSelector);
@@ -60,8 +61,8 @@ const Report = () => {
   //get specific activities and put in state
   useEffect(() => {
     const fetchData = async () => {
-      await axios
-        .get(`${url}/api/activities/getActivitiesById?q=${id}`, {
+      await axiosInstance
+        .get(`/activities/getActivitiesById?q=${id}`, {
           withCredentials: true,
         })
         .then((res) => {
@@ -199,14 +200,14 @@ const Report = () => {
     const reqPassword = password;
 
     await api
-      .post('/api/user/auth', { email, reqPassword })
+      .post('/user/auth', { email, reqPassword })
       .then((res) => {
         e.preventDefault();
         console.log(res);
         formHandler(e);
       })
       .catch((e) => {
-        setMessage(e.response.data.message);
+        setMessage('Please try again');
         setStatus('error');
         toastRef.current.showToast();
       });
@@ -258,8 +259,8 @@ const Report = () => {
     );
     ajk.forEach((ajk: any) => formData.append('ajk', JSON.stringify(ajk)));
     e.preventDefault();
-    await api
-      .post('/api/activities/createReport', formData)
+    await axiosInstance
+      .post('/activities/createReport', formData)
       .then((res) => {
         setMessage('Successful submit report! 🎉');
         setStatus('success');
@@ -359,7 +360,7 @@ const Report = () => {
                 <p>Disediakan oleh: </p>
                 <div className=' border-b-2 border-dotted border-black w-[80px] mt-2 h-[30px]'>
                   <img
-                    src={user.signature && `/uploads/${user.signature}`}
+                    src={user.signature && `${imgUrl}${user.signature}`}
                     alt='signature'
                     className='object-cover h-[50px] mx-auto'
                   />

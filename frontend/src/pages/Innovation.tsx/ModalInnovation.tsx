@@ -14,8 +14,8 @@ import {
   deletePublicationHandler,
 } from '../../features/Publication/Publication';
 import Dropzone from '../../components/Dropzone';
-import axios from 'axios';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
+import imgUrl from '../../utils/imgUrl';
 
 type Props = {
   show: boolean;
@@ -111,8 +111,8 @@ const ModalInnovation = (props: Props) => {
 
     const id = publication.id;
 
-    axios
-      .post(`${url}/api/publication/updatePublication?q=${id}`, formData, {
+    axiosInstance
+      .post(`/publication/updatePublication?q=${id}`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {
@@ -147,8 +147,8 @@ const ModalInnovation = (props: Props) => {
 
   const deletePublication = () => {
     const id = publication.id;
-    axios
-      .post(`${url}/api/publication/deletePublication?q=${id}`, {
+    axiosInstance
+      .post(`/publication/deletePublication?q=${id}`, {
         withCredentials: true,
       })
       .then((res: any) => {
@@ -190,7 +190,7 @@ const ModalInnovation = (props: Props) => {
                 <div className='w-full flex justify-center text-green-400 mb-4'></div>
                 <div>
                   <img
-                    src={`/file/${props.innovation?.img_url}`}
+                    src={`${imgUrl}${props.innovation?.img_url}`}
                     className=' rounded-lg mb-10 w-[400px] h-[200px] object-contain'
                   ></img>
                 </div>
@@ -221,7 +221,7 @@ const ModalInnovation = (props: Props) => {
                     }`}
                   >
                     <a
-                      href={`/file/${props.innovation?.pdf_url}`}
+                      href={`${imgUrl}${props.innovation?.pdf_url}`}
                       target='_blank'
                     >
                       View Details

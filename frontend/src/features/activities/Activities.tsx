@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 import { RootState } from '../../app/Store';
 import api from '../../utils/api';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
 
 interface interfaceState {
   [key: string]: any;
@@ -206,8 +207,8 @@ export const getActivities = createAsyncThunk(
   'activities/getAllUser',
   async (query: any, thunkAPI) => {
     try {
-      const response = await api.get(
-        `${url}/api/activities/getAllActivities?q=${query}`,
+      const response = await axiosInstance.get(
+        `/activities/getAllActivities?q=${query}`,
         {
           withCredentials: true,
         }
@@ -232,12 +233,9 @@ export const getMonthActivities = createAsyncThunk(
   'activities/getMonthActivities',
   async (_, thunkAPI) => {
     try {
-      const response = await api.get(
-        `${url}/api/activities/getAllActivities?q=`,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await api.get(`/activities/getAllActivities?q=`, {
+        withCredentials: true,
+      });
       let data = await response.data;
 
       if (response.status === 200) {
@@ -259,7 +257,7 @@ export const deleteActivities = createAsyncThunk(
   async (id: string, thunkAPI) => {
     try {
       const response = await api.delete(
-        `${url}/api/activities/deleteActivities?q=${id}`,
+        `/activities/deleteActivities?q=${id}`,
         {
           withCredentials: true,
         }

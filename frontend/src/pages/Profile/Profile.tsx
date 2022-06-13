@@ -24,20 +24,12 @@ export const Profile = (props: Props) => {
         <section className='col-span-4 w-full lg:relative lg:left-80'>
           <Routes>
             <Route element={<Middleware />}>
-              {user?.role !== 'staff' ? (
-                <>
-                  <Route index element={<Information />} />
-                  <Route path='account' element={<Information />} />
-                  <Route path='privacy' element={<Privacy />} />
-                </>
-              ) : (
-                <>
-                  <Route index element={<Information />} />
-                  <Route path='account' element={<Information />} />
-                  <Route path='privacy' element={<Privacy />} />
-                  <Route path='documents' element={<Document />} />
-                </>
-              )}
+              <>
+                <Route index element={<Information />} />
+                <Route path='account' element={<Information />} />
+                <Route path='privacy' element={<Privacy />} />
+                <Route path='documents' element={<Document />} />
+              </>
             </Route>
           </Routes>
         </section>

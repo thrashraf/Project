@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import Toast from '../../components/Toast';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -12,12 +11,13 @@ import {
 } from '../../features/admin/Admin';
 // components
 
-import CardTable from '../../components/Cards/CardTable';
 import useModal from '../../hooks/useModal';
 import { userSelector } from '../../features/user/User';
 import More from '../../components/More';
 import Modal from './Modal';
 import useInput from '../../hooks/useInput';
+import imgUrl from '../../utils/imgUrl';
+import DeleteModal from '../../components/DeleteModal';
 
 export default function Users() {
   const {
@@ -34,6 +34,8 @@ export default function Users() {
 
   const [userDetail, setUserDetail] = useState<any>();
   const mode = useInput('');
+
+  const { isShowing: deleteModal, toggle: toggleDelete } = useModal();
 
   useEffect(() => {
     const fetch = async () => {
@@ -134,7 +136,7 @@ export default function Users() {
                       <th
                         key={index}
                         className={
-                          'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center g-blueGray-50 text-blueGray-500 border-blueGray-100'
+                          'px-6 align-middle border border-solid py-3  uppercase border-l-0 border-r-0 whitespace-pre-wrap font-semibold text-center g-blueGray-50 text-blueGray-500 border-blueGray-100'
                         }
                       >
                         {item}
@@ -146,30 +148,33 @@ export default function Users() {
                   {allUsers && allUsers.length > 0 ? (
                     allUsers?.map((user: any, index: number) => {
                       return (
-                        <tr key={index} className='text-center relative'>
-                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                        <tr
+                          key={index}
+                          className='text-center relative odd:bg-slate-100'
+                        >
+                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-pre-wrap p-4'>
                             <span className='font-bold uppercase text-blue-500 hover:underline cursor-pointer'>
                               {user.name}
                             </span>
                           </td>
-                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-pre-wrap p-4'>
                             {user.email}
                           </td>
-                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-pre-wrap p-4'>
                             {user.role}
                           </td>
-                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-pre-wrap p-4'>
                             <p>
                               {user.phone_number
                                 ? user.phone_number
                                 : 'Not Set'}
                             </p>
                           </td>
-                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-pre-wrap p-4'>
                             <img
                               src={
                                 user?.profile_picture
-                                  ? `/file/${user.profile_picture}`
+                                  ? `${imgUrl}${user.profile_picture}`
                                   : '/assets/defaultProfile.jpg'
                               }
                               alt=''
@@ -195,16 +200,23 @@ export default function Users() {
                                 <section className='bg-slate-50 absolute -left-32 w-[120px] z-50'>
                                   <ul>
                                     <li
-                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5'
+                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5 '
                                       onClick={edit}
                                     >
                                       Edit
                                     </li>
                                     <li
-                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5'
-                                      onClick={() => deleteUserById(user.id)}
+                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5 '
+                                      onClick={toggleDelete}
                                     >
                                       Delete
+                                      <DeleteModal
+                                        isShowing={deleteModal}
+                                        hide={toggleDelete}
+                                        deleteItem={() =>
+                                          deleteUserById(user.id)
+                                        }
+                                      />
                                     </li>
                                   </ul>
                                 </section>
@@ -216,7 +228,7 @@ export default function Users() {
                     })
                   ) : (
                     <tr className='text-center flex'>
-                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-pre-wrap p-4'>
                         <span className='font-bold uppercase text-blue-500 hover:underline cursor-pointer'>
                           No item
                         </span>

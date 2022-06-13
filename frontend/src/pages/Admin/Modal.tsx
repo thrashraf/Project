@@ -4,12 +4,11 @@ import Dropzone from '../../components/Dropzone';
 import useInput from '../../hooks/useInput';
 import useModal from '../../hooks/useModal';
 import Toast from '../../components/Toast';
-import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { addUser, updateUserHandler } from '../../features/admin/Admin';
 import { userSelector } from '../../features/user/User';
 import api from '../../utils/api';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
 
 type Props = {
   isShowing: boolean;
@@ -88,8 +87,8 @@ const Modal = (props: Props) => {
     formData.append('img_url', props.user.profile_picture);
     file.forEach((image: any) => formData.append('upload', image));
 
-    axios
-      .post(`${url}/api/admin/updateUser`, formData, { withCredentials: true })
+    axiosInstance
+      .post(`/admin/updateUser`, formData, { withCredentials: true })
       .then((res: any) => {
         if (res.status === 200) {
           const newActivities = {

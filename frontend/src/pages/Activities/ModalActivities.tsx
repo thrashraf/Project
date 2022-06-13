@@ -14,13 +14,13 @@ import useInput from '../../hooks/useInput';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Dropzone from '../../components/Dropzone';
-import axios from 'axios';
 import { unitArray } from '../../constant/unitArray';
 import { userSelector } from '../../features/user/User';
 import { Link } from 'react-router-dom';
-import url from '../../utils/url';
 import { organizerArray } from '../../constant/organizerArray';
 import Toast from '../../components/Toast';
+import axiosInstance from '../../utils/axiosInstance';
+import imgUrl from '../../utils/imgUrl';
 
 type Props = {
   showActivity: boolean;
@@ -143,8 +143,8 @@ export const ModalActivities = (props: Props) => {
 
     isFetching = true;
 
-    axios
-      .post(`${url}/api/activities/updateActivities?q=${id}`, formData, {
+    axiosInstance
+      .post(`/activities/updateActivities?q=${id}`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {
@@ -197,7 +197,6 @@ export const ModalActivities = (props: Props) => {
           {/* show when delete and update events */}
           {isFetching && <Spinner />}
           {/* show when delete and update events */}
-          {console.log(detailActivities.userId, user.id)}
           <div className='flex flex-col'>
             <section className='relative'>
               {detailActivities.userId === user?.id && (
@@ -225,7 +224,7 @@ export const ModalActivities = (props: Props) => {
                 <img
                   src={
                     detailActivities.banner
-                      ? `/file/${detailActivities.banner}`
+                      ? `${imgUrl}${detailActivities.banner}`
                       : '/assets/default-placeholder.jpg'
                   }
                   alt={detailActivities.title}

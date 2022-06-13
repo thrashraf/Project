@@ -27,7 +27,7 @@ export const createPublication = async (req, res) => {
         ? files.filter((images) => images.mimetype.slice(0, 5) === 'image')
         : null;
 
-    const images = filterImages.map((item) => item.filename);
+    const images = filterImages.map((item) => item.key);
     console.log(images);
 
     //filter pdf
@@ -35,7 +35,6 @@ export const createPublication = async (req, res) => {
       files.length >= 0
         ? files.filter((images) => images.mimetype.slice(0, 5) !== 'image')
         : null;
-    console.log(pdf);
 
     const [activitiesCreated] = await publication.createPublication(
       id,
@@ -45,13 +44,14 @@ export const createPublication = async (req, res) => {
       staff,
       year,
       images,
-      pdf[0]?.filename
+      pdf[0]?.key
     );
 
     return res.status(200).json({
       message: 'successful',
+      id: id,
       image_url: files.length > 0 ? images : null,
-      pdf_url: pdf[0]?.filename,
+      pdf_url: pdf[0]?.key,
       id,
     });
   } catch (error) {
@@ -77,7 +77,7 @@ export const updatePublication = async (req, res) => {
         ? files.filter((images) => images.mimetype.slice(0, 5) === 'image')
         : null;
 
-    const images = filterImages.map((item) => item.filename);
+    const images = filterImages.map((item) => item.key);
     console.log('images: ' + images);
     console.log('Prev Images: ' + prevImages);
 
@@ -99,7 +99,7 @@ export const updatePublication = async (req, res) => {
         staff,
         year,
         images.length > 0 ? images : prevImages,
-        pdf.length > 0 ? pdf[0].filename : prevPdf
+        pdf.length > 0 ? pdf[0].key : prevPdf
       );
 
       if (updatedPublication.affectedRows !== 1) {
@@ -127,7 +127,7 @@ export const updatePublication = async (req, res) => {
     return res.status(200).json({
       message: 'successful',
       image_url: images.length > 0 ? images : null,
-      pdf_url: pdf.length > 0 ? pdf[0].filename : null,
+      pdf_url: pdf.length > 0 ? pdf[0].key : null,
     });
   } catch (error) {
     console.log(error);

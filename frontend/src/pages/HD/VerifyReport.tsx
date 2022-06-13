@@ -19,7 +19,6 @@ const VerifyReport = () => {
       {report !== null ? (
         <div className='w-full h-full bg-black'>
           <PDFViewer
-            showToolbar={true}
             style={{
               width: '100%',
               height: '100%',
@@ -39,6 +38,7 @@ const VerifyReport = () => {
               signature={report.signature}
               kjSignature={report.kjSignature}
               kjName={report.kjName}
+              position={report.position}
             />
           </PDFViewer>
         </div>

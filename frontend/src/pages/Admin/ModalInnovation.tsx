@@ -4,7 +4,6 @@ import Dropzone from '../../components/Dropzone';
 import useInput from '../../hooks/useInput';
 import useModal from '../../hooks/useModal';
 import Toast from '../../components/Toast';
-import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   addInnovationHandler,
@@ -14,7 +13,9 @@ import api from '../../utils/api';
 import DropZoneFile from '../../components/DropZoneFile';
 import generateYears from '../../utils/generateYears';
 import { refreshUser } from '../../features/user/User';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
+import axios from 'axios';
+import Spinner from '../../components/Spinner/Spinner';
 
 type Props = {
   isShowing: boolean;
@@ -33,6 +34,8 @@ const ModalInnovation = (props: Props) => {
   const Year = useInput('');
   const prevImages = useInput('');
   const prevPdf = useInput('');
+
+  const isFetching = useInput(false);
 
   const [status, setStatus] = useState<string>('');
   const [message, setMessage] = useState<string>('');
@@ -67,6 +70,9 @@ const ModalInnovation = (props: Props) => {
   const validateFile = (file: any) => {
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
     if (validTypes.indexOf(file.type) === -1) {
+      setMessage('only accept JPEG, JPG & PNG');
+      setStatus('error');
+      toastRef.current.showToast();
       return false;
     }
     return true;
@@ -108,11 +114,13 @@ const ModalInnovation = (props: Props) => {
   const validateFilePDF = (file: any) => {
     const validTypes = ['application/pdf'];
     if (validTypes.indexOf(file.type) === -1) {
+      setMessage('only accept PDF');
+      setStatus('error');
+      toastRef.current.showToast();
       return false;
     }
     return true;
   };
-
 
   //to remove file
   const removeFilePDF = (name: any) => {
@@ -125,7 +133,13 @@ const ModalInnovation = (props: Props) => {
   };
 
   const createInnovation = (e: any) => {
-    if (file.length < 1 || filePDF.length < 1) {
+    if (
+      file.length < 1 ||
+      filePDF.length < 1 ||
+      !Year.value ||
+      !Level.value ||
+      !Medal.value
+    ) {
       setMessage('Please insert all the field');
       setStatus('error');
       toastRef.current.showToast();
@@ -143,6 +157,8 @@ const ModalInnovation = (props: Props) => {
       return;
     }
 
+    isFetching.setInput(true);
+
     formData.append('Title', Title.value);
     formData.append('Description', Description.value);
     formData.append('Name', Name.value);
@@ -153,13 +169,14 @@ const ModalInnovation = (props: Props) => {
     file?.forEach((image: any) => formData.append('upload', image));
     filePDF.forEach((file: any) => formData.append('upload', file));
 
-    axios
-      .post(`${url}/api/inno/createInnovation`, formData, {
+    axiosInstance
+      .post(`/inno/createInnovation`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {
         if (res.status === 200) {
           const newInnovation = {
+            id: res.data.id,
             Title: Title.value,
             Description: Description.value,
             Name: Name.value,
@@ -171,6 +188,19 @@ const ModalInnovation = (props: Props) => {
           };
           console.log(newInnovation);
           dispatch(addInnovationHandler(newInnovation));
+
+          Title.setInput('');
+          Description.setInput('');
+          Name.setInput('');
+          Program.setInput('');
+          Level.setInput('');
+          Medal.setInput('');
+          Year.setInput('');
+          setFile([]);
+          setFilePDF([]);
+
+          isFetching.setInput(false);
+
           props.toggle();
         }
       })
@@ -198,8 +228,10 @@ const ModalInnovation = (props: Props) => {
 
     const id = props.innovation.id;
 
-    axios
-      .post(`${url}/api/inno/updateInnovation?q=${id}`, formData, {
+    isFetching.setInput(true);
+
+    axiosInstance
+      .post(`/inno/updateInnovation?q=${id}`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {
@@ -220,11 +252,21 @@ const ModalInnovation = (props: Props) => {
               ? res.data.pdf_url
               : props.innovation.pdf_url,
           };
+
+          Title.setInput('');
+          Description.setInput('');
+          Name.setInput('');
+          Program.setInput('');
+          Level.setInput('');
+          Medal.setInput('');
+          Year.setInput('');
+
           setFile([]);
           setFilePDF([]);
 
           dispatch(editInnovationHandler(newInnovation));
           //toggle modal
+          isFetching.setInput(false);
           props.toggle();
         }
       })
@@ -235,6 +277,8 @@ const ModalInnovation = (props: Props) => {
 
   useEffect(() => {
     if (!props.innovation) return;
+
+    console.log(props.innovation);
     if (props.mode === 'add') {
       Title.setInput('');
       Description.setInput('');
@@ -263,183 +307,192 @@ const ModalInnovation = (props: Props) => {
       hide={props.toggle}
     >
       <div className='relative mx-auto bg-white max-w-lg rounded-lg shadow z-50 p-5'>
-        <form
-          onSubmit={
-            props.mode === 'add'
-              ? (e) => createInnovation(e)
-              : (e) => updateCurrentInnovation(e)
-          }
-        >
-          <div>
-            <section className='my-5 grid grid-cols-2 gap-5'>
-              <section>
-                <p className='my-1 text-sm text-gray-400 ml-1'>
-                  Title
-                  <span className='text-red-500'>*</span>
-                </p>
-                <input
-                  type='text'
-                  value={Title.value}
-                  onChange={Title.onChange}
-                  required
-                  className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
-                />
-              </section>
-              <section className=''>
-                <p className='my-1 text-smactivitiesSlice text-gray-400 ml-1'>
-                  Year
-                  <span className='text-red-500'>*</span>
-                </p>
-                <select
-                  onChange={Year.onChange}
-                  value={Year.value}
-                  required
-                  className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
-                >
-                  {years?.map((item: any, index: number) => (
-                    <option key={index} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
-              </section>
-            </section>
-            <section className=''>
+        <div>
+          {isFetching.value ? <Spinner /> : null}
+          <section className='my-5 grid grid-cols-2 gap-5'>
+            <section>
               <p className='my-1 text-sm text-gray-400 ml-1'>
-                Description
+                Title
                 <span className='text-red-500'>*</span>
               </p>
-              <textarea
-                value={Description.value}
+              <input
+                type='text'
+                value={Title.value}
+                onChange={Title.onChange}
                 required
-                onChange={Description.onChange}
-                rows={3}
                 className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
               />
             </section>
-            <div className='grid grid-cols-2 gap-5'>
-            <select
-                  onChange={Level.onChange}
-                  value={Level.value}
-                  required
-                  className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
-                >
-                  {['Level','International','National','Others']?.map((item: any, index: number) => (
+            <section className=''>
+              <p className='my-1 text-smactivitiesSlice text-gray-400 ml-1'>
+                Year
+                <span className='text-red-500'>*</span>
+              </p>
+              <select
+                onChange={Year.onChange}
+                value={Year.value}
+                required
+                className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
+              >
+                {years?.map((item: any, index: number) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+            </section>
+          </section>
+          <section className=''>
+            <p className='my-1 text-sm text-gray-400 ml-1'>
+              Description
+              <span className='text-red-500'>*</span>
+            </p>
+            <textarea
+              value={Description.value}
+              required
+              onChange={Description.onChange}
+              rows={3}
+              className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
+            />
+          </section>
+          <div className='grid grid-cols-2 gap-5'>
+            <div>
+              <p className='my-5 text-sm text-gray-400 ml-1'>
+                Level
+                <span className='text-red-500'>*</span>
+              </p>
+              <select
+                onChange={Level.onChange}
+                value={Level.value}
+                required
+                className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
+              >
+                {['Level', 'International', 'National']?.map(
+                  (item: any, index: number) => (
                     <option key={index} value={item}>
                       {item}
                     </option>
-                  ))}
-                </select>
-              <div>
-                <section className=''>
+                  )
+                )}
+              </select>
+            </div>
+            <div>
+              <p className='my-5 text-sm text-gray-400 ml-1'>
+                Medal
+                <span className='text-red-500'>*</span>
+              </p>
+              <section className=''>
                 <select
                   onChange={Medal.onChange}
                   value={Medal.value}
                   required
                   className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
                 >
-                  {['Medal','Gold','Silver','Bronze']?.map((item: any, index: number) => (
-                    <option key={index} value={item}>
-                      {item}
-                    </option>
-                  ))}
+                  {['Medal', 'Gold', 'Silver', 'Bronze']?.map(
+                    (item: any, index: number) => (
+                      <option key={index} value={item}>
+                        {item}
+                      </option>
+                    )
+                  )}
                 </select>
-                </section>
-              </div>
-              <div>
-                <section className=''>
-                  <p className='my-1 text-sm text-gray-400 ml-1'>
-                    Program<span className='text-red-500'>*</span>
-                  </p>
-
-                  <textarea
-                    rows={4}
-                    value={Program.value}
-                    required
-                    onChange={Program.onChange}
-                    className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
-                  />
-                </section>
-              </div>
+              </section>
+            </div>
+            <div>
               <section className=''>
                 <p className='my-1 text-sm text-gray-400 ml-1'>
-                  Name<span className='text-red-500'>*</span>
+                  Program<span className='text-red-500'>*</span>
                 </p>
 
                 <textarea
                   rows={4}
-                  value={Name.value}
+                  value={Program.value}
                   required
-                  onChange={Name.onChange}
+                  onChange={Program.onChange}
                   className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
                 />
               </section>
             </div>
+            <section className=''>
+              <p className='my-1 text-sm text-gray-400 ml-1'>
+                Name<span className='text-red-500'>*</span>
+              </p>
 
-            <div className='flex justify-between'>
-              <section
-                className='mt-5 flex  w-[200px] items-center cursor-pointer 
-              text-slate-400 hover:text-blue-500
-            '
-                onClick={toggleDropzone}
-              >
-                <div className='p-5 rounded-md bg-blue-50 '>
-                  <i className='fa-solid fa-images fa-2xl'></i>
-                </div>
-                <p className='ml-5 text-sm'>Upload Images</p>
-              </section>
-              <section
-                className='mt-5 flex  w-[200px] items-center cursor-pointer 
-              text-slate-400 hover:text-blue-500
-            '
-                onClick={toggleDropFile}
-              >
-                <div className='p-5 rounded-md bg-blue-50 '>
-                  <i className='fa-solid fa-file-pdf fa-2xl'></i>
-                </div>
-                <p className='ml-5 text-sm'>Upload File</p>
-              </section>
-            </div>
-            <div className='flex justify-end'>
-              <section className=' flex justify-end mt-10'>
-                <button
-                  className='flex hover:bg-black hover:text-white px-3 py-2  rounded-lg mr-5'
-                  onClick={props.toggle}
-                >
-                  Cancel
-                </button>
-                <button
-                  className='flex bg-blue-500 px-3 py-2 text-white rounded-lg'
-                  type='submit'
-                >
-                  {props.mode === 'add' ? 'Create' : 'Update'}
-                </button>
-              </section>
-            </div>
-            <Dropzone
-              isShowing={showDropzone}
-              hide={toggleDropzone}
-              fileDrop={fileDrop}
-              files={file}
-              content={
-                'Add Cover Image'
-              }
-              removeFile={removeFile}
-            />
-            <DropZoneFile
-              isShowing={showDropFile}
-              hide={toggleDropFile}
-              fileDrop={fileDropPDF}
-              fileSize={fileSize}
-              files={filePDF}
-              content={
-                'Add Innovation Cerificate'
-              }
-              removeFile={removeFilePDF}
-            />
-            <Toast ref={toastRef} status={status} message={message} />
+              <textarea
+                rows={4}
+                value={Name.value}
+                required
+                onChange={Name.onChange}
+                className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
+              />
+            </section>
           </div>
-        </form>
+
+          <div className='flex justify-between'>
+            <section
+              className='mt-5 flex  w-[200px] items-center cursor-pointer 
+              text-slate-400 hover:text-blue-500
+            '
+              onClick={toggleDropzone}
+            >
+              <div className='p-5 rounded-md bg-blue-50 '>
+                <i className='fa-solid fa-images fa-2xl'></i>
+              </div>
+              <p className='ml-5 text-sm'>Upload Images</p>
+            </section>
+            <section
+              className='mt-5 flex  w-[200px] items-center cursor-pointer 
+              text-slate-400 hover:text-blue-500
+            '
+              onClick={toggleDropFile}
+            >
+              <div className='p-5 rounded-md bg-blue-50 '>
+                <i className='fa-solid fa-file-pdf fa-2xl'></i>
+              </div>
+              <p className='ml-5 text-sm'>Upload File</p>
+            </section>
+          </div>
+          <div className='flex justify-end'>
+            <section className=' flex justify-end mt-10'>
+              <button
+                className='flex hover:bg-black hover:text-white px-3 py-2  rounded-lg mr-5'
+                onClick={props.toggle}
+              >
+                Cancel
+              </button>
+              <button
+                className='flex bg-blue-500 px-3 py-2 text-white rounded-lg'
+                type='submit'
+                onClick={
+                  props.mode === 'add'
+                    ? (e) => createInnovation(e)
+                    : (e) => updateCurrentInnovation(e)
+                }
+              >
+                {props.mode === 'add' ? 'Create' : 'Update'}
+              </button>
+            </section>
+          </div>
+          <Dropzone
+            isShowing={showDropzone}
+            hide={toggleDropzone}
+            fileDrop={fileDrop}
+            files={file}
+            content={'Add Cover Image'}
+            removeFile={removeFile}
+          />
+          <DropZoneFile
+            isShowing={showDropFile}
+            hide={toggleDropFile}
+            fileDrop={fileDropPDF}
+            fileSize={fileSize}
+            files={filePDF}
+            content={'Add Innovation Cerificate'}
+            removeFile={removeFilePDF}
+          />
+
+          <Toast ref={toastRef} status={status} message={message} />
+        </div>
       </div>
     </ModalContainer>
   );

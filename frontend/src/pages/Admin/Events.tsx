@@ -16,6 +16,7 @@ import {
 import useModal from '../../hooks/useModal';
 import useInput from '../../hooks/useInput';
 import ModalEvent from './ModalEvent';
+import DeleteModal from '../../components/DeleteModal';
 
 export default function Users() {
   const { activities, query, filterData, showFilter, isSuccess } =
@@ -27,6 +28,8 @@ export default function Users() {
 
   const [activitiesDetail, setActivitiesDetail] = useState<any>();
   const mode = useInput('');
+
+  const { isShowing: deleteModal, toggle: toggleDelete } = useModal();
 
   useEffect(() => {
     const fetch = async () => {
@@ -103,7 +106,7 @@ export default function Users() {
               <div className='flex flex-wrap items-center'>
                 <div className='relative w-full px-4 max-w-full flex-grow flex-1'>
                   <h3 className={'font-semibold text-lg text-blueGray-700'}>
-                    Users
+                    List of Events
                   </h3>
                 </div>
               </div>
@@ -124,7 +127,7 @@ export default function Users() {
                       <th
                         key={index}
                         className={
-                          'px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center g-blueGray-50 text-blueGray-500 border-blueGray-100'
+                          'px-6 align-middle border border-solid py-3  uppercase border-l-0 border-r-0 whitespace-pre-wrap font-semibold text-center g-blueGray-50 text-blueGray-500 border-blueGray-100'
                         }
                       >
                         {item}
@@ -136,13 +139,16 @@ export default function Users() {
                   {activities && activities.length > 0 ? (
                     activities?.map((item: any, index: number) => {
                       return (
-                        <tr key={index} className='text-center relative'>
-                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                        <tr
+                          key={index}
+                          className='text-center relative odd:bg-slate-100'
+                        >
+                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-pre-wrap p-4'>
                             <span className='font-bold uppercase text-blue-500 hover:underline cursor-pointer'>
                               {item.title}
                             </span>
                           </td>
-                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-pre-wrap p-4'>
                             {new Date(item.start)
                               .toISOString()
                               .slice(0, 10)
@@ -150,7 +156,7 @@ export default function Users() {
                               .reverse()
                               .join('/')}
                           </td>
-                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-pre-wrap p-4'>
                             {new Date(item.end)
                               .toISOString()
                               .slice(0, 10)
@@ -158,10 +164,10 @@ export default function Users() {
                               .reverse()
                               .join('/')}
                           </td>
-                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-pre-wrap p-4'>
                             <p>{item.organizer}</p>
                           </td>
-                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-pre-wrap p-4'>
                             <p>{item.venue}</p>
                           </td>
                           <td className='absolute right-[90px]'>
@@ -177,16 +183,23 @@ export default function Users() {
                                 <section className='bg-slate-50 absolute -left-32 w-[120px] z-50'>
                                   <ul>
                                     <li
-                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5'
+                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5 '
                                       onClick={edit}
                                     >
                                       Edit
                                     </li>
                                     <li
-                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5'
-                                      onClick={() => deleteUserById(item.id)}
+                                      className='cursor-pointer hover:bg-slate-200 py-1 px-5 '
+                                      onClick={toggleDelete}
                                     >
                                       Delete
+                                      <DeleteModal
+                                        isShowing={deleteModal}
+                                        hide={toggleDelete}
+                                        deleteItem={() =>
+                                          deleteUserById(item.id)
+                                        }
+                                      />
                                     </li>
                                   </ul>
                                 </section>
@@ -198,7 +211,7 @@ export default function Users() {
                     })
                   ) : (
                     <tr className='text-center flex'>
-                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4'>
+                      <td className='border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-pre-wrap p-4'>
                         <span className='font-bold uppercase text-blue-500 hover:underline cursor-pointer'>
                           No item
                         </span>

@@ -9,6 +9,7 @@ import {
 } from '@react-pdf/renderer';
 import regular from '../../assets/Arimo-Regular.ttf';
 import bold from '../../assets/Arimo-Bold.ttf';
+import imgUrl from '../../utils/imgUrl';
 
 type Props = {
   title: string;
@@ -24,6 +25,7 @@ type Props = {
   signature: string;
   kjSignature: string;
   kjName: string;
+  position: string;
 };
 
 export const Template = (props: Props) => {
@@ -43,6 +45,8 @@ export const Template = (props: Props) => {
       backgroundColor: 'white',
       fontSize: 12,
       fontFamily: 'Arimo',
+      width: '100%',
+      height: '50vh', //As per your page layout
     },
 
     logo: {
@@ -224,21 +228,22 @@ export const Template = (props: Props) => {
               );
             })}
 
+            {/* signature problem */}
             <View style={styles.signatureContainer}>
               <Text style={styles.signatureHeader}>Disediakan oleh:</Text>
               <Image
-                src={props.signature && `/file/${props.signature}`}
+                src={props.signature && `${imgUrl}${props.signature}`}
                 style={styles.signatureImage}
               />
               <Text style={styles.name}>({props.staffName})</Text>
-              <Text style={styles.signatureContainer}>(Jawatan)</Text>
+              <Text style={styles.signatureContainer}>({props.position})</Text>
             </View>
 
             {props.kjSignature && props.kjName ? (
               <View style={styles.kjContainer}>
                 <Text style={styles.signatureHeader}>Disahkan oleh:</Text>
                 <Image
-                  src={props.kjSignature && `/uploads/${props.kjSignature}`}
+                  src={props.kjSignature && `${imgUrl}${props.kjSignature}`}
                   style={styles.signatureImage}
                 />
                 <Text style={styles.name}>({props.kjName})</Text>
@@ -248,8 +253,8 @@ export const Template = (props: Props) => {
               </View>
             ) : null}
           </View>
-          console.log(props.photo)
-          {props.photo ? (
+
+          {props.photo && props.photo.length > 0 ? (
             <View break>
               <Text style={styles.aboutProgram}>
                 GAMBAR-GAMBAR SEPANJANG AKTIVITI
@@ -259,7 +264,7 @@ export const Template = (props: Props) => {
                 return (
                   <View style={styles.photoContainer}>
                     <Image
-                      src={`/file/${img}`}
+                      src={`${imgUrl}${img}`}
                       key={index}
                       style={styles.image}
                     />

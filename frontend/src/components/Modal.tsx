@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import url from '../utils/url';
+import axiosInstance from '../utils/axiosInstance';
 
 type Props = {
   show: boolean;
@@ -32,13 +32,13 @@ export const Modal = (props: Props) => {
 
     const updateEndpoint =
       password.length > 0
-        ? `${url}/api/admin/updateUserWithPassword`
-        : `${url}/api/admin/updateUser`;
+        ? `/admin/updateUserWithPassword`
+        : `/admin/updateUser`;
 
     const id = props.user.id;
     const profile_picture = props.user.profile_picture;
 
-    axios
+    axiosInstance
       .post(
         updateEndpoint,
         { id, name, email, role, password },

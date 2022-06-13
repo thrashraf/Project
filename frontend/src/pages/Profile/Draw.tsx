@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import ModalUser from '../../components/ModalUser';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -9,7 +8,7 @@ import {
   toggleEditSignature,
 } from '../../features/user/User';
 import { useDispatch } from 'react-redux';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
 
 type Props = {
   modal: boolean;
@@ -91,8 +90,8 @@ const Draw = (props: Props) => {
       var file = new File([blob], 'fileName.jpeg', { type: 'image/jpeg' });
       formData.append('email', user?.email);
       formData.append('upload', file);
-      axios
-        .post(`${url}/api/user/uploadSignature`, formData, {
+      axiosInstance
+        .post(`/user/uploadSignature`, formData, {
           withCredentials: true,
         })
         .then((res) => {

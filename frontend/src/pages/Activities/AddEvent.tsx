@@ -4,13 +4,14 @@ import Dropzone from '../../components/Dropzone';
 import useInput from '../../hooks/useInput';
 import useModal from '../../hooks/useModal';
 import Toast from '../../components/Toast';
-import axios from 'axios';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { addNewActivities } from '../../features/activities/Activities';
 import { userSelector } from '../../features/user/User';
 import { unitArray } from '../../constant/unitArray';
 import { organizerArray } from '../../constant/organizerArray';
-import url from '../../utils/url';
+import axiosInstance from '../../utils/axiosInstance';
+import axios from 'axios';
+import Spinner from '../../components/Spinner/Spinner';
 
 type Props = {
   isShowing: boolean;
@@ -29,6 +30,8 @@ const AddEvent = (props: Props) => {
   const venue = useInput('');
   const selectOrganizer = useInput('');
   const selectVenue = useInput('');
+
+  const isFetching = useInput(false);
 
   //for toast
   const [status, setStatus] = useState<string>('');
@@ -60,6 +63,9 @@ const AddEvent = (props: Props) => {
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
     console.log(validTypes.indexOf(file.type) === -1);
     if (validTypes.indexOf(file.type) === -1) {
+      setMessage('only accept JPEG, JPG & PNG');
+      setStatus('error');
+      toastRef.current.showToast();
       return false;
     }
     return true;
@@ -80,14 +86,7 @@ const AddEvent = (props: Props) => {
   };
 
   const formHandler = (e: any) => {
-    if (organizer.value === 'select' || venue.value === 'select') {
-      toastRef.current.showToast();
-      setMessage('Please insert all the field!');
-      e.preventDefault();
-      return;
-    }
-
-    if (organizer.value === 'select') {
+    if (!organizer.value || !venue.value) {
       toastRef.current.showToast();
       setMessage('Please insert all the field!');
       e.preventDefault();
@@ -127,6 +126,8 @@ const AddEvent = (props: Props) => {
 
     e.preventDefault();
 
+    isFetching.setInput(true);
+
     const formData = new FormData();
 
     formData.append('title', title.value);
@@ -146,8 +147,8 @@ const AddEvent = (props: Props) => {
     file.forEach((image: any) => formData.append('upload', image));
     e.preventDefault();
 
-    axios
-      .post(`${url}/api/activities/createActivities`, formData, {
+    axiosInstance
+      .post(`/activities/createActivities`, formData, {
         withCredentials: true,
       })
       .then((res: any) => {
@@ -166,6 +167,8 @@ const AddEvent = (props: Props) => {
             userId: user.id,
           };
 
+          isFetching.setInput(false);
+
           dispatch(addNewActivities(newActivities));
           props.toggle();
         }
@@ -181,8 +184,8 @@ const AddEvent = (props: Props) => {
       toggle={props.toggle}
       hide={props.toggle}
     >
-      <Toast status='error' message={message} ref={toastRef} />
-      <div className='relative mx-auto top-20 bg-white max-w-lg rounded-lg shadow z-50 '>
+      {isFetching.value && <Spinner />}
+      <div className='relative mx-auto top-20 bg-white max-w-lg rounded-lg shadow z-20 '>
         <form
           className='flex flex-col px-5 py-3'
           onSubmit={(e) => formHandler(e)}

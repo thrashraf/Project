@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useAppDispatch } from '../../app/hooks';
-import Categories from '../../components/Categories';
 import Footer from '../../components/Footer';
 import Navbar from '../../components/Navbar';
 import { Table } from '../../components/Table';
@@ -8,8 +7,8 @@ import { deleteInnovationHandler } from '../../features/Innovation/Innovation';
 import useInput from '../../hooks/useInput';
 import useModal from '../../hooks/useModal';
 import api from '../../utils/api';
+import axiosInstance from '../../utils/axiosInstance';
 import ModalInnovation from '../Admin/ModalInnovation';
-import AddInnovation from './AddInnovation';
 
 export const Innovation = (props: any) => {
   const { isShowing, toggle } = useModal();
@@ -38,8 +37,8 @@ export const Innovation = (props: any) => {
   };
 
   const deletePublicationById = (id: string) => {
-    api
-      .delete(`/api/inno/deleteInnovation?q=${id}`)
+    axiosInstance
+      .delete(`/inno/deleteInnovation?q=${id}`)
       .then((res: any) => {
         if (res.status === 200) {
           console.log('ok');
@@ -56,7 +55,7 @@ export const Innovation = (props: any) => {
     <>
       <Navbar />
 
-      <div className=' max-w-7xl mx-auto'>
+      <div className=' max-w-7xl mx-auto relative'>
         <Table
           isShowing={isShowing}
           toggle={toggle}
