@@ -222,7 +222,7 @@ export const Sidebar = (props: Props) => {
           )}
         </section>
 
-        <section className='my-20 '>
+        {/* <section className='my-20 '>
           <h2 className='text-gray-400 text-center mb-10'>Committee Members</h2>
 
           {props.ajk.map((ajk: any, index: number) => {
@@ -262,7 +262,7 @@ export const Sidebar = (props: Props) => {
               +
             </button>
           )}
-        </section>
+        </section> */}
 
         <div className='flex'>
           <button
