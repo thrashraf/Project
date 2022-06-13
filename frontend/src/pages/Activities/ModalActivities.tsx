@@ -193,7 +193,7 @@ export const ModalActivities = (props: Props) => {
   return (
     <ModalUser modal={props.showActivity} setModal={props.setShowActivity}>
       {detailActivities && (
-        <div className='relative mx-auto bg-white max-w-md rounded-lg shadow z-50 '>
+        <div className='relative mx-auto z-10 bg-white max-w-md rounded-lg shadow '>
           {/* show when delete and update events */}
           {isFetching && <Spinner />}
           {/* show when delete and update events */}

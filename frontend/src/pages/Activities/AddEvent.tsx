@@ -169,6 +169,16 @@ const AddEvent = (props: Props) => {
 
           isFetching.setInput(false);
 
+          title.setInput('');
+          startEvent.setInput('');
+          endEvent.setInput('');
+          organizer.setInput('');
+          venue.setInput('');
+          selectOrganizer.setInput('');
+          selectVenue.setInput('');
+
+          setFile([]);
+
           dispatch(addNewActivities(newActivities));
           props.toggle();
         }

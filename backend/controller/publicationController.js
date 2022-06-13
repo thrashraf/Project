@@ -39,7 +39,7 @@ export const createPublication = async (req, res) => {
     const [activitiesCreated] = await publication.createPublication(
       id,
       title,
-      escape(description),
+      description,
       isbn,
       staff,
       year,
@@ -94,7 +94,7 @@ export const updatePublication = async (req, res) => {
       const [updatedPublication] = await publication.updatePublicationWithImage(
         q,
         title,
-        escape(description),
+        description,
         isbn,
         staff,
         year,
@@ -111,7 +111,7 @@ export const updatePublication = async (req, res) => {
       const [updatedPublication] = await publication.updatePublication(
         q,
         title,
-        escape(description),
+        description,
         isbn,
         staff,
         year

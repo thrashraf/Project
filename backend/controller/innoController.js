@@ -54,7 +54,7 @@ export const createInnovation = async (req, res) => {
     const [activitiesCreated] = await inno.createInnovation(
       id,
       Title,
-      escape(Description),
+      Description,
       Name,
       Program,
       Level,
@@ -116,7 +116,7 @@ export const updatedInnovation = async (req, res) => {
       const [updatedPublication] = await inno.updateInnovationWithImages(
         q,
         Title,
-        escape(Description),
+        Description,
         Name,
         Program,
         Level,
@@ -136,7 +136,7 @@ export const updatedInnovation = async (req, res) => {
     const [updatedPublication] = await inno.updateInnovation(
       q,
       Title,
-      escape(Description),
+      Description,
       Name,
       Program,
       Level,

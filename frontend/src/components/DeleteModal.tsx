@@ -3,7 +3,7 @@ import Modal from './ModalContainer';
 const DeleteModal = ({ isShowing, hide, deleteItem }: any) => {
   return (
     <Modal isShowing={isShowing} hide={hide}>
-      <div className='relative bg-white rounded-lg z-30 shadow max-w-md mx-auto top-40'>
+      <div className='relative bg-white rounded-lg  shadow max-w-md mx-auto top-40'>
         <button
           type='button'
           className='absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:text-white'
