@@ -324,7 +324,7 @@ const ModalInnovation = (props: Props) => {
                   required
                   className='bg-blue-50 px-3 py-2 rounded-lg outline-none w-full'
                 >
-                  {['Level','International','National']?.map((item: any, index: number) => (
+                  {['Level','International','National','Others']?.map((item: any, index: number) => (
                     <option key={index} value={item}>
                       {item}
                     </option>

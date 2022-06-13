@@ -371,14 +371,14 @@ export const Home = () => {
 
                 <div className='w-full lg:w-4/12 px-4'>
                   <h5 className='text-xl font-semibold pb-4 text-center'>
-                    Profile Page
+                    Events
                   </h5>
-                  <Link to='/profile'>
+                  <Link to='/activities'>
                     <div className='hover:scale-110 relative flex flex-col min-w-0 break-words bg-white w-full mb-2 shadow-lg rounded-lg ease-linear transition-all duration-150'>
                       <img
                         alt='...'
                         className='align-middle border-none max-w-full h-auto rounded-lg'
-                        src='/assets/profile.jpg'
+                        src='/assets/events.png'
                       />
                     </div>
                   </Link>

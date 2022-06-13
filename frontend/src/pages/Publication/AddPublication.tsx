@@ -297,7 +297,7 @@ const AddPublication = ({ isShowing, toggle }: any) => {
             </section>
 
             <Dropzone
-              content={'Drop Front and Backpage'}
+              content={'Drop Front and Backpage Cover'}
               isShowing={showDropzone}
               hide={toggleDropzone}
               fileDrop={fileDrop}
@@ -305,7 +305,6 @@ const AddPublication = ({ isShowing, toggle }: any) => {
               files={validFiles}
               removeFile={removeFile}
             />
-
             <DropZoneFile
               isShowing={showDropFile}
               hide={toggleDropFile}

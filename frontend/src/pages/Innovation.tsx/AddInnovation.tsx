@@ -362,7 +362,7 @@ const AddInnovation = (props: Props) => {
               <div className='p-5 rounded-md bg-blue-50 '>
                 <i className='fa-solid fa-file-pdf fa-2xl'></i>
               </div>
-              <p className='ml-5 text-sm'>Upload File</p>
+              <p className='ml-5 text-sm'>Upload Cretificate</p>
             </section>
           </section>
 
