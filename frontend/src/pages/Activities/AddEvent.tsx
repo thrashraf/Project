@@ -63,6 +63,9 @@ const AddEvent = (props: Props) => {
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
     console.log(validTypes.indexOf(file.type) === -1);
     if (validTypes.indexOf(file.type) === -1) {
+      setMessage('only accept JPEG, JPG & PNG');
+      setStatus('error');
+      toastRef.current.showToast();
       return false;
     }
     return true;
@@ -182,7 +185,6 @@ const AddEvent = (props: Props) => {
       hide={props.toggle}
     >
       {isFetching.value && <Spinner />}
-      <Toast status='error' message={message} ref={toastRef} />
       <div className='relative mx-auto top-20 bg-white max-w-lg rounded-lg shadow z-20 '>
         <form
           className='flex flex-col px-5 py-3'
