@@ -310,39 +310,37 @@ export const Template = (props: Props) => {
               </View>
             ) : null
           ) : null}
-          {props.ajk !== undefined ? (
-            props.ajk.length > 0 ? (
-              <View break>
-                <Text style={styles.aboutProgram}>JAWATANKUASA</Text>
+          {props.ajk.length > 0 ? (
+            <View break>
+              <Text style={styles.aboutProgram}>JAWATANKUASA</Text>
 
-                <View
-                  style={[
-                    styles.row,
-                    styles.bold,
-                    styles.table,
-                    styles.tableHeading,
-                  ]}
-                >
-                  <Text style={styles.row1}>JAWATAN</Text>
-                  <Text style={styles.row2}>NAMA</Text>
-                </View>
-
-                {props.ajk.map((row: any, index: number) => {
-                  return (
-                    <View key={index} style={styles.row}>
-                      <Text style={styles.row1}>{row.role}</Text>
-                      {row.names.split('\n\n').map((act: any, num: any) => {
-                        return (
-                          <Text key={num} style={styles.activities}>
-                            {act}
-                          </Text>
-                        );
-                      })}
-                    </View>
-                  );
-                })}
+              <View
+                style={[
+                  styles.row,
+                  styles.bold,
+                  styles.table,
+                  styles.tableHeading,
+                ]}
+              >
+                <Text style={styles.row1}>JAWATAN</Text>
+                <Text style={styles.row2}>NAMA</Text>
               </View>
-            ) : null
+
+              {props.ajk.map((row: any, index: number) => {
+                return (
+                  <View key={index} style={styles.row}>
+                    <Text style={styles.row1}>{row.role}</Text>
+                    {row.names.split('\n\n').map((act: any, num: any) => {
+                      return (
+                        <Text key={num} style={styles.activities}>
+                          {act}
+                        </Text>
+                      );
+                    })}
+                  </View>
+                );
+              })}
+            </View>
           ) : null}
         </Page>
       </Document>

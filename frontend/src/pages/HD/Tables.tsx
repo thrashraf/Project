@@ -13,6 +13,7 @@ import useInput from '../../hooks/useInput';
 import SignatureModal from '../Report/SignatureModal';
 import axiosInstance from '../../utils/axiosInstance';
 import Spinner from '../../components/Spinner/Spinner';
+import axios from 'axios';
 
 export default function Tables() {
   const { user }: any = useAppSelector(userSelector);
