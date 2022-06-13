@@ -83,6 +83,9 @@ const ModalPublication = (props: Props) => {
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
     console.log(validTypes.indexOf(file.type) === -1);
     if (validTypes.indexOf(file.type) === -1) {
+      setMessage('only accept JPEG, JPG & PNG');
+      setStatus('error');
+      toastRef.current.showToast();
       return false;
     }
     return true;
@@ -128,6 +131,9 @@ const ModalPublication = (props: Props) => {
     const validTypes = ['application/pdf'];
     console.log(validTypes.indexOf(file.type) === -1);
     if (validTypes.indexOf(file.type) === -1) {
+      setMessage('only accept PDF');
+      setStatus('error');
+      toastRef.current.showToast();
       return false;
     }
     return true;

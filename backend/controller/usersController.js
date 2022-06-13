@@ -118,7 +118,7 @@ export const loginUser = async (req, res) => {
     if (userInfo.role === 'admin') {
       route = '/admin/users';
     } else if (userInfo.role === 'hd') {
-      route = '/kj/report';
+      route = '/kj/dashboard';
     } else {
       route = '/';
     }

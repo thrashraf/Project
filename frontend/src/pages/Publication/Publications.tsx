@@ -11,7 +11,6 @@ import {
   getAllPublication,
 } from '../../features/Publication/Publication';
 import { userSelector } from '../../features/user/User';
-import ModalInnovation from '../Admin/ModalInnovation';
 import useModal from '../../hooks/useModal';
 import ModalPublication from '../Admin/ModalPublication';
 import ReactToPrint from 'react-to-print';

@@ -70,6 +70,9 @@ const ModalInnovation = (props: Props) => {
   const validateFile = (file: any) => {
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
     if (validTypes.indexOf(file.type) === -1) {
+      setMessage('only accept JPEG, JPG & PNG');
+      setStatus('error');
+      toastRef.current.showToast();
       return false;
     }
     return true;
@@ -111,6 +114,9 @@ const ModalInnovation = (props: Props) => {
   const validateFilePDF = (file: any) => {
     const validTypes = ['application/pdf'];
     if (validTypes.indexOf(file.type) === -1) {
+      setMessage('only accept PDF');
+      setStatus('error');
+      toastRef.current.showToast();
       return false;
     }
     return true;

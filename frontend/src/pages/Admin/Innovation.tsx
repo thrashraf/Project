@@ -163,13 +163,19 @@ export default function Innovation() {
                               {item.Title}
                             </span>
                           </td>
-                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-pre-wrap p-4'>
+                          <td className='border-t-0 px-6 text-left border-l-0 border-r-0  whitespace-pre-wrap p-4'>
                             {item.Description}
                           </td>
-                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-pre-wrap p-4'>
-                            {item.Name}
+                          <td className='border-t-0 px-6 text-left border-l-0 border-r-0  whitespace-nowrap p-4'>
+                            {item.Name.split('\n').map(
+                              (n: any, index: number) => (
+                                <p>
+                                  {index + 1}) {n}
+                                </p>
+                              )
+                            )}
                           </td>
-                          <td className='border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-pre-wrap p-4'>
+                          <td className='border-t-0 px-6 text-left border-l-0 border-r-0  whitespace-pre-wrap p-4'>
                             <p>{item.Program}</p>
                           </td>
                           <td className='border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-pre-wrap p-4'>

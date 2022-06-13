@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { adminSidebar } from '../../constant/adminSidebar';
 
@@ -15,8 +15,16 @@ import Users from './Users';
 import Events from './Events';
 import Publication from './Publication';
 import Innovation from './Innovation';
+import { useAppDispatch } from '../../app/hooks';
+import { getKpi } from '../../features/admin/Admin';
 
 export default function KJ() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getKpi());
+  }, []);
+
   return (
     <>
       <Sidebar sidebar={adminSidebar} />

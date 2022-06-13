@@ -236,7 +236,7 @@ const AddEvent = (props: Props) => {
   }, [props.mode, props.activities]);
 
   return (
-    <ModalContainer isShowing={props.isShowing} toggle={props.toggle}>
+    <ModalContainer isShowing={props.isShowing} hide={props.toggle}>
       <Toast status='error' message={message} ref={toastRef} />
       <div className='relative mx-auto bg-white max-w-lg rounded-lg shadow z-50 '>
         <form

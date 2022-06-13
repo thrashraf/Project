@@ -57,6 +57,9 @@ const AddPublication = ({ isShowing, toggle }: any) => {
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
     console.log(validTypes.indexOf(file.type) === -1);
     if (validTypes.indexOf(file.type) === -1) {
+      setMessage('Please insert all the field');
+      setStatus('error');
+      toastRef.current.showToast();
       return false;
     }
     return true;

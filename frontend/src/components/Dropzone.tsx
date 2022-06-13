@@ -21,7 +21,7 @@ const Dropzone = ({ isShowing, hide, ...props }: any) => {
 
   return (
     <Modal isShowing={isShowing} hide={hide}>
-      <div className=' top-20 p-5 bg-white mx-auto relative max-w-lg rounded-lg '>
+      <div className=' top-20 z-30 p-5 bg-white mx-auto relative max-w-lg rounded-lg '>
         <section
           className='flex justify-end mb-5 cursor-pointer'
           onClick={hide}
@@ -61,7 +61,6 @@ const Dropzone = ({ isShowing, hide, ...props }: any) => {
                 className='flex justify-between py-2 px-5 mb-2 bg-slate-200 items-center text-sm rounded-md'
                 key={i}
               >
-                {console.log(props.files)}
                 <div className='flex '>
                   <span className={`mr-3 ${data.invalid ? 'file-error' : ''}`}>
                     {data.name}

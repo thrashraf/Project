@@ -17,8 +17,8 @@ export default function CardStats({
         <div className='flex-auto p-4'>
           <div className='flex flex-wrap'>
             <div className='relative w-full pr-4 max-w-full flex-grow flex-1'>
-              <h5 className='text-blueGray-400 uppercase font-bold text-lg'>
-                {statSubtitle}
+              <h5 className='text-blueGray-400 uppercase font-bold text-[16px]'>
+                {statSubtitle} of {new Date().getFullYear()}
               </h5>
               {console.log(parseInt(statTitle), parseInt(kpi))}
               <section className=''>
