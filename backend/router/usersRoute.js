@@ -24,7 +24,7 @@ usersRoute.post(
   upload.single('upload'),
   users.uploadProfilePicture
 );
-usersRoute.post('/user/updatePassword', verifytoken, users.updatePassword);
+usersRoute.post('/user/updatePassword', users.updatePassword);
 usersRoute.get('/user/amountUser', users.getAmountUser);
 
 export default usersRoute;
