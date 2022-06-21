@@ -105,7 +105,7 @@ export default function Tables() {
     const email = user?.email;
     const reqPassword = password;
 
-    await api
+    await axiosInstance
       .post('/user/auth', { email, reqPassword })
       .then((res) => {
         //console.log(res);

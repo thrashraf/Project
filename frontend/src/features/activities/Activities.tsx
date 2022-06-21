@@ -233,9 +233,12 @@ export const getMonthActivities = createAsyncThunk(
   'activities/getMonthActivities',
   async (_, thunkAPI) => {
     try {
-      const response = await api.get(`/activities/getAllActivities?q=`, {
-        withCredentials: true,
-      });
+      const response = await axiosInstance.get(
+        `/activities/getAllActivities?q=`,
+        {
+          withCredentials: true,
+        }
+      );
       let data = await response.data;
 
       if (response.status === 200) {

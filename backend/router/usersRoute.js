@@ -12,8 +12,8 @@ usersRoute.get('/user/token', refreshToken);
 usersRoute.post('/user/updateInformation', users.updateUserInformation);
 usersRoute.get('/user/getAllUser', users.getAllUser);
 usersRoute.delete('/user/logout', users.Logout);
-usersRoute.delete('/user/delete', verifytoken, users.testDelete);
-usersRoute.post('/user/auth', verifytoken, users.authUser);
+usersRoute.delete('/user/delete', users.testDelete);
+usersRoute.post('/user/auth', users.authUser);
 usersRoute.post(
   '/user/uploadSignature',
   upload.single('upload'),

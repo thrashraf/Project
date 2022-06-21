@@ -1,4 +1,5 @@
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
@@ -139,6 +140,7 @@ export const Document = () => {
                       >
                         {console.log(item.images)}
                         <button className='bg-blue-500 rounded-lg px-5 py-2 text-white'>
+                          {console.log(item)}
                           <PDFDownloadLink
                             document={
                               <Template
@@ -150,7 +152,7 @@ export const Document = () => {
                                 venue={item.venue}
                                 photo={item.images}
                                 tentative={item.tentative}
-                                ajk={item.ajk}
+                                ajk={item.committee}
                                 staffName={item.owner}
                                 signature={item.signature}
                                 kjSignature={item.kjSignature}

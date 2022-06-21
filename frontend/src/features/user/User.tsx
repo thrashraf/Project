@@ -190,7 +190,7 @@ export const updateUserInformation = createAsyncThunk(
   'users/update',
   async ({ id, name, email, position, phoneNumber }: any, thunkAPI: any) => {
     try {
-      const response = await api.post(
+      const response = await axiosInstance.post(
         `/user/updateInformation`,
         {
           id,

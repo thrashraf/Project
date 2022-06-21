@@ -199,7 +199,7 @@ const Report = () => {
     const email = user.email;
     const reqPassword = password;
 
-    await api
+    await axiosInstance
       .post('/user/auth', { email, reqPassword })
       .then((res) => {
         e.preventDefault();
