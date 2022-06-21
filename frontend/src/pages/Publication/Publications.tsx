@@ -16,10 +16,6 @@ import ModalPublication from '../Admin/ModalPublication';
 import ReactToPrint from 'react-to-print';
 
 export const Publications = () => {
-  const background = {
-    backgroundImage: 'url(' + '/assets/wood.jpg' + ')',
-  };
-
   const { allPublication, isFetching }: any =
     useAppSelector(publicationSelector);
 
@@ -48,11 +44,8 @@ export const Publications = () => {
 
       <section>
         <div className='pt-[10px]'>
-          <div
-            className=' px-20 pb-16 pt-6 right-0 left-0 lg:h-full w-full bg-no-repeat bg-cover'
-            style={background}
-          >
-            <h1 className=' font-extrabold lg:text-5xl mb-8 text-center mt-[60px] rounded-2xl border-gray-800 border-2 w-[50%] mx-auto p-2'>
+          <div className=' px-20 pb-16 pt-6 right-0 left-0 lg:h-full w-full bg-no-repeat bg-cover bg-slate-50'>
+            <h1 className=' font-extrabold lg:text-5xl mb-8 text-center mt-[60px] rounded-2xl border-gray-800 border-2 bg-white w-[50%] mx-auto p-2'>
               Publications
             </h1>
 

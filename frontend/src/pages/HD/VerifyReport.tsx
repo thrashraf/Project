@@ -33,7 +33,7 @@ const VerifyReport = () => {
               venue={report.venue}
               photo={report.images}
               tentative={report.tentative}
-              ajk={report.ajk}
+              ajk={report.committee}
               staffName={report.owner}
               signature={report.signature}
               kjSignature={report.kjSignature}

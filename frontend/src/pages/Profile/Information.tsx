@@ -137,13 +137,33 @@ export const Information = (props: Props) => {
                 type={'text'}
                 onChange={name.onChange}
               />
-              <DynamicInput
+              {/* <DynamicInput
                 content={position.value}
                 editMode={editMode}
                 title='Position'
                 type={'text'}
                 onChange={position.onChange}
-              />
+              /> */}
+
+              <div className='relative'>
+                <p className='text-[12px] text-gray-500 mb-2'>Position</p>
+                <section className='relative'>
+                  <select
+                    onChange={position.onChange}
+                    className='text-lg px-6 py-3 bg-blue-50 rounded-lg w-full'
+                    value={position.value}
+                    disabled={editMode}
+                  >
+                    <option value='none' selected hidden>
+                      Select an option
+                    </option>
+                    <option value='Pensyarah'>Pensyarah</option>
+                    <option value='Ketua Jabatan'>Ketua Jabatan</option>
+                    <option value='Ketua Program'>Ketua Program</option>
+                  </select>
+                  {!position.value && <Notify />}
+                </section>
+              </div>
 
               <DynamicInput
                 content={email.value}
