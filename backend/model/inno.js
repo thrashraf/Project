@@ -15,10 +15,11 @@ class inno {
     Medal,
     Year,
     image,
-    pdf
+    pdf,
+    userId
   ) {
     const sql = `INSERT INTO
-                    innovation (id, Title,Description, Name, Program, Level, Medal, Year, img_url, pdf_url)
+                    innovation (id, Title,Description, Name, Program, Level, Medal, Year, img_url, pdf_url, userId)
                 VALUES 
                 (
                     '${id}',
@@ -30,7 +31,8 @@ class inno {
                     '${Medal}',
                     '${Year}',
                     '${image}',
-                    '${pdf}'
+                    '${pdf}',
+                    '${userId}'
                 )`;
     return db.execute(sql);
   }

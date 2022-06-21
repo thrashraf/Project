@@ -12,7 +12,7 @@ import {
 import api from '../../utils/api';
 import DropZoneFile from '../../components/DropZoneFile';
 import generateYears from '../../utils/generateYears';
-import { refreshUser } from '../../features/user/User';
+import { refreshUser, userSelector } from '../../features/user/User';
 import axiosInstance from '../../utils/axiosInstance';
 import axios from 'axios';
 import Spinner from '../../components/Spinner/Spinner';
@@ -36,6 +36,8 @@ const ModalInnovation = (props: Props) => {
   const prevPdf = useInput('');
 
   const isFetching = useInput(false);
+
+  const { user }: any = useAppSelector(userSelector);
 
   const [status, setStatus] = useState<string>('');
   const [message, setMessage] = useState<string>('');
@@ -159,6 +161,7 @@ const ModalInnovation = (props: Props) => {
 
     isFetching.setInput(true);
 
+    formData.append('userId', user.id);
     formData.append('Title', Title.value);
     formData.append('Description', Description.value);
     formData.append('Name', Name.value);
@@ -185,6 +188,7 @@ const ModalInnovation = (props: Props) => {
             Medal: Medal.value,
             Year: Year.value,
             img_url: res.data.img_url,
+            userId: user.id,
           };
           console.log(newInnovation);
           dispatch(addInnovationHandler(newInnovation));

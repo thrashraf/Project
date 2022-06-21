@@ -13,10 +13,11 @@ class publication {
     staff,
     year,
     images,
-    pdf
+    pdf,
+    userId
   ) {
     const sql = `INSERT INTO
-                    publication (id, Title, Description, isbn, staff, year, img_url, pdf_url)
+                    publication (id, Title, Description, isbn, staff, year, img_url, pdf_url, userId)
                 VALUES 
                 (
                     '${id}',
@@ -26,9 +27,9 @@ class publication {
                     '${staff}',
                     '${year}',
                     '${JSON.stringify(images)}',
-                    '${pdf}'
+                    '${pdf}',
+                    '${userId}'
                     
-    
                 )`;
     return db.execute(sql);
   }

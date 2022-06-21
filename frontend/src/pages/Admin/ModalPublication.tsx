@@ -47,6 +47,8 @@ const ModalPublication = (props: Props) => {
   const [prevImages, setPrevImages] = useState<any>([]);
   const prevPdf = useInput('');
 
+  const { user }: any = useAppSelector(userSelector);
+
   //dropzone State
   const { isShowing, toggle } = useModal();
 
@@ -191,6 +193,7 @@ const ModalPublication = (props: Props) => {
 
     const formData = new FormData();
 
+    formData.append('userId', user.id);
     formData.append('title', title.value);
     formData.append('description', description.value);
     formData.append('isbn', isbn.value);
@@ -215,6 +218,7 @@ const ModalPublication = (props: Props) => {
             year: year.value,
             img_url: res.data.image_url ? res.data.image_url : null,
             pdf_url: res.data.pdf_url,
+            userId: user.id,
           };
 
           dispatch(addPublication(newPublication));
