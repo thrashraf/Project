@@ -455,7 +455,7 @@ const Modal2 = (props: Props) => {
                 </div>
                 <div className='cursor-pointer absolute top-0 left-3 mt-4 mr-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-500 transition duration-150 ease-in-out'>
                   <section className='fixed w-10'>
-                    {user && publication?.userId == user.id ? (
+                    {user ? (
                       <More
                         isShowing={isShowing}
                         toggle={toggle}

@@ -247,14 +247,12 @@ export const Table = ({
                         {user && (
                           <td className='right-[90px relative '>
                             <section className=''>
-                              {user.id && inno.userId ? (
-                                <button
-                                  className='top-2 left-10  text-black bg-transparent hover:bg-slate-100 z-10 rounded-lg text-sm py-5 px-3 ml-auto inline-flex items-center focus:outline-none '
-                                  onClick={() => toggleAction(inno)}
-                                >
-                                  <i className='fa-solid fa-ellipsis-vertical fa-xl ' />
-                                </button>
-                              ) : null}
+                              <button
+                                className='top-2 left-10  text-black bg-transparent hover:bg-slate-100 z-10 rounded-lg text-sm py-5 px-3 ml-auto inline-flex items-center focus:outline-none '
+                                onClick={() => toggleAction(inno)}
+                              >
+                                <i className='fa-solid fa-ellipsis-vertical fa-xl ' />
+                              </button>
 
                               {isShowing &&
                               innovationDetail &&
