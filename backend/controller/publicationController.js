@@ -16,7 +16,7 @@ export const showPublication = async (req, res) => {
 
 export const createPublication = async (req, res) => {
   try {
-    const { title, description, isbn, staff, year } = req.body;
+    const { userId, title, description, isbn, staff, year } = req.body;
     const files = req.files;
 
     const id = crypto.randomBytes(16).toString('hex');
@@ -44,7 +44,8 @@ export const createPublication = async (req, res) => {
       staff,
       year,
       images,
-      pdf[0]?.key
+      pdf[0]?.key,
+      userId
     );
 
     return res.status(200).json({

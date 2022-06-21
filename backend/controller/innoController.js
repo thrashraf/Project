@@ -26,7 +26,11 @@ export const showInno = async (req, res) => {
 
 export const createInnovation = async (req, res) => {
   try {
-    const { Title, Description, Name, Program, Level, Medal, Year } = req.body;
+    const { userId, Title, Description, Name, Program, Level, Medal, Year } =
+      req.body;
+
+    console.log(userId);
+
     const files = req.files;
 
     const id = crypto.randomBytes(16).toString('hex');
@@ -61,7 +65,8 @@ export const createInnovation = async (req, res) => {
       Medal,
       Year,
       images[0],
-      pdf[0].key
+      pdf[0].key,
+      userId
     );
     console.log('images : ' + images[0]);
     console.log('pdf : ' + pdf[0]?.key);
