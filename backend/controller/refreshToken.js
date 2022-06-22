@@ -32,6 +32,7 @@ export const refreshToken = async (req, res) => {
             profile_picture: userInfo[0].profile_picture,
             phone_number: userInfo[0].phone_number,
             position: userInfo[0].position,
+            role: userInfo[0].role,
             signature: userInfo[0].signature,
           },
           process.env.ACCESS_TOKEN_SECRET,

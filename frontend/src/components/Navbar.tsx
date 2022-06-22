@@ -61,6 +61,12 @@ export default function Navbar(props: any) {
                   : 'visible'
               } flex flex-col lg:flex-row list-none lg:ml-auto`}
             >
+              {user && (
+                <li className='text-sm text-gray-600 p-2'>
+                  login as {user.role}
+                </li>
+              )}
+
               <li className='flex items-center'>
                 <NavDrop />
               </li>
