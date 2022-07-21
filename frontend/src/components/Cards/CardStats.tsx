@@ -24,7 +24,7 @@ export default function CardStats({
               <section className=''>
                 <span
                   className={`font-semibold text-2xl  ${
-                    parseInt(statTitle) > parseInt(kpi)
+                    parseInt(statTitle) >= parseInt(kpi)
                       ? 'text-green-500'
                       : 'text-red-500'
                   }`}
@@ -48,7 +48,7 @@ export default function CardStats({
           </div>
           <p className='text-sm text-blueGray-400 mt-4'>
             <span className={`font-semibold text-green-500 `}>
-              {parseInt(statTitle) > parseInt(kpi) ? 'Completed' : null}
+              {parseInt(statTitle) >= parseInt(kpi) ? 'Completed' : null}
             </span>
           </p>
         </div>
