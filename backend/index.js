@@ -9,7 +9,7 @@ import { fileURLToPath } from 'url';
 
 dotenv.config();
 
-const port = 5000 || process.env.PORT;
+const port = 3001 || process.env.PORT;
 
 //* import route
 import usersRoute from './router/usersRoute.js';
@@ -25,7 +25,9 @@ app.use('/uploads', express.static('uploads'));
 
 //enable cors
 //allow OPTIONS on all resources
-app.use(cors({ credentials: true, origin: 'http://jtmk-sams.com' }));
+app.use(cors({ credentials: true, origin: process.env.ORIGIN }));
+// app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+
 
 //support parsing of application/x-www-form-urlencoded post data
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -41,15 +43,15 @@ app.use(
   kpiRoute
 );
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
-console.log(path.join(__dirname, '../frontend/build'));
-app.use(express.static(path.join(__dirname, '../frontend/build')));
+// console.log(path.join(__dirname, '../frontend/build'));
+// app.use(express.static(path.join(__dirname, '../frontend/build')));
 
-app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, '../frontend/build/', 'index.html'));
-});
+// app.get('*', function (req, res) {
+//   res.sendFile(path.join(__dirname, '../frontend/build/', 'index.html'));
+// });
 
 checkDate();
 app.listen(port, console.log(`server running on port ${port}`));
